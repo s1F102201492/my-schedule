@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      List page
+      List page(index page)
     </div>
   );
 }
