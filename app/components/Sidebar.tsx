@@ -17,13 +17,13 @@ interface SidebarProps {
 
 export default function Sidebar({ open, toggleDrawer }: SidebarProps) {
   return (
-    <Drawer open={open} onClose={() => {toggleDrawer(false)}}>
+    <Drawer open={open} onClose={toggleDrawer(false)}>
       <Box sx={{ width: 250 }} role="presentation">
         {/* ハンバーガーアイコンをサイドバーの内部にも表示して、クリックでドロワーを閉じる */}
-        <IconButton onClick={() => {toggleDrawer(false)}} sx={{ mt: 1, ml: 1 }}>
+        <IconButton onClick={toggleDrawer(false)} sx={{ mt: 1, ml: 1 }}>
           <MenuIcon />
         </IconButton>
-        <List onClick={() => {toggleDrawer(false)}}>
+        <List onClick={toggleDrawer(false)}>
           {['Menu1', 'Menu2', 'Menu3', 'Menu4'].map((text) => (
             <ListItem key={text}>
               <ListItemButton>

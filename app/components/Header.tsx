@@ -33,7 +33,7 @@ const Header = () => {
             color="inherit"
             aria-label="sidebar"
             sx={{ mr: 2 }}
-            onClick={() => {handleDrawerToggle}} // ドロワーの開閉をトグルするために onClick に handleDrawerToggle を設定
+            onClick={handleDrawerToggle} // ドロワーの開閉をトグルするために onClick に handleDrawerToggle を設定
           >
             <MenuIcon />
           </IconButton>
