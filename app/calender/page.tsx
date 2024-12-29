@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Calender from '../components/Calender'
 import Header from '../components/Header'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Switch, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateComponents } from '../components/DateComponents';
 import TimeComponents from '../components/TimeComponents';
@@ -30,8 +30,14 @@ const priorities:priorprops[] = [
 
 const page = () => {
   const [open, setOpen] = useState<boolean>(false);
+  
+  // 終日（時間設定なし）の場合はtrue
+  const [time, setTime] = useState<boolean>(true);
+
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleTimeSet = () => setTime(!time)
 
   const handleSubmit = () => {
 
@@ -51,7 +57,7 @@ const page = () => {
         onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           {/* フォーム全体をフォームタグで囲む */}
-          <DialogTitle>予定を追加</DialogTitle>
+          <DialogTitle m={1}>タスクや習慣を追加する</DialogTitle>
           <DialogContent>
             <DialogContentText>
               タイトル
@@ -90,24 +96,22 @@ const page = () => {
               ))}
             </TextField>
             <Box sx={{ flexDirection: 'row' }}>
-              <DialogContentText mt={1}>
-                開始日
-              </DialogContentText>
-              <DateComponents />
+              終日 {time ? 'オン' : 'オフ'}
+              <Switch 
+              checked={time}
+              onChange={handleTimeSet} />
               <DialogContentText mt={1}>
                 開始時刻
               </DialogContentText>
-              <TimeComponents />
+              <DateComponents />
+              <TimeComponents checktime={time}/>
             </Box>
             <Box sx={{ flexDirection: 'row' }}>
               <DialogContentText mt={1}>
-                終了日
-              </DialogContentText>
-              <DateComponents />
-              <DialogContentText mt={1}>
                 終了時刻
               </DialogContentText>
-              <TimeComponents />
+              <DateComponents />
+              <TimeComponents checktime={time}/>
             </Box>
           </DialogContent>
           <DialogActions>
