@@ -9,12 +9,15 @@ interface TodoProps {
   id: string;
   title: string;
   description: string | null;
-  continuedays: number;
+  continuedays: number | null;
   checked: Boolean;
   priority: string;
   startdate: string;
   enddate: string;
+  starttime: string | null;
+  endtime: string | null;
   interval: number | null;
+
 };
 
 export default function Home() {
@@ -29,7 +32,9 @@ export default function Home() {
       checked: false,
       priority: 'high',
       startdate: '2025/01/01',
-      enddate: '2025/03/31', 
+      enddate: '2025/03/31',
+      starttime: null,
+      endtime: null,
       interval: 2
     },
     {
@@ -40,7 +45,9 @@ export default function Home() {
       checked: true,
       priority: 'middle',
       startdate: '2025/01/01',
-      enddate: '2025/01/31', 
+      enddate: '2025/01/31',
+      starttime: null,
+      endtime: null,
       interval: null
     },
     {
@@ -51,7 +58,9 @@ export default function Home() {
       checked: false,
       priority: 'row',
       startdate: '2025/01/01',
-      enddate: '2025/02/01', 
+      enddate: '2025/02/01',
+      starttime: null,
+      endtime: null, 
       interval: 3,
     }
   ]

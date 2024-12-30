@@ -5,7 +5,7 @@ interface TodoProps {
     id: string;
     title: string;
     description: string | null;
-    continuedays: number;
+    continuedays: number | null;
     checked: Boolean;
     priority: string;
     startdate: string;
