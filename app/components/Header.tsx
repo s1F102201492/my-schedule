@@ -1,49 +1,70 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import HomeIcon from '@mui/icons-material/Home';
+import EventIcon from '@mui/icons-material/Event';
 import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from './Sidebar';
+import Link from 'next/link';
 
 const Header = () => {
-  const [open, setOpen] = useState(false); // サイドバーの開閉状態を管理
-
-  // サイドバーを開閉するための toggleDrawer 関数
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
-
-  // アイコンのクリックでドロワーをトグルするための関数
-  const handleDrawerToggle = () => {
-    setOpen(!open); // open の状態を反転することで、開閉をトグル
+  const [value, setValue] = React.useState('');
+  
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="sidebar"
-            sx={{ mr: 2 }}
-            onClick={handleDrawerToggle} // ドロワーの開閉をトグルするために onClick に handleDrawerToggle を設定
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
             My schedule
           </Typography>
-          <Button color="inherit">ログイン</Button>
+          {/* ここから */}
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={handleChange}
+            sx={{ flexGrow: 1, backgroundColor: 'inherit' }}
+          >
+            <BottomNavigationAction 
+              label="Home" 
+              value='Home'
+              icon={<HomeIcon />} 
+              component={Link} 
+              href="/"
+            />
+            <BottomNavigationAction 
+              label="カレンダー" 
+              value='calender'
+              icon={<EventIcon />} 
+              component={Link} 
+              href="/calender"
+            />
+            <BottomNavigationAction 
+              label="Menu3" 
+              value='Menu3'
+              icon={<MenuIcon />}
+              href="/" 
+            />
+            <BottomNavigationAction 
+              label="Menu4" 
+              value='Menu4'
+              icon={<MenuIcon />} 
+              href="/calender"
+            />
+          </BottomNavigation>
+          {/* ここまでをBottom navigationに変更 */}
+          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
-      <Sidebar open={open} toggleDrawer={toggleDrawer} />
     </Box>
   );
 }
