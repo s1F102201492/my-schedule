@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
-import Calender from '../components/Calender'
 import Header from '../components/Header'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Switch, TextField } from '@mui/material';
 import { DateComponents } from '../components/DateComponents';
 import TimeComponents from '../components/TimeComponents';
+import Calendar from '../components/Calendar';
 
 interface priorprops {
   value: string;
@@ -47,7 +47,7 @@ const page = () => {
       <Header />
       <Box sx={{m: 2}}>
         <Button variant="contained" onClick={handleClickOpen}>
-          Open form dialog
+          予定を追加
         </Button>
       </Box>
       <Dialog
@@ -119,7 +119,7 @@ const page = () => {
           </DialogActions>
         </form>
       </Dialog>
-      <Calender />
+      <Calendar />
     </div>
   )
 }
