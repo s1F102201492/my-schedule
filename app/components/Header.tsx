@@ -46,7 +46,7 @@ const Header = () => {
               value='calender'
               icon={<EventIcon />} 
               component={Link} 
-              href="/calender"
+              href="/calendar"
             />
             <BottomNavigationAction 
               label="Menu3" 
@@ -58,7 +58,7 @@ const Header = () => {
               label="Menu4" 
               value='Menu4'
               icon={<MenuIcon />} 
-              href="/calender"
+              href="/calendar"
             />
           </BottomNavigation>
           {/* ここまでをBottom navigationに変更 */}
