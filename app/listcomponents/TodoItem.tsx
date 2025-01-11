@@ -1,42 +1,42 @@
-import React from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Button, CardActions, CardHeader, Typography } from '@mui/material';
+import React, { useState } from 'react'
+import { Checkbox, IconButton, ListItem, ListItemText, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TodoProps {
     id: string;
     title: string;
     description: string | null;
-    continuedays: number | null;
+    continuedays: number;
     checked: Boolean;
-    priority: string;
     startdate: string;
     enddate: string;
-    starttime: string | null;
-    endtime: string | null;
-    interval: number | null;
+    interval: number | string[]; 
+    // intervalには数字か配列（曜日を格納する）
   };
   
 interface TodoItemProps {
     todos: TodoProps;
-}
+};
 
 const TodoItem: React.FC<TodoItemProps> = ({ todos }) => {
+  const [checked, setChecked] = useState<boolean>(false)
+
+  const handlecheck = () => {
+    setChecked(!checked)
+  }
+
   return (
     <div>
-        <Card sx={{ mt: 2, mx: 2, boxShadow: 3 }}>
-            <CardHeader title={todos.title} />
-            <CardContent>
-                <Typography>
-                    {todos.description}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button variant='contained'>完了</Button>
-                <Button variant='outlined'>編集</Button>
-                <Button variant='outlined'>削除</Button>
-            </CardActions>
-        </Card>
+        <ListItem>
+          <Checkbox
+          value={checked}
+          onClick={handlecheck} />
+          <ListItemText primary={todos.title} />
+          {todos.continuedays + 1}日目
+          <IconButton aria-label="delete">
+          <DeleteIcon />
+          </IconButton>
+        </ListItem>
     </div>
   )
 }
