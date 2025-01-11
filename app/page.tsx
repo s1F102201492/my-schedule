@@ -9,32 +9,34 @@ interface TodoProps {
   id: string;
   title: string;
   description: string | null;
-  continuedays: number | null;
-  checked: Boolean;
-  priority: string;
+  continuedays: number;
+  checked: boolean;
   startdate: string;
   enddate: string;
-  starttime: string | null;
-  endtime: string | null;
-  interval: number | null;
-
+  interval: number | string[]; 
+  // intervalには数字か配列（曜日を格納する）
 };
 
 export default function Home() {
+  const today = new Date()
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
+console.log( year + '年' + month + '月' + day + '日');
+
+
   const createId = () => Math.random().toString(36).substring(2)
 
-  const initialtodos = [
+  const initialtodos:TodoProps[] = [
     {
       id: createId(),
       title: 'プログラミングの勉強',
       description: 'react',
       continuedays: 7,
       checked: false,
-      priority: 'high',
       startdate: '2025/01/01',
       enddate: '2025/03/31',
-      starttime: null,
-      endtime: null,
       interval: 2
     },
     {
@@ -43,12 +45,9 @@ export default function Home() {
       description: '20分',
       continuedays: 4,
       checked: true,
-      priority: 'middle',
       startdate: '2025/01/01',
       enddate: '2025/01/31',
-      starttime: null,
-      endtime: null,
-      interval: null
+      interval: ['月','水','日']
     },
     {
       id: createId(),
@@ -56,11 +55,8 @@ export default function Home() {
       description: '胸を鍛える',
       continuedays: 4,
       checked: false,
-      priority: 'row',
       startdate: '2025/01/01',
       enddate: '2025/02/01',
-      starttime: null,
-      endtime: null, 
       interval: 3,
     }
   ]
@@ -72,7 +68,7 @@ export default function Home() {
       <Header />
       <Typography variant="h4" fontFamily="Monospace"
       component="div" sx={{ m: 4 }}>
-        2025/01/01のやることリスト
+        {`${year}年${month}月${day}日`}のやることリスト
       </Typography>
       <TodoList todos={initialtodos}/>
     </div>
