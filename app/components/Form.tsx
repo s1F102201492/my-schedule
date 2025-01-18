@@ -4,14 +4,40 @@ import React, { useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Switch, TextField } from '@mui/material';
 import { DateComponents } from '../components/DateComponents';
 
-const Form = () => {
-    const [open, setOpen] = useState<boolean>(false);
+interface TodoProps {
+  id: string;
+  title: string;
+  description: string | null;
+  continuedays: number;
+  checked: boolean;
+  startdate: string;
+  enddate: string;
+  interval: number | string[];
+}
 
+interface FormProps {
+    taskList: TodoProps[];
+    setTaskList: React.Dispatch<React.SetStateAction<TodoProps[]>>;
+  }
+
+const Form: React.FC<FormProps> = ({taskList, setTaskList}) => {
+    const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-  
-    const handleSubmit = () => {
+
+    const [task, setTask] = useState<string>('');
+    const handletask = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTask(e.target.value)
     }
+  
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // setTaskList([...taskList, {
+        //     title: task,
+        //     startdate: ,
+        //     enddate: ,
+        // }])
+    };
 
   return (
     <div>
@@ -36,6 +62,8 @@ const Form = () => {
               margin="dense"
               fullWidth
               variant="outlined"
+              value={task}
+              onChange={handletask}
             />
             
             <Box sx={{ flexDirection: 'row' }}>

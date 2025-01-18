@@ -8,7 +8,7 @@ interface TodoProps {
   title: string;
   description: string | null;
   continuedays: number;
-  checked: Boolean;
+  checked: boolean;
   startdate: string;
   enddate: string;
   interval: number | string[]; 
