@@ -6,18 +6,6 @@ import { Typography } from '@mui/material';
 import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
 
-interface TodoProps {
-  id: string;
-  title: string;
-  description: string | null;
-  continuedays: number;
-  checked: boolean;
-  startdate: string;
-  enddate: string;
-  interval: number | string[]; 
-  // intervalには数字か配列（曜日を格納する）
-}
-
 export default function Home() {
   const today = new Date();
   const year = today.getFullYear();

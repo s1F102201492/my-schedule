@@ -7,7 +7,7 @@ interface TodoProps {
     title: string;
     description: string | null;
     continuedays: number;
-    checked: boolean;
+    checkedDates: Record<string, boolean> | Record<string, undefined>;
     startdate: string;
     enddate: string;
     interval: number | string[]; 

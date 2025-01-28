@@ -1,15 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Switch, TextField } from '@mui/material';
+import React, { useContext, useState } from 'react'
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, MenuItem, Switch, TextField } from '@mui/material';
 import { DateComponents } from '../components/DateComponents';
+import { TodoContext } from './TodoContext';
 
 interface TodoProps {
   id: string;
   title: string;
   description: string | null;
   continuedays: number;
-  checked: boolean;
+  checkedDates: Record<string, boolean>
   startdate: string;
   enddate: string;
   interval: number | string[];
@@ -20,24 +21,35 @@ interface FormProps {
     setTaskList: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   }
 
-const Form: React.FC<FormProps> = ({taskList, setTaskList}) => {
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+const Form: React.FC<FormProps> = () => {
 
-    const [task, setTask] = useState<string>('');
-    const handletask = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTask(e.target.value)
-    }
+  const todoContext = useContext(TodoContext);
   
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // setTaskList([...taskList, {
-        //     title: task,
-        //     startdate: ,
-        //     enddate: ,
-        // }])
-    };
+  if (!todoContext) {
+    throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
+  }
+
+  const { todos, setTodos } = todoContext;
+
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [input, setInput] = useState<string>('');
+  const handletask = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  }
+
+  const [selectedDays, setSelectedDays] = useState<string[]>([])
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log(input)
+
+  };
 
   return (
     <div>
@@ -62,7 +74,7 @@ const Form: React.FC<FormProps> = ({taskList, setTaskList}) => {
               margin="dense"
               fullWidth
               variant="outlined"
-              value={task}
+              value={input}
               onChange={handletask}
             />
             
@@ -78,6 +90,24 @@ const Form: React.FC<FormProps> = ({taskList, setTaskList}) => {
               </DialogContentText>
               <DateComponents />
             </Box>
+            <DialogContentText mt={2}>
+              繰り返し日
+            </DialogContentText>
+            <FormGroup row>
+              {['月', '火', '水', '木', '金', '土', '日'].map((day) => (
+                <FormControlLabel
+                  key={day}
+                  control={
+                    <Checkbox
+                      value={day}
+                      onChange={handleCheckbox}
+                      // checked={selectedDays.includes(day)}
+                    />
+                  }
+                  label={day}
+                />
+              ))}
+            </FormGroup>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
