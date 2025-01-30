@@ -50,7 +50,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         "2025-01-02": true,
         "2025-01-04": false,
         "2025-01-06": true,
-        "2025-01-28": false
+        "2025-01-28": false,
+        "2025-01-30": false,
       },
       startdate: '2025/01/02',
       enddate: '2025/03/31',
