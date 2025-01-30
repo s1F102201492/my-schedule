@@ -7,7 +7,7 @@ interface TodoProps {
   title: string;
   description: string | null;
   continuedays: number;
-  checkedDates: Record<string, boolean> | Record<string, undefined>;
+  checkedDates: Record<string, boolean | undefined>;
   startdate: string;
   enddate: string;
   interval: number | string[];
@@ -16,6 +16,7 @@ interface TodoProps {
 interface TodoContextType {
   todos: TodoProps[];
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
+  toggleChecked: (id: string, date: string) => void;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -44,6 +45,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         "2025-01-06": true,
         "2025-01-28": false
       }),
+      // その日付になった瞬間に"yyyy-mm-dd": undefinedで作成される必要がある。
       checkedDates: {
         "2025-01-02": true,
         "2025-01-04": false,
@@ -86,8 +88,21 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const [todos, setTodos] = useState<TodoProps[]>(initialtodos);
 
+  const toggleChecked = (id: string, date: string) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => {
+        if (todo.id === id) {
+          const newCheckedDates = { ...todo.checkedDates };
+          newCheckedDates[date] = !newCheckedDates[date];
+          return { ...todo, checkedDates: newCheckedDates };
+        }
+        return todo;
+      })
+    );
+  };
+  
   return (
-    <TodoContext.Provider value={{ todos, setTodos }}>
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked }}>
       {children}
     </TodoContext.Provider>
   );

@@ -8,7 +8,7 @@ interface TodoProps {
   title: string;
   description: string | null;
   continuedays: number;
-  checkedDates: Record<string, boolean> | Record<string, undefined>;
+  checkedDates: Record<string, boolean | undefined>;
   startdate: string;
   enddate: string;
   interval: number | string[]; 
@@ -21,7 +21,6 @@ interface TodoListProps {
 
 const TodoList: React.FC<TodoListProps> = ({ todos }) => {
   // タスクがその日なのかを判定する関数が必要
-  // const todayDate:string = new Date().toISOString().split('T')[0]; //ISO形式で今日の日付
   const todayDay:string = new Date().toLocaleDateString('ja-JP', { weekday: 'short' }); //今日の曜日
   const today:Date = new Date() //今日の日付(Date型)
 
@@ -55,11 +54,9 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
 
   const notchecktodos = todaytodos.filter(todo => todo.checkedDates[todayhyphen] == false);
   const checkedtodos = todaytodos.filter(todo => todo.checkedDates[todayhyphen] == true);
-  console.log(notchecktodos)
 
   return (
     <div>
-      {/* 今日のタスクが全て完了したら */}
         {/* 完了していないリスト */}
         <List sx={{ width: '100%', maxWidth: 500 }} disablePadding>
           {notchecktodos.map((todo:TodoProps) => <TodoItem key={todo.id} todos={todo} />)}
