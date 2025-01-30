@@ -1,13 +1,14 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Checkbox, IconButton, ListItem, ListItemText, Paper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
+import { TodoContext } from '../components/TodoContext';
 
 interface TodoProps {
     id: string;
     title: string;
     description: string | null;
     continuedays: number;
-    checked: Boolean;
+    checkedDates: Record<string, boolean | undefined>;
     startdate: string;
     enddate: string;
     interval: number | string[]; 
@@ -19,18 +20,25 @@ interface TodoItemProps {
 }
 
 const TodoChecked: React.FC<TodoItemProps> = ({ todos }) => {
-    const [checked, setChecked] = useState<boolean>(true)
+  const todoContext = useContext(TodoContext);
+  
+    if (!todoContext) {
+      throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
+    }
+  
+    const { toggleChecked } = todoContext;
+    const todayHyphen = new Date().toISOString().split('T')[0]; // Format today as 'yyyy-mm-dd'
+  
+    const handleCheck = () => {
+      toggleChecked(todos.id, todayHyphen);
+    };
     
-      const handlecheck = () => {
-        setChecked(!checked)
-      }
-
   return (
     <div style={{opacity: 0.4}}>
         <ListItem>
           <Checkbox
-          value={checked}
-          onClick={handlecheck} />
+          checked={!!todos.checkedDates[todayHyphen]}
+          onChange={handleCheck} />
           <ListItemText primary={todos.title} />
           {todos.continuedays + 1}日目
         </ListItem>

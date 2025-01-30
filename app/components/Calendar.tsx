@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -6,8 +6,23 @@ import allLocales from '@fullcalendar/core/locales-all';
 import { DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
+import { TodoContext } from './TodoContext';
+
+interface CalendarViewProps {
+  title: string;
+  start: string;
+  end: string;
+}
 
 const Calendar = () => {
+  const todoContext = useContext(TodoContext);
+
+  if (!todoContext) {
+    throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
+  }
+
+  const { todos } = todoContext;
+
   const handleDateSelect = (selectionInfo: DateSelectArg) => {
     console.log('selectionInfo: ', selectionInfo); // 選択した範囲の情報をconsoleに出力
   };
@@ -16,12 +31,18 @@ const Calendar = () => {
     const event: EventApi = clickInfo.event;
     alert('イベントタイトル: ' + event.title + '\n詳細: ' + (event.extendedProps.description || '説明はありません'));
   };
+
+  const todolist:CalendarViewProps[] = todos.map((todo) =>({
+    title: todo.title,
+    start: new Date(todo.startdate).toISOString(),
+    end: new Date(todo.enddate).toISOString(),
+  }))
   
   return (
     <div>
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       locales={allLocales} locale='ja'
-      events={'https://fullcalendar.io/api/demo-feeds/events.json'}
+      events={todolist}
       select={handleDateSelect}
       selectable={true}
       eventClick={handleEventClick}
