@@ -7,12 +7,13 @@ import { DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
 import { TodoContext } from './TodoContext';
+import './calendar.css'
 
 interface CalendarViewProps {
   title: string;
   start: string;
   end: string;
-  checkdates: string[]
+  checkdates: string[];
 }
 
 const Calendar = () => {
@@ -39,7 +40,7 @@ const Calendar = () => {
     end: new Date(todo.enddate).toISOString(),
     checkdates: Object.keys(todo.checkedDates)
   }))
-  
+
   return (
     <div>
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}

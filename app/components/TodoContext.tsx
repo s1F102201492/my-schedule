@@ -11,6 +11,7 @@ interface TodoProps {
   startdate: string;
   enddate: string;
   interval: number | string[];
+  color: string;
 }
 
 interface TodoContextType {
@@ -39,7 +40,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       },
       startdate: '2025/01/02',
       enddate: '2025/03/31',
-      interval: 3
+      interval: 3,
+      color: 'blue'
     },
     {
       id: 'dfawefwe335',
@@ -53,7 +55,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       },
       startdate: '2025/01/01',
       enddate: '2025/01/31',
-      interval: ['月','火','土']
+      interval: ['月','火','土'],
+      color: 'yellow'
     },
     {
       id: '4f35se4354w',
@@ -68,6 +71,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       startdate: '2025/01/07',
       enddate: '2025/02/01',
       interval: 3,
+      color: 'green'
     }
   ];
 

@@ -5,27 +5,11 @@ import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentT
 import { DateComponents } from '../components/DateComponents';
 import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
+import Pickcolor from './Pickcolor';
 
 dayjs.locale('ja');
 
-interface TodoProps {
-  id: string;
-  title: string;
-  description: string | null;
-  continuedays: number;
-  checkedDates: Record<string, boolean>
-  startdate: string;
-  enddate: string;
-  interval: number | string[];
-}
-
-interface FormProps {
-    taskList: TodoProps[];
-    setTaskList: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-  }
-
-
-const Form: React.FC<FormProps> = () => {
+const Form = () => {
 
   const todoContext = useContext(TodoContext);
   
@@ -90,6 +74,9 @@ const Form: React.FC<FormProps> = () => {
     }
   },[ndays]);
 
+  // color
+  const [selectColor, setSelectColor] = useState<string>('#FF0000');
+
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
@@ -152,7 +139,8 @@ const Form: React.FC<FormProps> = () => {
       checkedDates: checkdates,
       startdate: sd?.format('YYYY-MM-DD'),
       enddate: ed?.format('YYYY-MM-DD'),
-      interval: setint(ndays)
+      interval: setint(ndays),
+      color: selectColor
     }
 
     todoAdd(newTodo);
@@ -235,7 +223,9 @@ const Form: React.FC<FormProps> = () => {
               </FormGroup>}
               
             </Box>
-            
+            <Box>
+              <Pickcolor selectColor={selectColor} setSelectColor={setSelectColor}/>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
