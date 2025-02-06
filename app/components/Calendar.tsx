@@ -12,6 +12,7 @@ interface CalendarViewProps {
   title: string;
   start: string;
   end: string;
+  checkdates: string[]
 }
 
 const Calendar = () => {
@@ -36,6 +37,7 @@ const Calendar = () => {
     title: todo.title,
     start: new Date(todo.startdate).toISOString(),
     end: new Date(todo.enddate).toISOString(),
+    checkdates: Object.keys(todo.checkedDates)
   }))
   
   return (
@@ -43,6 +45,16 @@ const Calendar = () => {
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       locales={allLocales} locale='ja'
       events={todolist}
+      dayCellContent={(arg) => {
+        // その日のイベントがあるか判定
+        const hasEvent = todolist.some((event) => {
+          event.checkdates.some((date) => date === arg.date.toISOString().split('T')[0])
+            }
+          );
+
+        return hasEvent
+          && `<div style="text-align:center; font-size: 20px;">●</div>`
+        }}
       select={handleDateSelect}
       selectable={true}
       eventClick={handleEventClick}

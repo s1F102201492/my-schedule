@@ -7,7 +7,7 @@ interface TodoProps {
   title: string;
   description: string | null;
   continuedays: number;
-  checkedDates: Record<string, boolean | undefined>;
+  checkedDates: Record<string, boolean>;
   startdate: string;
   enddate: string;
   interval: number | string[];
@@ -39,7 +39,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       },
       startdate: '2025/01/02',
       enddate: '2025/03/31',
-      interval: 2
+      interval: 3
     },
     {
       id: 'dfawefwe335',

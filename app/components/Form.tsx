@@ -140,8 +140,9 @@ const Form: React.FC<FormProps> = () => {
       }
     };    
     
-    const checkdates:Record<string, boolean> = createCheckedDates(sd, ed, setint(ndays));
-    const contdays = counterContinuedays(checkdates);
+    const checkdates:Record<string, boolean> = 
+    createCheckedDates(sd, ed, setint(ndays)); // 日付: falseの辞書を作成
+    const contdays = counterContinuedays(checkdates); //checkdatesから達成日を計算
 
     const newTodo = {
       id: createId(),
@@ -190,6 +191,7 @@ const Form: React.FC<FormProps> = () => {
                 開始日
               </DialogContentText>
               <DateComponents label='開始日' date={sd} setDate={setSd}
+              minDate={dayjs(new Date("2000-01-01"))} maxDate={ed}
               />
             </Box>
             <Box sx={{ flexDirection: 'row' }}>
@@ -197,6 +199,7 @@ const Form: React.FC<FormProps> = () => {
                 終了日
               </DialogContentText>
               <DateComponents label='終了日' date={ed} setDate={setEd}
+              minDate={sd} maxDate={dayjs(new Date("2299-12-31"))}
               />
             </Box>
             <DialogContentText sx={{mt: 3}} variant='h6'>

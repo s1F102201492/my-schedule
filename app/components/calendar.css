@@ -1,0 +1,8 @@
+.fc-daygrid-event {
+    width: 12px;
+    height: 12px;
+    background-color: #007bff; /* 丸の色 */
+    border-radius: 50%;
+    text-indent: -9999px; /* タイトルを非表示 */
+    display: inline-block;
+  }
