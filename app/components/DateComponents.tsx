@@ -1,13 +1,21 @@
-import { JSX } from '@emotion/react/jsx-runtime';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ja';
 import React from 'react';
 
 dayjs.locale('ja'); // カレンダーの曜日のフォーマット
 
-export const DateComponents = (): JSX.Element => {
+interface DateComponentsProps {
+  label: string;
+  date: Dayjs;
+  setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+  minDate: Dayjs;
+  maxDate: Dayjs;
+}
+
+export const DateComponents: React.FC<DateComponentsProps> = ({ label, date, setDate, minDate, maxDate }) => {
+
   return (
     <div style={{marginTop: 10}}>
         <LocalizationProvider
@@ -15,7 +23,11 @@ export const DateComponents = (): JSX.Element => {
         dateFormats={{ year: 'YYYY年' }} // カレンダー内の年一覧のフォーマット
         >
         <DatePicker
-            label="日付"
+            label={label}
+            minDate={minDate}
+            maxDate={maxDate}
+            value={date}
+            onChange={(newdate) => { if (newdate) setDate(newdate)}} //dayjs型
             format="YYYY/MM/DD" // テキストエリア内のフォーマット
             slotProps={{ textField: { required: true } ,
             calendarHeader: { format: 'YYYY年MM月' }}} // カレンダーヘッダーのフォーマット

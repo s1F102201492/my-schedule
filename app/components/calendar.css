@@ -1,0 +1,31 @@
+/* イベントのスタイルをカスタマイズ */
+.custom-event {
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: rgba(0, 123, 255, 0.2);
+}
+
+/* 重要なイベントの色を変更 */
+.event-important {
+  background-color: red !important;
+  color: white;
+  font-weight: bold;
+}
+
+/* 普通のイベント */
+.event-casual {
+  background-color: green !important;
+  color: white;
+}
+
+/* 日付セルのスタイル変更 */
+.day-cell {
+  font-size: 12px;
+  text-align: center;
+}
+
+/* 2日ごとにアイコンを表示 */
+.day-cell:has(span) {
+  background-color: #fffae6;
+}

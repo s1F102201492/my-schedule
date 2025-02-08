@@ -12,6 +12,7 @@ interface CalendarViewProps {
   title: string;
   start: string;
   end: string;
+  color: string;
 }
 
 const Calendar = () => {
@@ -32,12 +33,15 @@ const Calendar = () => {
     alert('イベントタイトル: ' + event.title + '\n詳細: ' + (event.extendedProps.description || '説明はありません'));
   };
 
-  const todolist:CalendarViewProps[] = todos.map((todo) =>({
-    title: todo.title,
-    start: new Date(todo.startdate).toISOString(),
-    end: new Date(todo.enddate).toISOString(),
-  }))
-  
+  const todolist: CalendarViewProps[] = todos.flatMap((todo) => 
+    Object.keys(todo.checkedDates).map((dateKey) => ({
+      title: todo.title,
+      start: new Date(dateKey).toISOString(), // 各 checkedDate のキー（日付）を start に設定
+      end: new Date(dateKey).toISOString(), // start と同じ値を設定（変更が必要なら修正）
+      color: todo.color
+    }))
+  );
+
   return (
     <div>
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
