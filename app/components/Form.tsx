@@ -24,7 +24,7 @@ const Form = () => {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => { //閉じたらすべてリセット
     setOpen(false);
-    formReset;
+    formReset();
   }
 
   const formReset = () => {
@@ -158,7 +158,7 @@ const Form = () => {
     todoAdd(newTodo);
     console.log(newTodo)
     setOpen(false);
-    formReset;
+    formReset();
   };
 
   return (

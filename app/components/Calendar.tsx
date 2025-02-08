@@ -7,13 +7,12 @@ import { DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
 import { TodoContext } from './TodoContext';
-import './calendar.css'
 
 interface CalendarViewProps {
   title: string;
   start: string;
   end: string;
-  checkdates: string[];
+  color: string;
 }
 
 const Calendar = () => {
@@ -34,28 +33,20 @@ const Calendar = () => {
     alert('イベントタイトル: ' + event.title + '\n詳細: ' + (event.extendedProps.description || '説明はありません'));
   };
 
-  const todolist:CalendarViewProps[] = todos.map((todo) =>({
-    title: todo.title,
-    start: new Date(todo.startdate).toISOString(),
-    end: new Date(todo.enddate).toISOString(),
-    checkdates: Object.keys(todo.checkedDates)
-  }))
+  const todolist: CalendarViewProps[] = todos.flatMap((todo) => 
+    Object.keys(todo.checkedDates).map((dateKey) => ({
+      title: todo.title,
+      start: new Date(dateKey).toISOString(), // 各 checkedDate のキー（日付）を start に設定
+      end: new Date(dateKey).toISOString(), // start と同じ値を設定（変更が必要なら修正）
+      color: todo.color
+    }))
+  );
 
   return (
     <div>
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       locales={allLocales} locale='ja'
       events={todolist}
-      dayCellContent={(arg) => {
-        // その日のイベントがあるか判定
-        const hasEvent = todolist.some((event) => {
-          event.checkdates.some((date) => date === arg.date.toISOString().split('T')[0])
-            }
-          );
-
-        return hasEvent
-          && `<div style="text-align:center; font-size: 20px;">●</div>`
-        }}
       select={handleDateSelect}
       selectable={true}
       eventClick={handleEventClick}
