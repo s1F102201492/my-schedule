@@ -22,8 +22,20 @@ const Form = () => {
 // フォームのオープン
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => { //閉じたらすべてリセット
+    setOpen(false);
+    formReset;
+  }
 
+  const formReset = () => {
+    setTitle('');
+    setSd(dayjs());
+    setEd(dayjs());
+    setNumber(1);
+    setSelectedDays([]);
+    setNdays(true);
+    setSelectColor('');
+  }
 
 // テキストに書き込まれたか判定 
   const [title, setTitle] = useState<string>('');
@@ -146,6 +158,7 @@ const Form = () => {
     todoAdd(newTodo);
     console.log(newTodo)
     setOpen(false);
+    formReset;
   };
 
   return (
@@ -179,7 +192,7 @@ const Form = () => {
                 開始日
               </DialogContentText>
               <DateComponents label='開始日' date={sd} setDate={setSd}
-              minDate={dayjs(new Date("2000-01-01"))} maxDate={ed}
+              minDate={dayjs(new Date("2000-01-01"))} maxDate={dayjs(new Date("2299-12-31"))}
               />
             </Box>
             <Box sx={{ flexDirection: 'row' }}>

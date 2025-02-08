@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
 
 interface PickcolorProps {
     selectColor: string;
@@ -14,26 +16,68 @@ const colorsArray: string[] = [
     "#800000", "#808000", "#008080", "#800080"
   ];
 
-const Pickcolor: React.FC<PickcolorProps> = ({selectColor, setSelectColor}) => {
-    
+// スタイリング定義
+const ColorButton = styled.button<{ color: string }>`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%; /* 丸いボタン */
+  border: 2px solid #000;
+  background-color: ${(props) => props.color}; /* 選択された色 */
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const Palette = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  z-index: 10;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+`;
+
+const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Pickcolor: React.FC<PickcolorProps> = ({ selectColor, setSelectColor }) => {
+  const [showPalette, setShowPalette] = useState(false);
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <h1 className="text-xl font-bold">色</h1>
-      <div className="grid grid-cols-4 gap-2">
-        {colorsArray.map((color) => (
-          <button
-            key={color}
-            className="w-12 h-12 rounded-lg border-2"
-            style={{ backgroundColor: color, borderColor: selectColor === color ? "#000" : "#fff" }}
-            onClick={() => setSelectColor(color)}
-          />
-        ))}
-      </div>
-      <div className="w-4 h-4 rounded-lg border-2" style={{ backgroundColor: selectColor }}>
-      </div>
-    </div>
-  )
-}
+    <Container>
+      色
+      <ColorButton type='button' color={selectColor} onClick={() => setShowPalette(!showPalette)} />
+      {showPalette && (
+        <Palette>
+          {colorsArray.map((color) => (
+            <ColorButton
+              type='button'
+              key={color}
+              color={color}
+              onClick={() => {
+                setSelectColor(color);
+                setShowPalette(false); // 選択後にパレットを閉じる
+              }}
+            />
+          ))}
+        </Palette>
+      )}
+    </Container>
+  );
+};
 
 export default Pickcolor
