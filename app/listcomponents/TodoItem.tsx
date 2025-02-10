@@ -16,10 +16,10 @@ interface TodoProps {
   };
   
 interface TodoItemProps {
-    todos: TodoProps;
+    todo: TodoProps;
 };
 
-const TodoItem: React.FC<TodoItemProps> = ({ todos }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const todoContext = useContext(TodoContext);
 
   if (!todoContext) {
@@ -30,17 +30,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ todos }) => {
   const todayHyphen = new Date().toISOString().split('T')[0]; // Format today as 'yyyy-mm-dd'
 
   const handleCheck = () => {
-    toggleChecked(todos.id, todayHyphen);
+    toggleChecked(todo.id, todayHyphen);
   };
   
   return (
     <div>
         <ListItem>
         <Checkbox
-        checked={!!todos.checkedDates[todayHyphen]}
+        checked={!!todo.checkedDates[todayHyphen]}
         onChange={handleCheck} />
-          <ListItemText primary={todos.title} />
-          {todos.continuedays + 1}日目
+          <ListItemText primary={todo.title} />
+          {todo.continuedays + 1}日目
           <IconButton aria-label="delete">
           <DeleteIcon />
           </IconButton>

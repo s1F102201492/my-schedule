@@ -31,7 +31,6 @@ export default function Home() {
       >
         {`${year}年${month}月${day}日`}のやることリスト
       </Typography>
-      {/* 今後、必要であれば setTodos も使用できる */}
       <TodoList todos={todos} />
     </div>
   );

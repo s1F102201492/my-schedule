@@ -12,6 +12,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 const Header = () => {
   const [value, setValue] = React.useState('');
@@ -49,10 +50,11 @@ const Header = () => {
               href="/calendar"
             />
             <BottomNavigationAction 
-              label="Menu3" 
-              value='Menu3'
-              icon={<MenuIcon />}
-              href="/" 
+              label="タスク一覧" 
+              value='list'
+              icon={<FormatListNumberedIcon />}
+              component={Link}
+              href="/list" 
             />
             <BottomNavigationAction 
               label="Menu4" 
