@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoContext } from '../components/TodoContext';
 
 interface TodoProps {
-    id: string;
+    id: number;
     title: string;
     description: string | null;
     continuedays: number;

@@ -3,7 +3,7 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
 interface TodoProps {
-  id: string;
+  id: number;
   title: string;
   description: string | null;
   continuedays: number;
@@ -17,7 +17,7 @@ interface TodoProps {
 interface TodoContextType {
   todos: TodoProps[];
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-  toggleChecked: (id: string, date: string) => void;
+  toggleChecked: (id: number, date: string) => void;
   todoAdd: (newTodo: TodoProps) => void
 }
 
@@ -27,7 +27,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const initialtodos: TodoProps[] = [
     {
-      id: 'fdasf2121fs',
+      id: 1,
       title: 'プログラミングの勉強',
       description: null,
       continuedays: 2,
@@ -44,7 +44,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       color: 'blue'
     },
     {
-      id: 'dfawefwe335',
+      id: 2,
       title: 'ランニング',
       description: null,
       continuedays: 3,
@@ -59,7 +59,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       color: 'yellow'
     },
     {
-      id: '4f35se4354w',
+      id: 3,
       title: '筋トレ',
       description: null,
       continuedays: 3,
@@ -85,7 +85,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }
 
 // チェックボタンを機能させる関数
-  const toggleChecked = (id: string, date: string) => {
+  const toggleChecked = (id: number, date: string) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) => {
         if (todo.id === id) {

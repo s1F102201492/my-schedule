@@ -93,7 +93,7 @@ const Form = () => {
     e.preventDefault();
 
     // id
-    const createId = () => Math.random().toString(36).substring(2);
+    const createId = () => Math.random();
 
     // 継続日
       const counterContinuedays = (checkedDates:Record<string, boolean>) => {

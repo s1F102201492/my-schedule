@@ -1,10 +1,9 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Checkbox, IconButton, ListItem, ListItemText, Paper, Typography } from '@mui/material'
+import { Checkbox, ListItem, ListItemText } from '@mui/material'
 import React, { useContext, useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoContext } from '../components/TodoContext';
 
 interface TodoProps {
-    id: string;
+    id: number;
     title: string;
     description: string | null;
     continuedays: number;

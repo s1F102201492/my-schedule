@@ -3,7 +3,7 @@ import React from 'react'
 import Detail from '../components/Detail';
 
 interface TodoProps {
-    id: string;
+    id: number;
     title: string;
     description: string | null;
     continuedays: number;

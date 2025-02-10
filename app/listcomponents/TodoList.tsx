@@ -4,7 +4,7 @@ import TodoChecked from './TodoChecked'
 import { List, Typography } from '@mui/material'
 
 interface TodoProps {
-  id: string;
+  id: number;
   title: string;
   description: string | null;
   continuedays: number;

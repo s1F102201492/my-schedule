@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 import React, { useState } from 'react'
 
 interface TodoProps {
-    id: string;
+    id: number;
     title: string;
     description: string | null;
     continuedays: number;
