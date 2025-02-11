@@ -16,7 +16,7 @@ datasource db {
 
 model todos {
   id Int @id @default(autoincrement())
-  title String
+  title String @unique
   description String?
   continuedays Int
   checkedDates Json
