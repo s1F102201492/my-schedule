@@ -13,7 +13,7 @@ export async function main() {
 }
 
 // 全タスクの取得API
-export const GET = async (req: Request, res: NextResponse) => {
+export const GET = async () => {
     try {
         await main();
         const alltodos = await prisma.todos.findMany();
@@ -29,12 +29,12 @@ export const GET = async (req: Request, res: NextResponse) => {
 export const POST = async (req: Request, res: NextResponse) => {
     try {
         const jsondata = await req.json();
-        const { id, title, description, continuedays, checkedDates, startdate, enddate, interval, color } = jsondata
+        const { title, description, continuedays, checkedDates, startdate, enddate, interval, color } = jsondata
         const formattedStartDate = new Date(startdate.replace(/\//g, '-'));
         const formattedEndDate = new Date(enddate.replace(/\//g, '-'));
         await main();
 
-        const posttodo = await prisma.todos.create({data: { id, title, description, continuedays, checkedDates, startdate:formattedStartDate, enddate:formattedEndDate, interval, color }})
+        const posttodo = await prisma.todos.create({data: { title, description, continuedays, checkedDates, startdate:formattedStartDate, enddate:formattedEndDate, interval, color }})
         return NextResponse.json({message:"success", posttodo }, {status: 201});
     } catch (err) {
         return NextResponse.json({message:"Error", error:err }, {status: 500})
