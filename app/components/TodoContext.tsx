@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
 
 interface TodoProps {
   id: number;
@@ -19,63 +19,31 @@ interface TodoContextType {
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   toggleChecked: (id: number, date: string) => void;
   todoAdd: (newTodo: TodoProps) => void
+  fetchAllTodos: () => Promise<void>
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [todos, setTodos] = useState<TodoProps[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const initialtodos: TodoProps[] = [
-    {
-      id: 1,
-      title: 'プログラミングの勉強',
-      description: null,
-      continuedays: 2,
-      checkedDates: {
-        "2025-01-02": true,
-        "2025-01-04": false,
-        "2025-01-06": true,
-        "2025-01-28": false,
-        "2025-01-30": false,
-      },
-      startdate: '2025/01/02',
-      enddate: '2025/03/31',
-      interval: 3,
-      color: 'blue'
-    },
-    {
-      id: 2,
-      title: 'ランニング',
-      description: null,
-      continuedays: 3,
-      checkedDates: {
-        "2025-01-01": true,
-        "2025-01-05": false,
-        "2025-01-06": true
-      },
-      startdate: '2025/01/01',
-      enddate: '2025/01/31',
-      interval: ['月','火','土'],
-      color: 'yellow'
-    },
-    {
-      id: 3,
-      title: '筋トレ',
-      description: null,
-      continuedays: 3,
-      checkedDates: {
-        "2025-01-06": true,
-        "2025-01-09": false,
-        "2025-01-12": true
-      },
-      startdate: '2025/01/07',
-      enddate: '2025/02/01',
-      interval: 3,
-      color: 'green'
+  const fetchAllTodos = async () => {
+    try {
+      const res = await fetch("/api/todo", { cache: "no-store" });
+      const data = await res.json();
+      setTodos(data.alltodos);
+    } catch (error) {
+      console.error("データの取得に失敗しました:", error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const [todos, setTodos] = useState<TodoProps[]>(initialtodos);
+  useEffect(() => {
+  
+    fetchAllTodos();
+  }, []);
 
 // タスクを追加する関数
   const todoAdd = (newTodo: TodoProps) => {
@@ -99,8 +67,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
   
   return (
-    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, todoAdd }}>
-      {children}
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, todoAdd , fetchAllTodos }}>
+      {loading ? <p>Loading...</p> : children}
     </TodoContext.Provider>
   );
   };

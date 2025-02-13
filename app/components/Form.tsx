@@ -6,10 +6,34 @@ import { DateComponents } from '../components/DateComponents';
 import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import Pickcolor from './Pickcolor';
+import { useRouter } from 'next/navigation';
 
 dayjs.locale('ja');
 
+const addTodo = async (
+  title: string,
+  description: string | null,
+  continuedays: number,
+  checkedDates: Record<string, boolean>,
+  startdate: string,
+  enddate: string,
+  interval: number | string[],
+  color: string) => {
+
+    const res = await fetch("/api/todo",
+     { method: "POST",
+       body: JSON.stringify({title, description, continuedays, checkedDates, startdate, enddate, interval, color}),
+       headers: {
+        "Content-type": "application/json",
+       }
+     });
+    
+     return res.json();
+  };
+
 const Form = () => {
+
+  const router = useRouter();
 
   const todoContext = useContext(TodoContext);
   
@@ -17,7 +41,7 @@ const Form = () => {
     throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
   }
 
-  const { todoAdd } = todoContext;
+  const { todoAdd, fetchAllTodos } = todoContext;
 
 // フォームのオープン
   const [open, setOpen] = useState<boolean>(false);
@@ -37,11 +61,17 @@ const Form = () => {
     setSelectColor('');
   }
 
-// テキストに書き込まれたか判定 
+// タイトルに書き込まれたか判定 
   const [title, setTitle] = useState<string>('');
   const handletitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }
+
+// 詳細テキストに書き込まれたか判定 
+const [desc, setdesc] = useState<string>('');
+const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setdesc(e.target.value);
+}
 
 // 日付フォームをStateで管理（sdがstartdate,edがenddate）
   const [sd, setSd] = useState<Dayjs>(dayjs()); //Date型
@@ -89,11 +119,8 @@ const Form = () => {
   // color
   const [selectColor, setSelectColor] = useState<string>('#FF0000');
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-
-    // id
-    const createId = () => Math.random();
 
     // 継続日
       const counterContinuedays = (checkedDates:Record<string, boolean>) => {
@@ -143,20 +170,13 @@ const Form = () => {
     createCheckedDates(sd, ed, setint(ndays)); // 日付: falseの辞書を作成
     const contdays = counterContinuedays(checkdates); //checkdatesから達成日を計算
 
-    const newTodo = {
-      id: createId(),
-      title: title,
-      description: null,
-      continuedays: contdays,
-      checkedDates: checkdates,
-      startdate: sd?.format('YYYY-MM-DD'),
-      enddate: ed?.format('YYYY-MM-DD'),
-      interval: setint(ndays),
-      color: selectColor
-    }
-
-    todoAdd(newTodo);
-    console.log(newTodo)
+    await addTodo(title, desc, contdays, checkdates,
+       sd?.format('YYYY-MM-DD'),ed?.format('YYYY-MM-DD'), setint(ndays), selectColor
+    )
+    
+    await fetchAllTodos();
+    router.push("/calendar");
+    router.refresh();
     setOpen(false);
     formReset();
   };
@@ -173,7 +193,6 @@ const Form = () => {
         open={open}
         onClose={handleClose}>
         <form onSubmit={handleSubmit}>
-          {/* フォーム全体をフォームタグで囲む */}
           <DialogTitle sx={{m: 1}} variant='h4'>タスクや習慣を追加する</DialogTitle>
           <DialogContent>
             <DialogContentText variant='h6'>
@@ -186,6 +205,18 @@ const Form = () => {
               variant="outlined"
               value={title}
               onChange={handletitle}
+            />
+            <DialogContentText variant='h6'>
+              詳細
+            </DialogContentText>
+            <TextField
+              multiline
+              rows={3}
+              margin="dense"
+              fullWidth
+              variant="outlined"
+              value={desc}
+              onChange={handledesc}
             />
             <Box sx={{ flexDirection: 'row' }}>
               <DialogContentText sx={{mt: 3}} variant='h6'>
