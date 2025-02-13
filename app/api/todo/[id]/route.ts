@@ -42,3 +42,21 @@ export const PUT = async (req: Request, res: NextResponse) => {
         await prisma.$disconnect();
     }
 }
+
+// タスク削除用API
+export const DELETE = async (req: Request, res: NextResponse) => {
+    try {
+        const id:number = parseInt(req.url.split("/todo/")[1]);
+        
+        await main();
+        const todoedit = await prisma.todos.delete({
+            where: { id },
+        });
+
+        return NextResponse.json({message:"success", todoedit }, {status: 200});
+    } catch (err) {
+        return NextResponse.json({message:"Error", error:err }, {status: 500})
+    } finally {
+        await prisma.$disconnect();
+    }
+}
