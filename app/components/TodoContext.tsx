@@ -1,6 +1,8 @@
 'use client'
 
+import { Box, Grid2 } from '@mui/material';
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import FadeLoader from "react-spinners/FadeLoader";
 
 interface TodoProps {
   id: number;
@@ -18,7 +20,6 @@ interface TodoContextType {
   todos: TodoProps[];
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   toggleChecked: (id: number, date: string) => void;
-  todoAdd: (newTodo: TodoProps) => void
   fetchAllTodos: () => Promise<void>
 }
 
@@ -41,16 +42,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
-  
     fetchAllTodos();
   }, []);
-
-// タスクを追加する関数
-  const todoAdd = (newTodo: TodoProps) => {
-    setTodos((prevTodos) => {
-      return [...prevTodos, newTodo];
-    })
-  }
 
 // チェックボタンを機能させる関数
   const toggleChecked = (id: number, date: string) => {
@@ -67,8 +60,19 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
   
   return (
-    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, todoAdd , fetchAllTodos }}>
-      {loading ? <p>Loading...</p> : children}
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos }}>
+      {loading ? (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <FadeLoader color="#2196f3" />
+    </Box>
+  ) : children}
     </TodoContext.Provider>
   );
   };
