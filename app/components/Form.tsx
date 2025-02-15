@@ -12,7 +12,7 @@ dayjs.locale('ja');
 
 const addTodo = async (
   title: string,
-  description: string | null,
+  description: string,
   continuedays: number,
   checkedDates: Record<string, boolean>,
   startdate: string,

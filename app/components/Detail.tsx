@@ -2,16 +2,18 @@
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import Edit from './Edit';
 
 interface TodoProps {
     id: number;
     title: string;
-    description: string | null;
+    description: string;
     continuedays: number;
-    checkedDates: Record<string, boolean | undefined>;
+    checkedDates: Record<string, boolean>;
     startdate: string;
     enddate: string;
     interval: number | string[]; 
+    color: string;
     // intervalには数字か配列（曜日を格納する）
   };
   
@@ -82,7 +84,7 @@ const Detail:React.FC<TodoItemProps> = ({ todo }) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
-            <Button variant='contained'>編集</Button>
+            <Edit id={todo.id} todo={todo} />
             <Button variant='contained'>削除</Button>
           </DialogActions>
       </Dialog>

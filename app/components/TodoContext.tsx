@@ -6,7 +6,7 @@ import Loader from './Loader';
 interface TodoProps {
   id: number;
   title: string;
-  description: string | null;
+  description: string;
   continuedays: number;
   checkedDates: Record<string, boolean>;
   startdate: string;
