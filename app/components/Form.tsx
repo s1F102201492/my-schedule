@@ -12,7 +12,7 @@ dayjs.locale('ja');
 
 const addTodo = async (
   title: string,
-  description: string | null,
+  description: string,
   continuedays: number,
   checkedDates: Record<string, boolean>,
   startdate: string,
@@ -41,7 +41,7 @@ const Form = () => {
     throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
   }
 
-  const { todoAdd, fetchAllTodos } = todoContext;
+  const { fetchAllTodos } = todoContext;
 
 // フォームのオープン
   const [open, setOpen] = useState<boolean>(false);

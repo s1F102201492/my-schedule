@@ -5,7 +5,7 @@ import { TodoContext } from '../components/TodoContext';
 interface TodoProps {
     id: number;
     title: string;
-    description: string | null;
+    description: string;
     continuedays: number;
     checkedDates: Record<string, boolean | undefined>;
     startdate: string;
@@ -28,8 +28,8 @@ const TodoChecked: React.FC<TodoItemProps> = ({ todo }) => {
     const { toggleChecked } = todoContext;
     const todayHyphen = new Date().toISOString().split('T')[0]; // Format today as 'yyyy-mm-dd'
   
-    const handleCheck = () => {
-      toggleChecked(todo.id, todayHyphen);
+    const handleCheck = async () => {
+      await toggleChecked(todo.id, todayHyphen);
     };
     
   return (

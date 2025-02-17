@@ -1,11 +1,12 @@
-'use client'
+'use client';
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import Loader from './Loader';
 
 interface TodoProps {
   id: number;
   title: string;
-  description: string | null;
+  description: string;
   continuedays: number;
   checkedDates: Record<string, boolean>;
   startdate: string;
@@ -18,8 +19,7 @@ interface TodoContextType {
   todos: TodoProps[];
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   toggleChecked: (id: number, date: string) => void;
-  todoAdd: (newTodo: TodoProps) => void
-  fetchAllTodos: () => Promise<void>
+  fetchAllTodos: () => Promise<void>;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -30,45 +30,52 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchAllTodos = async () => {
     try {
-      const res = await fetch("/api/todo", { cache: "no-store" });
+      const res = await fetch('/api/todo', { cache: 'no-store' });
       const data = await res.json();
       setTodos(data.alltodos);
     } catch (error) {
-      console.error("データの取得に失敗しました:", error);
+      console.error('データの取得に失敗しました:', error);
     } finally {
       setLoading(false);
     }
   };
 
+  const checkTodo = async (todo: TodoProps) => {
+    try {
+      const res = await fetch(`/api/todo/${todo.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(todo),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      if (!res.ok) throw new Error(`APIエラー: ${(await res.json()).message || '不明なエラー'}`);
+      console.log('チェック更新成功');
+    } catch (error) {
+      console.error('チェック更新エラー:', error);
+    }
+  };
+
   useEffect(() => {
-  
     fetchAllTodos();
   }, []);
 
-// タスクを追加する関数
-  const todoAdd = (newTodo: TodoProps) => {
-    setTodos((prevTodos) => {
-      return [...prevTodos, newTodo];
-    })
-  }
-
-// チェックボタンを機能させる関数
-  const toggleChecked = (id: number, date: string) => {
+  const toggleChecked = async (id: number, date: string) => {
     setTodos((prevTodos) =>
-      prevTodos.map((todo) => {
-        if (todo.id === id) {
-          const newCheckedDates = { ...todo.checkedDates };
-          newCheckedDates[date] = !newCheckedDates[date];
-          return { ...todo, checkedDates: newCheckedDates };
-        }
-        return todo;
-      })
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, checkedDates: { ...todo.checkedDates, [date]: !todo.checkedDates[date] } } : todo
+      )
     );
+
+    const targetTodo = todos.find((todo) => todo.id === id);
+    if (!targetTodo) return;
+
+    await checkTodo({ ...targetTodo, checkedDates: { ...targetTodo.checkedDates, [date]: !targetTodo.checkedDates[date] } });
+    fetchAllTodos();
   };
-  
+
   return (
-    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, todoAdd , fetchAllTodos }}>
-      {loading ? <p>Loading...</p> : children}
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos }}>
+      {loading ? <Loader loading={loading} /> : children}
     </TodoContext.Provider>
   );
-  };
+};
