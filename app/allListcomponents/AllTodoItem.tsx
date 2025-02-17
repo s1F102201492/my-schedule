@@ -5,12 +5,13 @@ import Detail from '../components/Detail';
 interface TodoProps {
     id: number;
     title: string;
-    description: string | null;
+    description: string;
     continuedays: number;
-    checkedDates: Record<string, boolean | undefined>;
+    checkedDates: Record<string, boolean>;
     startdate: string;
     enddate: string;
-    interval: number | string[]; 
+    interval: number | string[];
+    color: string;
     // intervalには数字か配列（曜日を格納する）
   };
   
