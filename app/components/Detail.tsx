@@ -3,6 +3,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import Edit from './Edit';
+import Delete from './Delete';
 
 interface TodoProps {
     id: number;
@@ -85,7 +86,7 @@ const Detail:React.FC<TodoItemProps> = ({ todo }) => {
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
             <Edit id={todo.id} todo={todo} />
-            <Button variant='contained'>削除</Button>
+            <Delete onetodo={todo} />
           </DialogActions>
       </Dialog>
     </div>
