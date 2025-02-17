@@ -59,7 +59,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     fetchAllTodos();
   }, []);
 
-  const toggleChecked = async (id: number, date: string) => {
+  const toggleChecked = async (id: number, date: string) => { //タスクのチェックボタン
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id ? { ...todo, checkedDates: { ...todo.checkedDates, [date]: !todo.checkedDates[date] } } : todo
