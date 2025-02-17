@@ -31,12 +31,13 @@ export const PUT = async (req: Request, res: NextResponse) => {
 
         await main();
         const todoedit = await prisma.todos.update({
-            data: { title, description, continuedays, checkedDates, startdate:formattedStartDate, enddate:formattedEndDate, interval, color },
+            data: { title, description, continuedays, checkedDates: checkedDates as object, startdate:formattedStartDate, enddate:formattedEndDate, interval, color },
             where: { id },
         });
 
         return NextResponse.json({message:"success", todoedit }, {status: 200});
     } catch (err) {
+        console.error("更新エラー:", err);
         return NextResponse.json({message:"Error", error:err }, {status: 500})
     } finally {
         await prisma.$disconnect();

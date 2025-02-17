@@ -29,9 +29,10 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const { toggleChecked } = todoContext;
   const todayHyphen = new Date().toISOString().split('T')[0]; // Format today as 'yyyy-mm-dd'
 
-  const handleCheck = () => {
-    toggleChecked(todo.id, todayHyphen);
+  const handleCheck = async () => {
+    await toggleChecked(todo.id, todayHyphen);
   };
+  
   
   return (
     <div>
