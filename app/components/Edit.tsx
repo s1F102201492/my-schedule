@@ -141,9 +141,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
       // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
       useEffect(() => {
         if (ndays === true) {
-          setSelectedDays([]);
+          setSelectedDays(initialinterval() as string[]);
         } else {
-          setNumber(0);
+          setNumber(initialinterval() as number);
         }
       },[ndays]);
     
