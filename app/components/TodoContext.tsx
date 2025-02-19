@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import Loader from './Loader';
+import { CountContinueDays } from './calculate/CountContinueDays';
 
 interface TodoProps {
   id: number;
@@ -69,7 +70,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const targetTodo = todos.find((todo) => todo.id === id);
     if (!targetTodo) return;
 
-    await checkTodo({ ...targetTodo, checkedDates: { ...targetTodo.checkedDates, [date]: !targetTodo.checkedDates[date] } });
+    const contdays = CountContinueDays(targetTodo.checkedDates)
+
+    await checkTodo({ ...targetTodo, continuedays: contdays, checkedDates: { ...targetTodo.checkedDates, [date]: !targetTodo.checkedDates[date] } });
     fetchAllTodos();
   };
 

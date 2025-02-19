@@ -2,13 +2,14 @@ import React, { useContext, useState } from 'react'
 import { Checkbox, IconButton, ListItem, ListItemText, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoContext } from '../components/TodoContext';
+import { CountContinueDays } from '../components/calculate/CountContinueDays';
 
 interface TodoProps {
     id: number;
     title: string;
     description: string;
     continuedays: number;
-    checkedDates: Record<string, boolean | undefined>;
+    checkedDates: Record<string, boolean>;
     startdate: string;
     enddate: string;
     interval: number | string[]; 
@@ -27,10 +28,12 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   }
 
   const { toggleChecked } = todoContext;
-  const todayHyphen = new Date().toISOString().split('T')[0]; // Format today as 'yyyy-mm-dd'
+  const todayslash = new Date().toISOString().split('T')[0].replace(/-/g, '/');
+
+  const todayDayscnt = CountContinueDays(todo.checkedDates);
 
   const handleCheck = async () => {
-    await toggleChecked(todo.id, todayHyphen);
+    await toggleChecked(todo.id, todayslash);
   };
   
   
@@ -38,10 +41,10 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     <div>
         <ListItem>
         <Checkbox
-        checked={!!todo.checkedDates[todayHyphen]}
+        checked={!!todo.checkedDates[todayslash]}
         onChange={handleCheck} />
           <ListItemText primary={todo.title} />
-          {todo.continuedays + 1}日目
+          {todayDayscnt + 1}日目
           <IconButton aria-label="delete">
           <DeleteIcon />
           </IconButton>

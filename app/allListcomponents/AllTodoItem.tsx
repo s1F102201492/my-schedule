@@ -2,7 +2,7 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, CircularProgre
 import React, { useState } from 'react'
 import Detail from '../components/Detail';
 import Grid from "@mui/material/Grid2";
-import { CheckRate } from '../components/CheckRate';
+import { CheckRate } from '../components/calculate/CheckRate';
 
 interface TodoProps {
     id: number;

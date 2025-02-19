@@ -1,3 +1,5 @@
+// 達成率を計算する関数
+
 'use client';
 
 interface TodoProps {

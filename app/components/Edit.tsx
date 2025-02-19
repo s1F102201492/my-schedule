@@ -165,8 +165,8 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
           if (typeof interval === 'number') { // 日ごとの場合
             let date = sd;
             while (dayjs(date).isBefore(dayjs(ed).add(1,'d'))) {
-              const hyphendate = dayjs(date).format('YYYY-MM-DD')
-              objdate[hyphendate] = false
+              const slashdate = dayjs(date).format('YYYY/MM/DD')
+              objdate[slashdate] = false
               date = dayjs(date).add(interval, 'd')
             };
             return objdate;
@@ -176,8 +176,8 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
             while (dayjs(date).isBefore(dayjs(ed).add(1,'d'))) {
               const day = dayjs(date).format('ddd');
               if (selectedDays.includes(day)) {
-                const hyphendate = dayjs(date).format('YYYY-MM-DD');
-                objdate[hyphendate] = false;
+                const slashdate = dayjs(date).format('YYYY-MM-DD');
+                objdate[slashdate] = false;
     
               }
               date = dayjs(date).add(1, 'd');

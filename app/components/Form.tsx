@@ -122,17 +122,6 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    // 継続日
-      const counterContinuedays = (checkedDates:Record<string, boolean>) => {
-        let counter: number = 0
-        for (const elem in checkedDates) {
-          if (checkedDates[elem] === true) {
-            counter += 1;
-          }
-        }
-        return counter;
-      }
-
     // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
     const setint = (ndays: boolean) => {
       if (ndays) {
@@ -145,8 +134,8 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (typeof interval === 'number') { // 日ごとの場合
         let date = sd;
         while (dayjs(date).isBefore(dayjs(ed).add(1,'d'))) {
-          const hyphendate = dayjs(date).format('YYYY-MM-DD')
-          objdate[hyphendate] = false
+          const slashdate = dayjs(date).format('YYYY/MM/DD')
+          objdate[slashdate] = false
           date = dayjs(date).add(interval, 'd')
         };
         return objdate;
@@ -156,8 +145,8 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
         while (dayjs(date).isBefore(dayjs(ed).add(1,'d'))) {
           const day = dayjs(date).format('ddd');
           if (selectedDays.includes(day)) {
-            const hyphendate = dayjs(date).format('YYYY-MM-DD');
-            objdate[hyphendate] = false;
+            const slashdate = dayjs(date).format('YYYY/MM/DD');
+            objdate[slashdate] = false;
 
           }
           date = dayjs(date).add(1, 'd');
@@ -168,7 +157,7 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     
     const checkdates:Record<string, boolean> = 
     createCheckedDates(sd, ed, setint(ndays)); // 日付: falseの辞書を作成
-    const contdays = counterContinuedays(checkdates); //checkdatesから達成日を計算
+    let contdays:number = 0 // continuedays 登録したてなので最初は0
 
     await addTodo(title, desc, contdays, checkdates,
        sd?.format('YYYY-MM-DD'),ed?.format('YYYY-MM-DD'), setint(ndays), selectColor
