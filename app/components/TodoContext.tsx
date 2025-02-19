@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import Loader from './Loader';
+import { CountContinueDays } from './calculate/CountContinueDays';
 
 interface TodoProps {
   id: number;
@@ -60,17 +61,20 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const toggleChecked = async (id: number, date: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, checkedDates: { ...todo.checkedDates, [date]: !todo.checkedDates[date] } } : todo
-      )
-    );
-
-    const targetTodo = todos.find((todo) => todo.id === id);
-    if (!targetTodo) return;
-
-    await checkTodo({ ...targetTodo, checkedDates: { ...targetTodo.checkedDates, [date]: !targetTodo.checkedDates[date] } });
-    fetchAllTodos();
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          const newCheckedDates = { ...todo.checkedDates, [date]: !todo.checkedDates[date] };
+          const contdays = CountContinueDays(newCheckedDates);
+          
+          // 非同期でサーバーに更新リクエストを送信
+          checkTodo({ ...todo, continuedays: contdays, checkedDates: newCheckedDates });
+  
+          return { ...todo, checkedDates: newCheckedDates };
+        }
+        return todo;
+      });
+    });
   };
 
   return (
