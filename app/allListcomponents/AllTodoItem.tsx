@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Detail from '../components/Detail';
 import Grid from "@mui/material/Grid2";
 import { CheckRate } from '../components/calculate/CheckRate';
+import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 
 interface TodoProps {
     id: number;
@@ -28,6 +29,9 @@ const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
     setOpen(false);
   }
   const checkrate = CheckRate(todo);
+  const slashstart = todo.startdate.replace(/-/g, "/");
+  const slashend = todo.enddate.replace(/-/g, "/");
+
   
   return (
     <div>
@@ -64,10 +68,10 @@ const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
                   </Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    開始日: {todo.startdate}
+                    開始日: {slashstart.replace(/T\S+/,"")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    終了日: {todo.enddate}
+                    終了日: {slashend.replace(/T\S+/,"")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     期間: {todo.interval}
