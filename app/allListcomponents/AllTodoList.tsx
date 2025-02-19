@@ -1,19 +1,23 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TodoContext } from '../components/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import { Box } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 
 const AllTodoList = () => {
-    const todoContext = useContext(TodoContext);
-    
-      if (!todoContext) {
-        throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
-      }
-    
-      const { todos } = todoContext;
+  const todoContext = useContext(TodoContext);
+  
+  if (!todoContext) {
+    throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
+  }
+
+  const { todos, fetchAllTodos } = todoContext;
+
+  useEffect(() => {
+    fetchAllTodos();
+  },[])
 
   return (
     <div>

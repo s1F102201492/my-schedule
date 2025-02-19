@@ -176,7 +176,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
             while (dayjs(date).isBefore(dayjs(ed).add(1,'d'))) {
               const day = dayjs(date).format('ddd');
               if (selectedDays.includes(day)) {
-                const slashdate = dayjs(date).format('YYYY-MM-DD');
+                const slashdate = dayjs(date).format('YYYY/MM/DD');
                 objdate[slashdate] = false;
     
               }
@@ -191,7 +191,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
         const contdays = todo.continuedays; //編集なので達成日はそのまま
         
         await editTodo(id, title, desc, contdays, checkdates,
-            sd?.format('YYYY-MM-DD'),ed?.format('YYYY-MM-DD'), setint(ndays), selectColor
+            sd?.format('YYYY/MM/DD'),ed?.format('YYYY/MM/DD'), setint(ndays), selectColor
          )
          
         await fetchAllTodos();
@@ -243,7 +243,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
                 開始日
               </DialogContentText>
               <DateComponents label='開始日' date={sd} setDate={setSd}
-              minDate={dayjs(new Date("2000-01-01"))} maxDate={dayjs(new Date("2299-12-31"))}
+              minDate={dayjs(new Date("2000/01/01"))} maxDate={dayjs(new Date("2299/12/31"))}
               />
             </Box>
             <Box sx={{ flexDirection: 'row' }}>
@@ -251,7 +251,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
                 終了日
               </DialogContentText>
               <DateComponents label='終了日' date={ed} setDate={setEd}
-              minDate={sd} maxDate={dayjs(new Date("2299-12-31"))}
+              minDate={sd} maxDate={dayjs(new Date("2299/12/31"))}
               />
             </Box>
             <DialogContentText sx={{mt: 3}} variant='h6'>

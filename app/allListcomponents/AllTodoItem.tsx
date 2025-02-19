@@ -22,13 +22,13 @@ interface TodoItemProps {
 };
 
 const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => { //閉じたらすべてリセット
-      setOpen(false);
-    }
-    const checkrate = CheckRate(todo);
-
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => { //閉じたらすべてリセット
+    setOpen(false);
+  }
+  const checkrate = CheckRate(todo);
+  
   return (
     <div>
         <Grid size={{xs:12, sm:6, md:4}}>

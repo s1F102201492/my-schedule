@@ -60,20 +60,21 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     fetchAllTodos();
   }, []);
 
-  const toggleChecked = async (id: number, date: string) => { //タスクのチェックボタン
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, checkedDates: { ...todo.checkedDates, [date]: !todo.checkedDates[date] } } : todo
-      )
-    );
-
-    const targetTodo = todos.find((todo) => todo.id === id);
-    if (!targetTodo) return;
-
-    const contdays = CountContinueDays(targetTodo.checkedDates)
-
-    await checkTodo({ ...targetTodo, continuedays: contdays, checkedDates: { ...targetTodo.checkedDates, [date]: !targetTodo.checkedDates[date] } });
-    fetchAllTodos();
+  const toggleChecked = async (id: number, date: string) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          const newCheckedDates = { ...todo.checkedDates, [date]: !todo.checkedDates[date] };
+          const contdays = CountContinueDays(newCheckedDates);
+          
+          // 非同期でサーバーに更新リクエストを送信
+          checkTodo({ ...todo, continuedays: contdays, checkedDates: newCheckedDates });
+  
+          return { ...todo, checkedDates: newCheckedDates };
+        }
+        return todo;
+      });
+    });
   };
 
   return (

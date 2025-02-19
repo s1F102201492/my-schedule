@@ -160,7 +160,7 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     let contdays:number = 0 // continuedays 登録したてなので最初は0
 
     await addTodo(title, desc, contdays, checkdates,
-       sd?.format('YYYY-MM-DD'),ed?.format('YYYY-MM-DD'), setint(ndays), selectColor
+       sd?.format('YYYY/MM/DD'),ed?.format('YYYY/MM/DD'), setint(ndays), selectColor
     )
     
     await fetchAllTodos();
@@ -212,7 +212,7 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
                 開始日
               </DialogContentText>
               <DateComponents label='開始日' date={sd} setDate={setSd}
-              minDate={dayjs(new Date("2000-01-01"))} maxDate={dayjs(new Date("2299-12-31"))}
+              minDate={dayjs(new Date("2000/01/01"))} maxDate={dayjs(new Date("2299/12/31"))}
               />
             </Box>
             <Box sx={{ flexDirection: 'row' }}>
@@ -220,7 +220,7 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
                 終了日
               </DialogContentText>
               <DateComponents label='終了日' date={ed} setDate={setEd}
-              minDate={sd} maxDate={dayjs(new Date("2299-12-31"))}
+              minDate={sd} maxDate={dayjs(new Date("2299/12/31"))}
               />
             </Box>
             <DialogContentText sx={{mt: 3}} variant='h6'>
