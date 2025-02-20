@@ -11,6 +11,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import MenuIcon from '@mui/icons-material/Menu';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import Link from 'next/link';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
@@ -57,10 +58,10 @@ const Header = () => {
               href="/list" 
             />
             <BottomNavigationAction 
-              label="Menu4" 
-              value='Menu4'
-              icon={<MenuIcon />} 
-              href="/calendar"
+              label="My Goal" 
+              value='goal'
+              icon={<SportsScoreIcon />} 
+              href="/goal"
             />
           </BottomNavigation>
           {/* ここまでをBottom navigationに変更 */}
