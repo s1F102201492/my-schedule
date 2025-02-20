@@ -37,7 +37,7 @@ const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
     <div>
         <Grid size={{xs:12, sm:6, md:4}}>
             <Box onClick={handleClickOpen} sx={{ cursor: "pointer" }}>
-            <Card sx={{ minWidth: 275, height: "100%" }} >
+            <Card sx={{ minWidth: 200, height: "100%" }} >
               <CardContent
                 sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
               >

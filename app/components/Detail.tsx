@@ -46,6 +46,9 @@ const Detail:React.FC<TodoItemProps> = ({ todo, onClose }) => {
         const totalcount = Object.keys(todo.checkedDates).length;
         return Math.round((checkcount / totalcount) * 1000) / 10
     }
+
+    const slashstart = todo.startdate.replace(/-/g, "/");
+  const slashend = todo.enddate.replace(/-/g, "/");
       
   return (
     <div>
@@ -56,10 +59,10 @@ const Detail:React.FC<TodoItemProps> = ({ todo, onClose }) => {
             詳細:{descriptionnull(todo.description) ? todo.description : 'なし' }
         </Typography>
         <Typography>
-            開始日:{todo.startdate}
+            開始日:{slashstart.replace(/T\S+/,"")}
         </Typography>
         <Typography>
-            終了日:{todo.enddate}
+            終了日:{slashend.replace(/T\S+/,"")}
         </Typography>
         <Typography>
             間隔:{intervaltype(todo.interval) ? todo.interval+'日ごと' : '曜日:'+todo.interval}
