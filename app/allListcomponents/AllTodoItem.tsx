@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Dialog, Divider, Typography } from '@mui/material';
+import { Box,  Card, CardContent, CircularProgress, Dialog, Divider, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import Detail from '../components/Detail';
 import Grid from "@mui/material/Grid2";
@@ -28,12 +28,15 @@ const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
     setOpen(false);
   }
   const checkrate = CheckRate(todo);
+  const slashstart = todo.startdate.replace(/-/g, "/");
+  const slashend = todo.enddate.replace(/-/g, "/");
+
   
   return (
     <div>
         <Grid size={{xs:12, sm:6, md:4}}>
             <Box onClick={handleClickOpen} sx={{ cursor: "pointer" }}>
-            <Card sx={{ minWidth: 275, height: "100%" }} >
+            <Card sx={{ minWidth: 200, height: "100%" }} >
               <CardContent
                 sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
               >
@@ -64,10 +67,10 @@ const AllTodoItem:React.FC<TodoItemProps> = ({ todo }) => {
                   </Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    開始日: {todo.startdate}
+                    開始日: {slashstart.replace(/T\S+/,"")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    終了日: {todo.enddate}
+                    終了日: {slashend.replace(/T\S+/,"")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     期間: {todo.interval}
