@@ -1,9 +1,8 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Dialog, Divider, Typography } from '@mui/material';
+import { Box,  Card, CardContent, CircularProgress, Dialog, Divider, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import Detail from '../components/Detail';
 import Grid from "@mui/material/Grid2";
 import { CheckRate } from '../components/calculate/CheckRate';
-import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 
 interface TodoProps {
     id: number;
