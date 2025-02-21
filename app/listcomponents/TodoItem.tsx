@@ -27,7 +27,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
   }
 
-  const { toggleChecked } = todoContext;
+  const { toggleChecked, toggleDelete } = todoContext;
   const todayslash = new Date().toISOString().split('T')[0].replace(/-/g, '/');
 
   const todayDayscnt = CountContinueDays(todo.checkedDates);
@@ -36,6 +36,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     await toggleChecked(todo.id, todayslash);
   };
   
+  const handleDelete = async () => {
+    await toggleDelete(todo.id, todayslash)
+  }
   
   return (
     <div>
@@ -45,8 +48,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
         onChange={handleCheck} />
           <ListItemText primary={todo.title} />
           {todayDayscnt + 1}日目
-          <IconButton aria-label="delete">
-          <DeleteIcon />
+          <IconButton aria-label="delete" onClick={handleDelete}>
+            <DeleteIcon />
           </IconButton>
         </ListItem>
     </div>

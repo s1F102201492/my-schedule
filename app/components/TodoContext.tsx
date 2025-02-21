@@ -21,6 +21,7 @@ interface TodoContextType {
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   toggleChecked: (id: number, date: string) => void;
   fetchAllTodos: () => Promise<void>;
+  toggleDelete: (id: number, date: string) => void;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -60,7 +61,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     fetchAllTodos();
   }, []);
 
-  const toggleChecked = async (id: number, date: string) => {
+  const toggleChecked = async (id: number, date: string) => { //チェックボタンを機能させる関数
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
         if (todo.id === id) {
@@ -77,8 +78,20 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  const toggleDelete = async (id: number, date: string) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter((todo) => {
+        if (todo.id === id) {
+          const arraydates = Object.entries(todo.checkedDates).filter((d) => d[0] !== date);
+          return Object.keys(Object.fromEntries(arraydates))
+        }
+      })
+    })
+    console.log(todos)
+  }
+
   return (
-    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos }}>
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos, toggleDelete }}>
       {loading ? <Loader loading={loading} /> : children}
     </TodoContext.Provider>
   );
