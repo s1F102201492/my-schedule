@@ -204,9 +204,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
 
   return (
     <div>
-        <Box sx={{m: 2}}>
+      <Box sx={{m: 2}}>
         <Button variant="contained" startIcon={<EditIcon />} sx={{ mr: 1 }} onClick={handleClickOpen}>
-        編集
+          編集
         </Button>
       </Box>
       <Dialog

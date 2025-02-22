@@ -7,6 +7,7 @@ import { DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
 import { TodoContext } from './TodoContext';
+import { Box } from '@mui/material';
 
 interface CalendarViewProps {
   title: string;
@@ -44,19 +45,21 @@ const Calendar = () => {
 
   return (
     <div>
-      <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-      locales={allLocales} locale='ja'
-      events={todolist}
-      eventColor="#4caf50"
-      select={handleDateSelect}
-      selectable={true}
-      eventClick={handleEventClick}
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek listWeek',
-      }}
-      />
+      <Box sx={{pb: 3}}>
+        <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        locales={allLocales} locale='ja'
+        events={todolist}
+        eventColor="#4caf50"
+        select={handleDateSelect}
+        selectable={true}
+        eventClick={handleEventClick}
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek listWeek',
+        }}
+        />
+      </Box>
     </div>
   )
 }
