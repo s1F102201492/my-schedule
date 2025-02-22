@@ -117,7 +117,7 @@ const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
   },[ndays]);
 
   // color
-  const [selectColor, setSelectColor] = useState<string>('#FF0000');
+  const [selectColor, setSelectColor] = useState<string>('#ffffff');
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();

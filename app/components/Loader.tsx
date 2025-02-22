@@ -23,12 +23,12 @@ const Loader: React.FC<loadingType> = ({ loading }) => {
                 mb: 2, // 下に余白を追加
                 fontSize: "1.5rem",
                 fontWeight: "bold",
-                color: "#1769aa",
+                color: "#357a38",
                 }}
             >
                 処理中...
             </Typography>
-        <FadeLoader color="#2196f3" loading={loading} />
+        <FadeLoader color="#6fbf73" loading={loading} />
         </Box>
     </div>
   )

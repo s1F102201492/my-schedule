@@ -27,7 +27,7 @@ const Header = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
-            My schedule
+            Best practice
           </Typography>
           {/* ここから */}
           <BottomNavigation
