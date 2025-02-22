@@ -57,6 +57,21 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const deleteTodo = async (todo: TodoProps) => {
+    try {
+      const res = await fetch(`/api/todo/${todo.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(todo),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      if (!res.ok) throw new Error(`APIエラー: ${(await res.json()).message || '不明なエラー'}`);
+      console.log('チェック更新成功');
+    } catch (error) {
+      console.error('チェック更新エラー:', error);
+    }
+  };
+
   useEffect(() => {
     fetchAllTodos();
   }, []);
@@ -80,14 +95,18 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const toggleDelete = async (id: number, date: string) => {
     setTodos((prevTodos) => {
-      return prevTodos.filter((todo) => {
+      return prevTodos.map((todo) => {
         if (todo.id === id) {
           const arraydates = Object.entries(todo.checkedDates).filter((d) => d[0] !== date);
-          return Object.keys(Object.fromEntries(arraydates))
+          const newCheckedDates = Object.fromEntries(arraydates);
+
+          deleteTodo({ ...todo,  checkedDates: newCheckedDates });
+
+          return { ...todo, checkedDates: newCheckedDates };
         }
-      })
-    })
-    console.log(todos)
+        return todo;
+      });
+    });
   }
 
   return (

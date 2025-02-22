@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Checkbox, IconButton, ListItem, ListItemText, Typography } from '@mui/material';
+import { Checkbox, IconButton, ListItem, ListItemText, Tooltip, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoContext } from '../components/TodoContext';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
@@ -48,9 +48,11 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
         onChange={handleCheck} />
           <ListItemText primary={todo.title} />
           {todayDayscnt + 1}日目
-          <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="削除">
+            <IconButton aria-label="delete" onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </ListItem>
     </div>
   )
