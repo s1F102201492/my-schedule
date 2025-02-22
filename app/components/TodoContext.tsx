@@ -21,6 +21,7 @@ interface TodoContextType {
   setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
   toggleChecked: (id: number, date: string) => void;
   fetchAllTodos: () => Promise<void>;
+  toggleDelete: (id: number, date: string) => void;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -56,11 +57,26 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const deleteTodo = async (todo: TodoProps) => {
+    try {
+      const res = await fetch(`/api/todo/${todo.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(todo),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      if (!res.ok) throw new Error(`APIエラー: ${(await res.json()).message || '不明なエラー'}`);
+      console.log('チェック更新成功');
+    } catch (error) {
+      console.error('チェック更新エラー:', error);
+    }
+  };
+
   useEffect(() => {
     fetchAllTodos();
   }, []);
 
-  const toggleChecked = async (id: number, date: string) => {
+  const toggleChecked = async (id: number, date: string) => { //チェックボタンを機能させる関数
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
         if (todo.id === id) {
@@ -77,8 +93,24 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  const toggleDelete = async (id: number, date: string) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          const arraydates = Object.entries(todo.checkedDates).filter((d) => d[0] !== date);
+          const newCheckedDates = Object.fromEntries(arraydates);
+
+          deleteTodo({ ...todo,  checkedDates: newCheckedDates });
+
+          return { ...todo, checkedDates: newCheckedDates };
+        }
+        return todo;
+      });
+    });
+  }
+
   return (
-    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos }}>
+    <TodoContext.Provider value={{ todos, setTodos, toggleChecked, fetchAllTodos, toggleDelete }}>
       {loading ? <Loader loading={loading} /> : children}
     </TodoContext.Provider>
   );

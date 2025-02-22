@@ -7,6 +7,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import Pickcolor from './Pickcolor'
 import { useRouter } from 'next/navigation';
 import { TodoContext } from './TodoContext';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface oneTodo {
     id: number,
@@ -204,7 +205,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
   return (
     <div>
         <Box sx={{m: 2}}>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="contained" startIcon={<EditIcon />} sx={{ mr: 1 }} onClick={handleClickOpen}>
         編集
         </Button>
       </Box>
