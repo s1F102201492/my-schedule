@@ -4,6 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import React, { useContext, useState } from 'react'
 import { TodoContext } from './TodoContext';
 import { useRouter } from 'next/navigation';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface oneTodo {
     onetodo: TodoProps
@@ -72,7 +73,7 @@ const Delete:React.FC<oneTodo> = ({ onetodo }) => {
 
   return (
     <div>
-        <Button variant='contained' onClick={handleClickOpen}>削除</Button>
+        <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={handleClickOpen}>削除</Button>
         <Dialog
         fullWidth
         open={open}
