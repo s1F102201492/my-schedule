@@ -82,7 +82,7 @@ const Delete:React.FC<oneTodo> = ({ onetodo }) => {
           <DialogTitle sx={{m: 1}} variant='h4'>本当に削除しますか？</DialogTitle>
           <DialogContent>
             <DialogContentText variant='h6'>
-              タイトル
+              タイトル名：{onetodo.title}
             </DialogContentText>
             </DialogContent>
           <DialogActions>
