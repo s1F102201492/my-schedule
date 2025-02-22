@@ -47,7 +47,7 @@ const Calendar = () => {
       <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       locales={allLocales} locale='ja'
       events={todolist}
-      eventColor="#6fbf73"
+      eventColor="#4caf50"
       select={handleDateSelect}
       selectable={true}
       eventClick={handleEventClick}
