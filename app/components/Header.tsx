@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -10,17 +10,13 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
-import MenuIcon from '@mui/icons-material/Menu';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import Link from 'next/link';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
-  const [value, setValue] = React.useState('');
-  
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const pathname = usePathname();
 
   return (
     <Box>
@@ -29,42 +25,40 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
             Best practice
           </Typography>
-          {/* ここから */}
           <BottomNavigation
             showLabels
-            value={value}
-            onChange={handleChange}
+            value={pathname} // 現在のページのパスを value に設定
             sx={{ flexGrow: 1, backgroundColor: 'inherit' }}
           >
             <BottomNavigationAction 
               label="Home" 
-              value='Home'
+              value="/" // pathname と一致するように設定
               icon={<HomeIcon />} 
               component={Link} 
               href="/"
             />
             <BottomNavigationAction 
               label="カレンダー" 
-              value='calender'
+              value="/calendar"
               icon={<EventIcon />} 
               component={Link} 
               href="/calendar"
             />
             <BottomNavigationAction 
               label="タスク一覧" 
-              value='list'
+              value="/list"
               icon={<FormatListNumberedIcon />}
               component={Link}
               href="/list" 
             />
             <BottomNavigationAction 
               label="My Goal" 
-              value='goal'
-              icon={<SportsScoreIcon />} 
+              value="/goal"
+              icon={<SportsScoreIcon/>} 
+              component={Link}
               href="/goal"
             />
           </BottomNavigation>
-          {/* ここまでをBottom navigationに変更 */}
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>

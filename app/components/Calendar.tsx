@@ -31,7 +31,7 @@ const Calendar = () => {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const event: EventApi = clickInfo.event;
-    alert('イベントタイトル: ' + event.title + '\n詳細: ' + (event.extendedProps.description || '説明はありません'));
+    alert('イベントタイトル: ' + event.title );
   };
 
   const todolist: CalendarViewProps[] = todos.flatMap((todo) => 
