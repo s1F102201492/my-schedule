@@ -20,43 +20,63 @@ const Header = () => {
 
   return (
     <Box>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: 'primary' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
             Best practice
           </Typography>
           <BottomNavigation
             showLabels
-            value={pathname} // 現在のページのパスを value に設定
+            value={pathname}
             sx={{ flexGrow: 1, backgroundColor: 'inherit' }}
           >
-            <BottomNavigationAction 
-              label="Home" 
-              value="/" // pathname と一致するように設定
-              icon={<HomeIcon />} 
-              component={Link} 
+            <BottomNavigationAction
+              label="Home"
+              value="/"
+              icon={<HomeIcon />}
+              component={Link}
               href="/"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/' ? 'primary.light' : 'inherit'
+                },
+              }}
             />
-            <BottomNavigationAction 
-              label="カレンダー" 
+            <BottomNavigationAction
+              label="カレンダー"
               value="/calendar"
-              icon={<EventIcon />} 
-              component={Link} 
+              icon={<EventIcon />}
+              component={Link}
               href="/calendar"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/calendar' ? 'primary.light' : 'inherit'
+                },
+              }}
             />
-            <BottomNavigationAction 
-              label="タスク一覧" 
+            <BottomNavigationAction
+              label="タスク一覧"
               value="/list"
               icon={<FormatListNumberedIcon />}
               component={Link}
-              href="/list" 
+              href="/list"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/list' ? 'primary.light' : 'inherit'
+                },
+              }}
             />
-            <BottomNavigationAction 
-              label="My Goal" 
+            <BottomNavigationAction
+              label="My Goal"
               value="/goal"
-              icon={<SportsScoreIcon/>} 
+              icon={<SportsScoreIcon />}
               component={Link}
               href="/goal"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/goal' ? 'primary.light' : 'inherit'
+                },
+              }}
             />
           </BottomNavigation>
           <Button color="inherit">Login</Button>
@@ -64,6 +84,6 @@ const Header = () => {
       </AppBar>
     </Box>
   );
-}
+};
 
 export default Header;
