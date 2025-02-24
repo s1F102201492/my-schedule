@@ -40,6 +40,7 @@ const Header = () => {
                 '&.Mui-selected': {
                   color: pathname === '/' ? 'primary.light' : 'inherit'
                 },
+                whiteSpace: 'nowrap'
               }}
             />
             <BottomNavigationAction
@@ -52,6 +53,7 @@ const Header = () => {
                 '&.Mui-selected': {
                   color: pathname === '/calendar' ? 'primary.light' : 'inherit'
                 },
+                whiteSpace: 'nowrap'
               }}
             />
             <BottomNavigationAction
@@ -64,6 +66,7 @@ const Header = () => {
                 '&.Mui-selected': {
                   color: pathname === '/list' ? 'primary.light' : 'inherit'
                 },
+                whiteSpace: 'nowrap'
               }}
             />
             <BottomNavigationAction
@@ -76,6 +79,7 @@ const Header = () => {
                 '&.Mui-selected': {
                   color: pathname === '/goal' ? 'primary.light' : 'inherit'
                 },
+                whiteSpace: 'nowrap'
               }}
             />
           </BottomNavigation>
