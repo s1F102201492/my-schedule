@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -10,66 +10,84 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
-import MenuIcon from '@mui/icons-material/Menu';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import Link from 'next/link';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
-  const [value, setValue] = React.useState('');
-  
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const pathname = usePathname();
 
   return (
     <Box>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: 'primary' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
-            My schedule
+            Best practice
           </Typography>
-          {/* ここから */}
           <BottomNavigation
             showLabels
-            value={value}
-            onChange={handleChange}
+            value={pathname}
             sx={{ flexGrow: 1, backgroundColor: 'inherit' }}
           >
-            <BottomNavigationAction 
-              label="Home" 
-              value='Home'
-              icon={<HomeIcon />} 
-              component={Link} 
+            <BottomNavigationAction
+              label="Home"
+              value="/"
+              icon={<HomeIcon />}
+              component={Link}
               href="/"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/' ? 'primary.light' : 'inherit'
+                },
+                whiteSpace: 'nowrap'
+              }}
             />
-            <BottomNavigationAction 
-              label="カレンダー" 
-              value='calender'
-              icon={<EventIcon />} 
-              component={Link} 
+            <BottomNavigationAction
+              label="カレンダー"
+              value="/calendar"
+              icon={<EventIcon />}
+              component={Link}
               href="/calendar"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/calendar' ? 'primary.light' : 'inherit'
+                },
+                whiteSpace: 'nowrap'
+              }}
             />
-            <BottomNavigationAction 
-              label="タスク一覧" 
-              value='list'
+            <BottomNavigationAction
+              label="タスク一覧"
+              value="/list"
               icon={<FormatListNumberedIcon />}
               component={Link}
-              href="/list" 
+              href="/list"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/list' ? 'primary.light' : 'inherit'
+                },
+                whiteSpace: 'nowrap'
+              }}
             />
-            <BottomNavigationAction 
-              label="My Goal" 
-              value='goal'
-              icon={<SportsScoreIcon />} 
+            <BottomNavigationAction
+              label="My Goal"
+              value="/goal"
+              icon={<SportsScoreIcon />}
+              component={Link}
               href="/goal"
+              sx={{ 
+                '&.Mui-selected': {
+                  color: pathname === '/goal' ? 'primary.light' : 'inherit'
+                },
+                whiteSpace: 'nowrap'
+              }}
             />
           </BottomNavigation>
-          {/* ここまでをBottom navigationに変更 */}
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </Box>
   );
-}
+};
 
 export default Header;
