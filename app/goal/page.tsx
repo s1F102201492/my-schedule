@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Header from '../components/Header'
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Edit } from '@mui/icons-material'
 import GoalSetting from '../components/goal/GoalSetting';
 
@@ -15,9 +15,11 @@ const page = () => {
   return (
     <div>
       <Header />
-      <Button variant="contained" startIcon={<Edit />} onClick={openform}>
-        目標を編集
-      </Button>
+      <Box sx={{ m: 3 }}>
+        <Button variant="contained" startIcon={<Edit />} onClick={openform}>
+          目標を編集
+        </Button>
+      </Box>
       {goalsettingform && <GoalSetting open={goalsettingform} onClose={openform}/>}
     </div>
   )
