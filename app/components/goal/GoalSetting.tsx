@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Container, Dialog, DialogContent, DialogTitle, IconButton, List, ListItem, Step, StepLabel, Stepper, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ImageIcon from '@mui/icons-material/Image';
 
@@ -8,19 +8,17 @@ const GoalSetting = () => {
     const [text, setText] = useState<string>("");
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
-    }
+    };
 
     const [img, setImg] = useState<string>("");
     const handleSetImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file: FileList | null = e.target.files;
+        const file: File | undefined = e.target.files?.[0];
         console.log(file)
-        if (file === null || undefined || "") {
+        if (!file) {
             return ;
         } else {
-            console.log(file)
-            const imageUrl = URL.createObjectURL(file[0])
+            const imageUrl = URL.createObjectURL(file);
             setImg(imageUrl);
-            
         }
     }
 
@@ -30,11 +28,12 @@ const GoalSetting = () => {
       <Typography variant='h5'>
         おすすめの習慣を提案
       </Typography>
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 3 }}>
           <Typography variant='subtitle1'>
             テキスト
           </Typography>
           <TextField
+          sx={{ mt: 1 }}
           fullWidth
           rows={4}
           multiline
@@ -43,22 +42,24 @@ const GoalSetting = () => {
           onChange={inputText}
            />
         </Box>
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 3 }}>
           <Typography variant='subtitle1'>
             画像をアップロード
           </Typography>
           <input
-          type='file'
+          type="file"
           style={{ display: "none" }}
           accept='image/*'
           id='img-upload'
           onChange={handleSetImg} />
-          <label htmlFor='img-upload'>
-            <Button variant="outlined" component="span" startIcon={<ImageIcon />}>   
-                画像をアップロード
-            </Button>
-            {img && <img src={img} />}
-          </label>
+          <Box sx={{ mt: 1}}>
+            <label htmlFor='img-upload'>
+              <Button variant="outlined" component="span" startIcon={<ImageIcon />}>   
+                  画像をアップロード
+              </Button>
+              {img && <img src={img} />}
+            </label>
+          </Box>
         </Box>
      </Box>
     </div>
