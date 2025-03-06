@@ -1,20 +1,28 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { prompt } = await request.json();
-  
-  const apiKey = process.env.OPENAI_API_KEY;
-  const apiEndPoint = process.env.OPENAI_API_URL
-  
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "API keyがありません。" },
-      { status: 500 }
-    );
-  }
-  
-  // INIAD_APIエンドポイント: https://api.openai.iniad.org/api/v1/chat/completions
   try {
+    const { prompt } = await request.json();
+
+    const apiKey = process.env.OPENAI_API_KEY;
+    const apiEndPoint = process.env.OPENAI_API_URL;
+
+    if (!apiKey) {
+      console.error("API keyがありません。");
+      return NextResponse.json(
+        { error: "API keyがありません。" },
+        { status: 500 }
+      );
+    }
+
+    if (!apiEndPoint) {
+      console.error("API URLがありません。");
+      return NextResponse.json(
+        { error: "API URLがありません。" },
+        { status: 500 }
+      );
+    }
+
     const response = await fetch(`${apiEndPoint}`, {
       method: "POST",
       headers: {
@@ -25,10 +33,20 @@ export async function POST(request: Request) {
         model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 500,
-        stream: true, // ストリームを有効にする
+        stream: true,
       }),
     });
-    
+
+    if (!response.ok) {
+      console.error(`APIリクエスト失敗: ${response.status} ${response.statusText}`);
+      const errorData = await response.json();
+      console.error("エラーメッセージ:", errorData);
+      return NextResponse.json(
+        { error: "APIリクエストが失敗しました。" },
+        { status: response.status }
+      );
+    }
+
     const reader = response.body?.getReader();
     const stream = new ReadableStream({
       async pull(controller) {
@@ -40,16 +58,13 @@ export async function POST(request: Request) {
         controller.enqueue(value);
       },
     });
-    
-    const streamResponse = new Response(stream);
-    return streamResponse;
-    } catch (error) {
+
+    return new Response(stream);
+  } catch (error) {
+    console.error("サーバーエラー:", error);
     return NextResponse.json(
       { error: "responseの取得に失敗しました。" },
       { status: 500 }
     );
   }
 }
-
-
-
