@@ -5,35 +5,36 @@ import React, { useState } from 'react'
 import ImageIcon from '@mui/icons-material/Image';
 
 const GoalSetting = () => {
-    const [text, setText] = useState<string>("");
-    const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-    };
+  const [text, setText] = useState<string>("");
+  const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setText(e.target.value);
+  };
 
-    const [img, setImg] = useState<string>("");
-    const handleSetImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file: File | undefined = e.target.files?.[0];
-        console.log(file)
-        if (!file) {
-            return ;
-        } else {
-            const imageUrl = URL.createObjectURL(file);
-            setImg(imageUrl);
-        }
-    };
+  const [img, setImg] = useState<string>("");
+  const handleSetImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file: File | undefined = e.target.files?.[0];
+      console.log(file)
+      if (!file) {
+          return ;
+      } else {
+          const imageUrl = URL.createObjectURL(file);
+          setImg(imageUrl);
+      }
+  };
 
   const [isComplete, setIsComplete] = useState<boolean>(true); // AIの回答生成が完了したことを示す値
   const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-  const [response, setResponse] = useState<string>(""); // AIからの回答を表す状態変化
+  const [response, setResponse] = useState<string[]>([]); // AIからの回答を表す状態変化
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => { //ボタンを押すとAIが分析を開始し応答を表示
-      
+      e.preventDefault();
+
       if (text === "") {
         alert("プロンプトを入力してください。");
         return;
       }
 
-      setResponse(""); // 初期化
+      setResponse([]); // 初期化
       setIsComplete(false); // ストリーミング開始
       setIsGenerating(true); // 応答生成開始
       
@@ -48,12 +49,14 @@ const GoalSetting = () => {
         },
         body: JSON.stringify({ prompt: SystemPrompt }), // キー名を修正
       });
+
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
 
       if (reader) {
         let done = false;
         let incompleteChunk = ""; // 不完全なチャンクを一時的に保持
+
         while (!done) {
           const { value, done: readerDone } = await reader.read();
           done = readerDone;
@@ -64,21 +67,24 @@ const GoalSetting = () => {
           const lines = incompleteChunk
             .split("\n")
             .filter((line) => line.startsWith("data: "));
+
           for (const line of lines) {
             const jsonString = line.replace("data: ", "").trim();
+
             if (jsonString === "[DONE]") {
               // ストリーミングが完了した場合
               setIsComplete(true); // 完了フラグを立てる
               setIsGenerating(false); // 応答生成完了
               break;
             }
+
             try {
               // JSONとして有効か確認
               const parsedChunk = JSON.parse(jsonString);
               const content = parsedChunk.choices[0]?.delta?.content;
               if (content) {
                 // チャンクごとにレスポンスを追加
-                setResponse((prev) => prev + content);
+                setResponse((prev) => [...prev, content]);
               }
             } catch (error) {
               // JSONが未完了の場合は、次のチャンクで処理を続ける
@@ -141,6 +147,9 @@ const GoalSetting = () => {
         onClick={handleSubmit} sx={{mt: 4, height: 40, width: 180}}>
           おすすめの習慣を見る
         </Button>
+        <Box sx={{ mt: 2 }}>
+          {response}
+        </Box>
      </Box>
     </div>
   )

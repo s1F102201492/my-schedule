@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { prompt } = await request.json();
+    const { prompt } = await req.json();
 
     const apiKey = process.env.OPENAI_API_KEY;
     const apiEndPoint = process.env.OPENAI_API_URL;
@@ -34,9 +34,11 @@ export async function POST(request: Request) {
         messages: [{ role: "user", content: prompt }],
         max_tokens: 500,
         stream: true,
+        temperature: 1.5
       }),
     });
 
+    //API処理が正常にできない場合
     if (!response.ok) {
       console.error(`APIリクエスト失敗: ${response.status} ${response.statusText}`);
       const errorData = await response.json();
@@ -47,7 +49,9 @@ export async function POST(request: Request) {
       );
     }
 
+    // ストリームの処理
     const reader = response.body?.getReader();
+    console.log(response.body)
     const stream = new ReadableStream({
       async pull(controller) {
         const { done, value } = await reader!.read();
@@ -60,6 +64,7 @@ export async function POST(request: Request) {
     });
 
     return new Response(stream);
+    
   } catch (error) {
     console.error("サーバーエラー:", error);
     return NextResponse.json(
