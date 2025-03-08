@@ -16,78 +16,94 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const Header = () => {
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  return (
-    <Box>
-      <AppBar position="static" sx={{ backgroundColor: 'primary' }}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ marginRight: 6 }}>
-            Best practice
-          </Typography>
-          <BottomNavigation
-            showLabels
-            value={pathname}
-            sx={{ flexGrow: 1, backgroundColor: 'inherit' }}
-          >
-            <BottomNavigationAction
-              label="Home"
-              value="/"
-              icon={<HomeIcon />}
-              component={Link}
-              href="/"
-              sx={{ 
-                '&.Mui-selected': {
-                  color: pathname === '/' ? 'primary.light' : 'inherit'
-                },
-                whiteSpace: 'nowrap'
-              }}
-            />
-            <BottomNavigationAction
-              label="カレンダー"
-              value="/calendar"
-              icon={<EventIcon />}
-              component={Link}
-              href="/calendar"
-              sx={{ 
-                '&.Mui-selected': {
-                  color: pathname === '/calendar' ? 'primary.light' : 'inherit'
-                },
-                whiteSpace: 'nowrap'
-              }}
-            />
-            <BottomNavigationAction
-              label="タスク一覧"
-              value="/list"
-              icon={<FormatListNumberedIcon />}
-              component={Link}
-              href="/list"
-              sx={{ 
-                '&.Mui-selected': {
-                  color: pathname === '/list' ? 'primary.light' : 'inherit'
-                },
-                whiteSpace: 'nowrap'
-              }}
-            />
-            <BottomNavigationAction
-              label="My Goal"
-              value="/goal"
-              icon={<SportsScoreIcon />}
-              component={Link}
-              href="/goal"
-              sx={{ 
-                '&.Mui-selected': {
-                  color: pathname === '/goal' ? 'primary.light' : 'inherit'
-                },
-                whiteSpace: 'nowrap'
-              }}
-            />
-          </BottomNavigation>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
-  );
+    return (
+        <Box>
+            <AppBar
+                position='static'
+                sx={{ backgroundColor: 'primary' }}>
+                <Toolbar>
+                    <Typography
+                        variant='h6'
+                        component='div'
+                        sx={{ marginRight: 6 }}>
+                        Best practice
+                    </Typography>
+                    <BottomNavigation
+                        showLabels
+                        value={pathname}
+                        sx={{ flexGrow: 1, backgroundColor: 'inherit' }}>
+                        <BottomNavigationAction
+                            label='Home'
+                            value='/'
+                            icon={<HomeIcon />}
+                            component={Link}
+                            href='/'
+                            sx={{
+                                '&.Mui-selected': {
+                                    color:
+                                        pathname === '/'
+                                            ? 'primary.light'
+                                            : 'inherit',
+                                },
+                                whiteSpace: 'nowrap',
+                            }}
+                        />
+                        <BottomNavigationAction
+                            label='カレンダー'
+                            value='/calendar'
+                            icon={<EventIcon />}
+                            component={Link}
+                            href='/calendar'
+                            sx={{
+                                '&.Mui-selected': {
+                                    color:
+                                        pathname === '/calendar'
+                                            ? 'primary.light'
+                                            : 'inherit',
+                                },
+                                whiteSpace: 'nowrap',
+                            }}
+                        />
+                        <BottomNavigationAction
+                            label='タスク一覧'
+                            value='/list'
+                            icon={<FormatListNumberedIcon />}
+                            component={Link}
+                            href='/list'
+                            sx={{
+                                '&.Mui-selected': {
+                                    color:
+                                        pathname === '/list'
+                                            ? 'primary.light'
+                                            : 'inherit',
+                                },
+                                whiteSpace: 'nowrap',
+                            }}
+                        />
+                        <BottomNavigationAction
+                            label='My Goal'
+                            value='/goal'
+                            icon={<SportsScoreIcon />}
+                            component={Link}
+                            href='/goal'
+                            sx={{
+                                '&.Mui-selected': {
+                                    color:
+                                        pathname === '/goal'
+                                            ? 'primary.light'
+                                            : 'inherit',
+                                },
+                                whiteSpace: 'nowrap',
+                            }}
+                        />
+                    </BottomNavigation>
+                    <Button color='inherit'>Login</Button>
+                </Toolbar>
+            </AppBar>
+        </Box>
+    );
 };
 
 export default Header;

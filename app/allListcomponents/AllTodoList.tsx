@@ -3,142 +3,197 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TodoContext } from '../components/TodoContext';
 import AllTodoItem from './AllTodoItem';
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import Grid from "@mui/material/Grid2";
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+} from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
 
 interface TodoProps {
-  id: number;
-  title: string;
-  description: string;
-  continuedays: number;
-  checkedDates: Record<string, boolean>;
-  startdate: string;
-  enddate: string;
-  interval: number | string[]; 
-  color: string;
-  // intervalには数字か配列（曜日を格納する）
-};
-
-const AllTodoList = () => {
-  const todoContext = useContext(TodoContext);
-  
-  if (!todoContext) {
-    throw new Error('TodoContext is undefined. Make sure to use TodoProvider.');
-  }
-
-  const { todos, fetchAllTodos } = todoContext;
-
-  // const checkrate = CheckRate(todo)
-
-  useEffect(() => {
-    fetchAllTodos();
-  },[])
-
-
-  const [search, setSearch] = useState<string>(""); // 検索機能
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => { 
-    setSearch(e.target.value);
-  };
-
-  const [active, setActive] = useState<string>("all");
-  const handleActive = (e: React.MouseEvent<HTMLElement>, newActive: string) => {
-    setActive(newActive);
-  };
-
-  const [sort, setSort] = useState<string>("startDateAsc");
-  const selectSort = (e: SelectChangeEvent) => {
-    setSort(e.target.value);
-  };
-
-
-  const searchtodos = todos.filter((todo) => todo.title.match(new RegExp(".*"+search+".*"))) //文字検索
-
-  const filtertodos = searchtodos.filter((todo) => { //フィルター
-    const todayslash = ChangeSlashDay(new Date())
-
-    if (active === "active") { //アクティブの場合
-      return todayslash >= ChangeSlashDay(new Date(todo.startdate)) &&
-       todayslash <= ChangeSlashDay(new Date(todo.enddate));
-
-    } else if (active === "archived") {
-      return todayslash < ChangeSlashDay(new Date(todo.startdate)) ||
-       todayslash > ChangeSlashDay(new Date(todo.enddate));
-
-    } else {
-      return true;
-    };
-  });
-
-  const compareDates = (dateA: string, dateB: string) => new Date(dateA).getTime() - new Date(dateB).getTime();
-const compareProgress = (a: TodoProps, b: TodoProps) => CheckRate(a) - CheckRate(b);
-
-const sortFunctions: Record<string, (a: TodoProps, b: TodoProps) => number> = {
-  startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
-  startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),
-  endDateAsc: (a, b) => compareDates(a.enddate, b.enddate),
-  endDateDesc: (a, b) => compareDates(b.enddate, a.enddate),
-  progressAsc: compareProgress,
-  progressDesc: (a, b) => compareProgress(b, a),
-};
-
-const finaltodos = filtertodos.sort(sortFunctions[sort] || (() => 0));
-
-
-  return (
-    <div>
-      <Box sx ={{ flexGrow: 1, p: 3 }}>
-      <Box sx={{ mb: 3 }}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="タスクを検索"
-          sx={{ mb: 2 }}
-          value={search}
-          onChange={handleSearch}
-        />
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <ToggleButtonGroup
-            exclusive
-            aria-label="task filter"
-            value={active}
-            onChange={(e,newActive) => handleActive(e,newActive)}
-          >
-            <ToggleButton value="all" aria-label="all tasks">
-              全て
-            </ToggleButton>
-            <ToggleButton value="active" aria-label="active tasks">
-              アクティブ
-            </ToggleButton>
-            <ToggleButton value="archived" aria-label="archived tasks">
-              アーカイブ済み
-            </ToggleButton>
-          </ToggleButtonGroup>
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel id="sort-select-label">並べ替え</InputLabel>
-            <Select
-              labelId="sort-select-label"
-              label="並べ替え"
-              value={sort}
-              onChange={selectSort}
-            >
-              <MenuItem value="startDateAsc">開始日が早い順</MenuItem>
-              <MenuItem value="startDateDesc">開始日が遅い順</MenuItem>
-              <MenuItem value="endDateAsc">終了日が早い順</MenuItem>
-              <MenuItem value="endDateDesc">終了日が遅い順</MenuItem>
-              <MenuItem value="progressAsc">達成率が低い順</MenuItem>
-              <MenuItem value="progressDesc">達成率が高い順</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-        <Grid container spacing={3}>
-          {finaltodos.map((todo) => <AllTodoItem key={todo.id} todo={todo} />)}
-        </Grid>
-      </Box>
-    </div>
-  )
+    id: number;
+    title: string;
+    description: string;
+    continuedays: number;
+    checkedDates: Record<string, boolean>;
+    startdate: string;
+    enddate: string;
+    interval: number | string[];
+    color: string;
+    // intervalには数字か配列（曜日を格納する）
 }
 
-export default AllTodoList
+const AllTodoList = () => {
+    const todoContext = useContext(TodoContext);
+
+    if (!todoContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { todos, fetchAllTodos } = todoContext;
+
+    // const checkrate = CheckRate(todo)
+
+    useEffect(() => {
+        fetchAllTodos();
+    }, []);
+
+    const [search, setSearch] = useState<string>(''); // 検索機能
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+    };
+
+    const [active, setActive] = useState<string>('all');
+    const handleActive = (
+        e: React.MouseEvent<HTMLElement>,
+        newActive: string,
+    ) => {
+        setActive(newActive);
+    };
+
+    const [sort, setSort] = useState<string>('startDateAsc');
+    const selectSort = (e: SelectChangeEvent) => {
+        setSort(e.target.value);
+    };
+
+    const searchtodos = todos.filter((todo) =>
+        todo.title.match(new RegExp('.*' + search + '.*')),
+    ); //文字検索
+
+    const filtertodos = searchtodos.filter((todo) => {
+        //フィルター
+        const todayslash = ChangeSlashDay(new Date());
+
+        if (active === 'active') {
+            //アクティブの場合
+            return (
+                todayslash >= ChangeSlashDay(new Date(todo.startdate)) &&
+                todayslash <= ChangeSlashDay(new Date(todo.enddate))
+            );
+        } else if (active === 'archived') {
+            return (
+                todayslash < ChangeSlashDay(new Date(todo.startdate)) ||
+                todayslash > ChangeSlashDay(new Date(todo.enddate))
+            );
+        } else {
+            return true;
+        }
+    });
+
+    const compareDates = (dateA: string, dateB: string) =>
+        new Date(dateA).getTime() - new Date(dateB).getTime();
+    const compareProgress = (a: TodoProps, b: TodoProps) =>
+        CheckRate(a) - CheckRate(b);
+
+    const sortFunctions: Record<
+        string,
+        (a: TodoProps, b: TodoProps) => number
+    > = {
+        startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
+        startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),
+        endDateAsc: (a, b) => compareDates(a.enddate, b.enddate),
+        endDateDesc: (a, b) => compareDates(b.enddate, a.enddate),
+        progressAsc: compareProgress,
+        progressDesc: (a, b) => compareProgress(b, a),
+    };
+
+    const finaltodos = filtertodos.sort(sortFunctions[sort] || (() => 0));
+
+    return (
+        <div>
+            <Box sx={{ flexGrow: 1, p: 3 }}>
+                <Box sx={{ mb: 3 }}>
+                    <TextField
+                        fullWidth
+                        variant='outlined'
+                        label='タスクを検索'
+                        sx={{ mb: 2 }}
+                        value={search}
+                        onChange={handleSearch}
+                    />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                        <ToggleButtonGroup
+                            exclusive
+                            aria-label='task filter'
+                            value={active}
+                            onChange={(e, newActive) =>
+                                handleActive(e, newActive)
+                            }>
+                            <ToggleButton
+                                value='all'
+                                aria-label='all tasks'>
+                                全て
+                            </ToggleButton>
+                            <ToggleButton
+                                value='active'
+                                aria-label='active tasks'>
+                                アクティブ
+                            </ToggleButton>
+                            <ToggleButton
+                                value='archived'
+                                aria-label='archived tasks'>
+                                アーカイブ済み
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id='sort-select-label'>
+                                並べ替え
+                            </InputLabel>
+                            <Select
+                                labelId='sort-select-label'
+                                label='並べ替え'
+                                value={sort}
+                                onChange={selectSort}>
+                                <MenuItem value='startDateAsc'>
+                                    開始日が早い順
+                                </MenuItem>
+                                <MenuItem value='startDateDesc'>
+                                    開始日が遅い順
+                                </MenuItem>
+                                <MenuItem value='endDateAsc'>
+                                    終了日が早い順
+                                </MenuItem>
+                                <MenuItem value='endDateDesc'>
+                                    終了日が遅い順
+                                </MenuItem>
+                                <MenuItem value='progressAsc'>
+                                    達成率が低い順
+                                </MenuItem>
+                                <MenuItem value='progressDesc'>
+                                    達成率が高い順
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </Box>
+                <Grid
+                    container
+                    spacing={3}>
+                    {finaltodos.map((todo) => (
+                        <AllTodoItem
+                            key={todo.id}
+                            todo={todo}
+                        />
+                    ))}
+                </Grid>
+            </Box>
+        </div>
+    );
+};
+
+export default AllTodoList;
