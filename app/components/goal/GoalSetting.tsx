@@ -24,7 +24,7 @@ const GoalSetting = () => {
 
     const [isComplete, setIsComplete] = useState<boolean>(true); // AIの回答生成が完了したことを示す値
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<string[]>([]); // AIからの回答を表す状態変化
+    const [response, setResponse] = useState<string>(""); // AIからの回答
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         //ボタンを押すとAIが分析を開始し応答を表示
@@ -35,7 +35,7 @@ const GoalSetting = () => {
             return;
         }
 
-        setResponse([]); // 初期化
+        setResponse(""); // 初期化
         setIsComplete(false); // ストリーミング開始
         setIsGenerating(true); // 応答生成開始
 
@@ -85,7 +85,8 @@ const GoalSetting = () => {
                         const content = parsedChunk.choices[0]?.delta?.content;
                         if (content) {
                             // チャンクごとにレスポンスを追加
-                            setResponse((prev) => [...prev, content]);
+                            console.log(content)
+                            setResponse((prev) => prev + content);
                         }
                     } catch (error) {
                         // JSONが未完了の場合は、次のチャンクで処理を続ける
