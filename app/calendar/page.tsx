@@ -3,14 +3,15 @@
 import React from 'react';
 import Header from '../components/Header';
 import Calendar from '../components/Calendar';
-import Form from '../components/Form';
+import { Box } from '@mui/material';
 
 const page = () => {
     return (
         <div>
             <Header />
-            <Form />
-            <Calendar />
+            <Box sx={{ mt: 4, width: '100%' }} >
+                <Calendar />
+            </Box>
         </div>
     );
 };
