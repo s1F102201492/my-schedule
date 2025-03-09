@@ -57,10 +57,11 @@ const addTodo = async (
 
 interface FormProps {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  locate: string;
 }
 
-const Form:React.FC<FormProps> = ({ open, setOpen }) => {
+const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -73,6 +74,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen }) => {
 
     const { fetchAllTodos } = todoContext;
 
+    // フォームのクローズ
     const handleClose = () => {
       //閉じたらすべてリセット
       setOpen(false);
@@ -208,7 +210,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen }) => {
         );
 
         await fetchAllTodos();
-        router.push('/calendar');
+        router.push(locate);
         router.refresh();
         setOpen(false);
         formReset();
@@ -296,9 +298,9 @@ const Form:React.FC<FormProps> = ({ open, setOpen }) => {
                                 onChange={handleNumber}>
                                 {numberofdays.map((num) => (
                                     <MenuItem
-                                        key={num}
-                                        value={num}>
-                                        {num}
+                                      key={num}
+                                      value={num}>
+                                      {num}
                                     </MenuItem>
                                 ))}
                             </Select>

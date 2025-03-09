@@ -32,7 +32,7 @@ export default function Home() {
                 sx={{ m: 4 }}>
                 {`${year}年${month}月${day}日`}のやることリスト
             </Typography>
-            <TodoList todos={todos} />
+            <TodoList todos={todos} locate={"/"}/>
         </div>
     );
 }

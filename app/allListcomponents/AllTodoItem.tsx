@@ -30,12 +30,14 @@ interface TodoItemProps {
 }
 
 const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+
+    // 詳細ダイアログの開閉
     const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => {
-        //閉じたらすべてリセット
         setOpen(false);
     };
+
     const checkrate = CheckRate(todo);
     const slashstart = todo.startdate.replace(/-/g, '/');
     const slashend = todo.enddate.replace(/-/g, '/');
@@ -129,15 +131,12 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             </Grid>
 
             {/* Dialog を使って Detail コンポーネントを表示 */}
-            <Dialog
-                fullWidth
+            <Detail
+                todo={todo}
+                onClose={handleClose}
                 open={open}
-                onClose={handleClose}>
-                <Detail
-                    todo={todo}
-                    onClose={handleClose}
-                />
-            </Dialog>
+                setOpen={setOpen}
+            />
         </div>
     );
 };

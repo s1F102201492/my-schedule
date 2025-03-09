@@ -19,9 +19,10 @@ interface TodoProps {
 
 interface TodoListProps {
     todos: TodoProps[];
+    locate: string;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, locate }) => {
     // フォームのオープン
     const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => setOpen(true);
@@ -79,8 +80,9 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
                 ))}
                 <ListItem>
                     <Box sx={{ display: "flex", justifyContent: "center",
-                        width: '100%', mt: 2 }}>
+                        width: '100%', mt: 1 }}>
                         <Button variant='outlined' fullWidth
+                        sx={{ border: "3px dashed #dcdcdc", color: "#a9a9a9", height: 45 }}
                         onClick={handleClickOpen}>
                             新しい習慣を追加
                         </Button>
@@ -106,7 +108,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
                 ))}
             </List>
 
-            {open && <Form open={open} setOpen={setOpen} />}
+            {open && <Form open={open} setOpen={setOpen} locate={locate}/>}
         </div>
     );
 };

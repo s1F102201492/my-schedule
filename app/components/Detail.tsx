@@ -14,12 +14,14 @@ import {
     LinearProgress,
     Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import Edit from './Edit';
 import Delete from './Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { CheckRate } from './calculate/CheckRate';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TodoProps {
     id: number;
@@ -37,11 +39,26 @@ interface TodoProps {
 interface TodoItemProps {
     todo: TodoProps;
     onClose: () => void;
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Detail: React.FC<TodoItemProps> = ({ todo, onClose }) => {
+const Detail: React.FC<TodoItemProps> = ({ todo, onClose, open }) => {
+
+    // 編集フォームの管理
+    const [editOpen, setEditOpen] = useState<boolean>(false);
+    const handleEditOpen = () => {
+        setEditOpen(true);
+    };
+
+    // 削除フォームの管理
+    const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+    const handleDeleteOpen = () => {
+        setDeleteOpen(true);
+    };
+
     const descriptionnull = (description: string | null) => {
-        if (description === 'string') {
+        if (typeof description === 'string') {
             //詳細が書かれている場合はtrue,ない場合はfalse
             return true;
         } else {
@@ -58,18 +75,12 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose }) => {
         }
     };
 
-    const checkrate = () => {
-        // 達成率を求める(%表示で小数第２位で四捨五入)
-        const checkcount = todo.continuedays;
-        const totalcount = Object.keys(todo.checkedDates).length;
-        return Math.round((checkcount / totalcount) * 1000) / 10;
-    };
-
     const slashstart = todo.startdate.split('T')[0].replace(/-/g, '/');
     const slashend = todo.enddate.split('T')[0].replace(/-/g, '/');
 
     return (
         <div>
+            <Dialog fullWidth open={open} onClose={onClose}>
             {/* フォーム全体をフォームタグで囲む */}
             <DialogTitle sx={{ m: 1 }}></DialogTitle>
             <DialogContent>
@@ -83,9 +94,10 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose }) => {
                     <Typography
                         variant='body1'
                         color='text.secondary'
-                        gutterBottom>
+                        gutterBottom
+                        sx={{ whiteSpace: "pre-line" }}>
                         {descriptionnull(todo.description)
-                            ? todo.description
+                            ? '詳細\n'+ todo.description
                             : '詳細なし'}
                     </Typography>
                 </Grid2>
@@ -227,12 +239,34 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose }) => {
                     onClick={onClose}>
                     閉じる
                 </Button>
+                <Box sx={{ m: 2 }}>
+                    <Button
+                        variant='contained'
+                        startIcon={<EditIcon />}
+                        sx={{ mr: 1 }}
+                        onClick={handleEditOpen}>
+                        編集
+                    </Button>
+                </Box>
                 <Edit
                     id={todo.id}
                     todo={todo}
+                    editOpen={editOpen}
+                    setEditOpen={setEditOpen}
                 />
-                <Delete onetodo={todo} />
+                <Button
+                    variant='contained'
+                    color='error'
+                    startIcon={<DeleteIcon />}
+                    onClick={handleDeleteOpen}>
+                    削除
+                </Button>
+                <Delete
+                    onetodo={todo}
+                    deleteOpen={deleteOpen}
+                    setDeleteOpen={setDeleteOpen}/>
             </DialogActions>
+            </Dialog>
         </div>
     );
 };

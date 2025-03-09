@@ -22,11 +22,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import Pickcolor from './Pickcolor';
 import { useRouter } from 'next/navigation';
 import { TodoContext } from './TodoContext';
-import EditIcon from '@mui/icons-material/Edit';
 
 interface oneTodo {
     id: number;
     todo: todo;
+    editOpen: boolean;
+    setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface todo {
@@ -73,7 +74,7 @@ const editTodo = async (
     return res.json();
 };
 
-const Edit: React.FC<oneTodo> = ({ id, todo }) => {
+const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -86,12 +87,10 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
 
     const { fetchAllTodos } = todoContext;
 
-    // フォームのオープン
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => {
+    // フォームのクローズ
+    const handleEditClose = () => {
         //閉じたらすべてリセット
-        setOpen(false);
+        setEditOpen(false);
         formReset();
     };
 
@@ -245,7 +244,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
         );
 
         await fetchAllTodos();
-        setOpen(false);
+        setEditOpen(false);
         router.push('/list');
         router.refresh();
         formReset();
@@ -253,19 +252,10 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
 
     return (
         <div>
-            <Box sx={{ m: 2 }}>
-                <Button
-                    variant='contained'
-                    startIcon={<EditIcon />}
-                    sx={{ mr: 1 }}
-                    onClick={handleClickOpen}>
-                    編集
-                </Button>
-            </Box>
             <Dialog
                 fullWidth
-                open={open}
-                onClose={handleClose}>
+                open={editOpen}
+                onClose={handleEditClose}>
                 <form onSubmit={handleSubmit}>
                     <DialogTitle
                         sx={{ m: 1 }}
@@ -386,12 +376,12 @@ const Edit: React.FC<oneTodo> = ({ id, todo }) => {
                         </Box>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>閉じる</Button>
+                        <Button onClick={handleEditClose}>閉じる</Button>
                         <Button
                             type='submit'
                             value='submit'
                             variant='contained'>
-                            追加
+                            編集
                         </Button>
                     </DialogActions>
                 </form>
