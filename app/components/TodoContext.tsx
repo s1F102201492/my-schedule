@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import Loader from './Loader';
 import { CountContinueDays } from './calculate/CountContinueDays';
+import FadeLoading from './FadeLoading';
 
 interface TodoProps {
     id: number;
@@ -138,7 +138,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 fetchAllTodos,
                 toggleDelete,
             }}>
-            {loading ? <Loader loading={loading} /> : children}
+            {loading ? <FadeLoading loading={loading} /> : children}
         </TodoContext.Provider>
     );
 };

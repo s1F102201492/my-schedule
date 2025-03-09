@@ -39,11 +39,11 @@ interface TodoProps {
 interface TodoItemProps {
     todo: TodoProps;
     onClose: () => void;
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    detailOpen: boolean;
+    setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Detail: React.FC<TodoItemProps> = ({ todo, onClose, open }) => {
+const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
 
     // 編集フォームの管理
     const [editOpen, setEditOpen] = useState<boolean>(false);
@@ -80,7 +80,7 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, open }) => {
 
     return (
         <div>
-            <Dialog fullWidth open={open} onClose={onClose}>
+            <Dialog fullWidth open={detailOpen} onClose={onClose}>
             {/* フォーム全体をフォームタグで囲む */}
             <DialogTitle sx={{ m: 1 }}></DialogTitle>
             <DialogContent>

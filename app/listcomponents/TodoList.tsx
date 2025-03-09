@@ -82,7 +82,11 @@ const TodoList: React.FC<TodoListProps> = ({ todos, locate }) => {
                     <Box sx={{ display: "flex", justifyContent: "center",
                         width: '100%', mt: 1 }}>
                         <Button variant='outlined' fullWidth
-                        sx={{ border: "3px dashed #dcdcdc", color: "#a9a9a9", height: 45 }}
+                        sx={{ border: "3px dashed #dcdcdc", color: "#a9a9a9",
+                            height: 45, '&:hover': {
+                            color: '#c0c0c0',
+                            backgroundColor: '#f5f5f5',
+                            }}}
                         onClick={handleClickOpen}>
                             新しい習慣を追加
                         </Button>

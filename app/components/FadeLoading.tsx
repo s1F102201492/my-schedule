@@ -6,7 +6,7 @@ interface loadingType {
     loading: boolean;
 }
 
-const Loader: React.FC<loadingType> = ({ loading }) => {
+const FadeLoading: React.FC<loadingType> = ({ loading }) => {
     return (
         <div>
             <Box
@@ -35,4 +35,4 @@ const Loader: React.FC<loadingType> = ({ loading }) => {
     );
 };
 
-export default Loader;
+export default FadeLoading;

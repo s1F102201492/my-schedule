@@ -5,6 +5,8 @@ import { TodoContext } from '../components/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import {
     Box,
+    Card,
+    Fab,
     FormControl,
     InputLabel,
     MenuItem,
@@ -13,10 +15,13 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
+    Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
+import Form from '../components/Form';
+import AddIcon from '@mui/icons-material/Add';
 
 interface TodoProps {
     id: number;
@@ -32,6 +37,11 @@ interface TodoProps {
 }
 
 const AllTodoList = () => {
+
+    // 追加フォームの開閉
+    const [open, setOpen] = useState<boolean>(false);
+    const handleClickOpen = () => setOpen(true);
+
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -190,8 +200,20 @@ const AllTodoList = () => {
                             todo={todo}
                         />
                     ))}
+                    
                 </Grid>
+                <Fab color="primary"
+                aria-label="add"
+                sx={{ position: "fixed", bottom: 32, right: 32 }}
+                onClick={handleClickOpen} >
+                    <AddIcon />
+                </Fab>
             </Box>
+            <Form
+                open={open}
+                setOpen={setOpen}
+                locate={"/list"}
+            />
         </div>
     );
 };
