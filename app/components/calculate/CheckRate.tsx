@@ -13,11 +13,10 @@ interface TodoProps {
     interval: number | string[];
     color: string;
     // intervalには数字か配列（曜日を格納する）
-  };
+}
 
-export const CheckRate = ( todo: TodoProps ): number => {
-
+export const CheckRate = (todo: TodoProps): number => {
     const checkcount = todo.continuedays;
     const totalcount = Object.keys(todo.checkedDates).length;
-    return Math.round((checkcount / totalcount) * 1000) / 10
-}
+    return Math.round((checkcount / totalcount) * 1000) / 10;
+};

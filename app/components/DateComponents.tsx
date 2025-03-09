@@ -7,34 +7,41 @@ import React from 'react';
 dayjs.locale('ja'); // カレンダーの曜日のフォーマット
 
 interface DateComponentsProps {
-  label: string;
-  date: Dayjs;
-  setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
-  minDate: Dayjs;
-  maxDate: Dayjs;
+    label: string;
+    date: Dayjs;
+    setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+    minDate: Dayjs;
+    maxDate: Dayjs;
 }
 
-export const DateComponents: React.FC<DateComponentsProps> = ({ label, date, setDate, minDate, maxDate }) => {
-
-  return (
-    <div style={{marginTop: 10}}>
-        <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-        dateFormats={{ year: 'YYYY年' }} // カレンダー内の年一覧のフォーマット
-        >
-        <DatePicker
-            label={label}
-            minDate={minDate}
-            maxDate={maxDate}
-            value={date}
-            onChange={(newdate) => { if (newdate) setDate(newdate)}} //dayjs型
-            format="YYYY/MM/DD" // テキストエリア内のフォーマット
-            slotProps={{ textField: { required: true } ,
-            calendarHeader: { format: 'YYYY年MM月' }}} // カレンダーヘッダーのフォーマット
-            
-        />
-        </LocalizationProvider>
-    </div>
-  );
+export const DateComponents: React.FC<DateComponentsProps> = ({
+    label,
+    date,
+    setDate,
+    minDate,
+    maxDate,
+}) => {
+    return (
+        <div style={{ marginTop: 10 }}>
+            <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                dateFormats={{ year: 'YYYY年' }} // カレンダー内の年一覧のフォーマット
+            >
+                <DatePicker
+                    label={label}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    value={date}
+                    onChange={(newdate) => {
+                        if (newdate) setDate(newdate);
+                    }} //dayjs型
+                    format='YYYY/MM/DD' // テキストエリア内のフォーマット
+                    slotProps={{
+                        textField: { required: true },
+                        calendarHeader: { format: 'YYYY年MM月' },
+                    }} // カレンダーヘッダーのフォーマット
+                />
+            </LocalizationProvider>
+        </div>
+    );
 };
-
