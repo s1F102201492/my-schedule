@@ -7,19 +7,19 @@ export async function POST(req: Request) {
     const apiEndPoint = process.env.OPENAI_API_URL;
 
     if (!apiKey) {
-    console.error('API keyがありません。');
-    return NextResponse.json(
-    { error: 'API keyがありません。' },
-    { status: 500 },
-    );
+        console.error('API keyがありません。');
+        return NextResponse.json(
+            { error: 'API keyがありません。' },
+            { status: 500 },
+        );
     }
 
     if (!apiEndPoint) {
-    console.error('API URLがありません。');
-    return NextResponse.json(
-    { error: 'API URLがありません。' },
-    { status: 500 },
-    );
+        console.error('API URLがありません。');
+        return NextResponse.json(
+            { error: 'API URLがありません。' },
+            { status: 500 },
+        );
     }
 
     const response = await fetch(`${apiEndPoint}`, {
