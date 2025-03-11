@@ -30,7 +30,7 @@ interface TodoProps {
     color: string;
 }
 
-const deleteTodo = async (todo: TodoProps) => {
+const deletePractice = async (todo: TodoProps) => {
     const res = await fetch(`/api/todo/${todo.id}`, {
         method: 'DELETE',
         body: JSON.stringify({ todo }),
@@ -71,7 +71,7 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
         const targetTodo = todos.find((todo) => todo.id === onetodo.id);
         if (!targetTodo) return;
 
-        await deleteTodo(targetTodo);
+        await deletePractice(targetTodo);
 
         await fetchAllTodos();
         setDeleteOpen(false);

@@ -151,7 +151,7 @@ const GoalSetting = () => {
                             <Button variant='outlined' component='span' startIcon={<ImageIcon />}>
                                 画像をアップロード
                             </Button>
-                            <Tooltip title='削除'>
+                            <Tooltip title='アップロードされた画像を削除'>
                                 <IconButton
                                     aria-label='delete'
                                     onClick={resetImg}>

@@ -34,6 +34,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // データベースから情報を取得
     const fetchAllTodos = async () => {
         try {
             const res = await fetch('/api/todo', { cache: 'no-store' });
@@ -46,6 +47,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // 今日のタスクのチェックマーク
     const checkTodo = async (todo: TodoProps) => {
         try {
             const res = await fetch(`/api/todo/${todo.id}`, {
@@ -64,6 +66,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // 今日のタスクの削除ボタン
     const deleteTodo = async (todo: TodoProps) => {
         try {
             const res = await fetch(`/api/todo/${todo.id}`, {

@@ -42,7 +42,7 @@ interface todo {
     color: string;
 }
 
-const editTodo = async (
+const editPractice = async (
     id: number,
     title: string,
     description: string | null,
@@ -231,7 +231,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         ); // 日付: falseの辞書を作成
         const contdays = todo.continuedays; //編集なので達成日はそのまま
 
-        await editTodo(
+        await editPractice(
             id,
             title,
             desc,
