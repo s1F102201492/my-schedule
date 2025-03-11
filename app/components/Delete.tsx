@@ -33,7 +33,7 @@ interface TodoProps {
 const deletePractice = async (todo: TodoProps) => {
     const res = await fetch(`/api/todo/${todo.id}`, {
         method: 'DELETE',
-        body: JSON.stringify({ todo }),
+        body: JSON.stringify(todo),
         headers: {
             'Content-type': 'application/json',
         },
