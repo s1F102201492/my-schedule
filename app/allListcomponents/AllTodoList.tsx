@@ -23,6 +23,7 @@ import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
 import Form from '../components/Form';
 import AddIcon from '@mui/icons-material/Add';
+import FadeLoading from '../components/FadeLoading';
 
 interface TodoProps {
     id: number;
@@ -51,7 +52,7 @@ const AllTodoList = () => {
         );
     }
 
-    const { todos, fetchAllTodos } = todoContext;
+    const { todos, fetchAllTodos, loading } = todoContext;
 
     // const checkrate = CheckRate(todo)
 
@@ -191,17 +192,18 @@ const AllTodoList = () => {
                         </FormControl>
                     </Box>
                 </Box>
+                { loading ? <FadeLoading loading={loading} /> :
                 <Grid
-                    container
-                    spacing={3}>
-                    {finaltodos.map((todo) => (
-                        <AllTodoItem
-                            key={todo.id}
-                            todo={todo}
-                        />
-                    ))}
-                    
-                </Grid>
+                container
+                spacing={3}>
+                {finaltodos.map((todo) => (
+                    <AllTodoItem
+                        key={todo.id}
+                        todo={todo}
+                    />
+                ))}
+                </Grid>}
+                
                 <Tooltip title='新しい習慣を追加'>
                     <Fab color="primary"
                     aria-label="add"

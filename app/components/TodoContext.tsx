@@ -3,6 +3,7 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import { CountContinueDays } from './calculate/CountContinueDays';
 import FadeLoading from './FadeLoading';
+import Header from './Header';
 
 interface TodoProps {
     id: number;
@@ -22,6 +23,7 @@ interface TodoContextType {
     toggleChecked: (id: number, date: string) => void;
     fetchAllTodos: () => Promise<void>;
     toggleDelete: (id: number, date: string) => void;
+    loading: boolean;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(
@@ -140,8 +142,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 toggleChecked,
                 fetchAllTodos,
                 toggleDelete,
+                loading
             }}>
-            {loading ? <FadeLoading loading={loading} /> : children}
+            {children}
         </TodoContext.Provider>
     );
 };

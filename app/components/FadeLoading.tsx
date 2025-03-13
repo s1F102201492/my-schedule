@@ -15,7 +15,7 @@ const FadeLoading: React.FC<loadingType> = ({ loading }) => {
                     flexDirection: 'column', // 縦方向に配置
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh', // 画面全体を占める
+                    height: '50vh', // 画面全体を占める
                 }}>
                 <Typography
                     sx={{

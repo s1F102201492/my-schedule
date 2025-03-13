@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import Form from '../components/Form';
+import { TodoContext } from '../components/TodoContext';
 
 interface TodoProps {
     id: number;
@@ -18,11 +19,20 @@ interface TodoProps {
 }
 
 interface TodoListProps {
-    todos: TodoProps[];
     locate: string;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos, locate }) => {
+const TodoList: React.FC<TodoListProps> = ({ locate }) => {
+    const todoContext = useContext(TodoContext);
+
+    if (!todoContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { todos } = todoContext;
+
     // フォームのオープン
     const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => setOpen(true);
