@@ -11,10 +11,11 @@ import {
 import React, { useContext, useState } from 'react';
 import { TodoContext } from './TodoContext';
 import { useRouter } from 'next/navigation';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 interface oneTodo {
     onetodo: TodoProps;
+    deleteOpen: boolean;
+    setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface TodoProps {
@@ -29,10 +30,10 @@ interface TodoProps {
     color: string;
 }
 
-const deleteTodo = async (todo: TodoProps) => {
+const deletePractice = async (todo: TodoProps) => {
     const res = await fetch(`/api/todo/${todo.id}`, {
         method: 'DELETE',
-        body: JSON.stringify({ todo }),
+        body: JSON.stringify(todo),
         headers: {
             'Content-type': 'application/json',
         },
@@ -41,7 +42,7 @@ const deleteTodo = async (todo: TodoProps) => {
     return res.json();
 };
 
-const Delete: React.FC<oneTodo> = ({ onetodo }) => {
+const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -54,12 +55,10 @@ const Delete: React.FC<oneTodo> = ({ onetodo }) => {
 
     const { todos, setTodos, fetchAllTodos } = todoContext;
 
-    // フォームのオープン
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => {
+    // フォームのクローズ
+    const handleDeleteClose = () => {
         //閉じたらすべてリセット
-        setOpen(false);
+        setDeleteOpen(false);
     };
 
     const handleDelete = async (e: React.FormEvent) => {
@@ -72,27 +71,20 @@ const Delete: React.FC<oneTodo> = ({ onetodo }) => {
         const targetTodo = todos.find((todo) => todo.id === onetodo.id);
         if (!targetTodo) return;
 
-        await deleteTodo(targetTodo);
+        await deletePractice(targetTodo);
 
         await fetchAllTodos();
-        setOpen(false);
+        setDeleteOpen(false);
         router.push('/list');
         router.refresh();
     };
 
     return (
         <div>
-            <Button
-                variant='contained'
-                color='error'
-                startIcon={<DeleteIcon />}
-                onClick={handleClickOpen}>
-                削除
-            </Button>
             <Dialog
                 fullWidth
-                open={open}
-                onClose={handleClose}>
+                open={deleteOpen}
+                onClose={handleDeleteClose}>
                 <form onSubmit={handleDelete}>
                     <DialogTitle
                         sx={{ m: 1 }}
@@ -105,7 +97,7 @@ const Delete: React.FC<oneTodo> = ({ onetodo }) => {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>戻る</Button>
+                        <Button onClick={handleDeleteClose}>戻る</Button>
                         <Button
                             type='submit'
                             value='submit'

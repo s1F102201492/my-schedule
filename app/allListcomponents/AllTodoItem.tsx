@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import Detail from '../components/Detail';
 import Grid from '@mui/material/Grid2';
 import { CheckRate } from '../components/calculate/CheckRate';
+import Form from '../components/Form';
 
 interface TodoProps {
     id: number;
@@ -30,12 +31,14 @@ interface TodoItemProps {
 }
 
 const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => {
-        //閉じたらすべてリセット
-        setOpen(false);
+
+    // 詳細ダイアログの開閉
+    const [detailOpen, setDetailOpen] = useState<boolean>(false);
+    const handleDetailOpen = () => setDetailOpen(true);
+    const handleDetailClose = () => {
+        setDetailOpen(false);
     };
+
     const checkrate = CheckRate(todo);
     const slashstart = todo.startdate.replace(/-/g, '/');
     const slashend = todo.enddate.replace(/-/g, '/');
@@ -44,7 +47,7 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
         <div>
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Box
-                    onClick={handleClickOpen}
+                    onClick={handleDetailOpen}
                     sx={{ cursor: 'pointer' }}>
                     <Card sx={{ minWidth: 200, height: '100%' }}>
                         <CardContent
@@ -129,15 +132,12 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             </Grid>
 
             {/* Dialog を使って Detail コンポーネントを表示 */}
-            <Dialog
-                fullWidth
-                open={open}
-                onClose={handleClose}>
-                <Detail
-                    todo={todo}
-                    onClose={handleClose}
-                />
-            </Dialog>
+            <Detail
+                todo={todo}
+                onClose={handleDetailClose}
+                detailOpen={detailOpen}
+                setDetailOpen={setDetailOpen}
+            />
         </div>
     );
 };

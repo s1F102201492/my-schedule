@@ -1,8 +1,9 @@
 'use client';
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import Loader from './Loader';
 import { CountContinueDays } from './calculate/CountContinueDays';
+import FadeLoading from './FadeLoading';
+import Header from './Header';
 
 interface TodoProps {
     id: number;
@@ -22,6 +23,7 @@ interface TodoContextType {
     toggleChecked: (id: number, date: string) => void;
     fetchAllTodos: () => Promise<void>;
     toggleDelete: (id: number, date: string) => void;
+    loading: boolean;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(
@@ -34,6 +36,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // データベースから情報を取得
     const fetchAllTodos = async () => {
         try {
             const res = await fetch('/api/todo', { cache: 'no-store' });
@@ -46,6 +49,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // 今日のタスクのチェックマーク
     const checkTodo = async (todo: TodoProps) => {
         try {
             const res = await fetch(`/api/todo/${todo.id}`, {
@@ -59,11 +63,14 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                     `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
                 );
             console.log('チェック更新成功');
-        } catch (error) {
-            console.error('チェック更新エラー:', error);
+        } catch (err) {
+            if (err instanceof Error){
+                console.log("Error: ", err.stack)
+            }
         }
     };
 
+    // 今日のタスクの削除ボタン
     const deleteTodo = async (todo: TodoProps) => {
         try {
             const res = await fetch(`/api/todo/${todo.id}`, {
@@ -77,8 +84,30 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                     `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
                 );
             console.log('チェック更新成功');
-        } catch (error) {
-            console.error('チェック更新エラー:', error);
+        } catch (err) {
+            if (err instanceof Error){
+                console.log("Error: ", err.stack)
+            }
+        }
+    };
+
+    const deletePractice = async (todo: TodoProps) => {
+        try {
+            const res = await fetch(`/api/todo/${todo.id}`, {
+                method: 'DELETE',
+                body: JSON.stringify(todo),
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!res.ok)
+                throw new Error(
+                    `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
+                );
+            console.log('チェック更新成功');
+        } catch (err) {
+            if (err instanceof Error){
+                console.log("Error: ", err.stack)
+            }
         }
     };
 
@@ -111,7 +140,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         });
     };
 
-    const toggleDelete = async (id: number, date: string) => {
+    //今日のタスクを削除する関数
+    const deleteDate = async (id: number, date: string) => { 
         setTodos((prevTodos) => {
             return prevTodos.map((todo) => {
                 if (todo.id === id) {
@@ -127,6 +157,34 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 return todo;
             });
         });
+    }
+
+    // checkedDatesの中の要素が一つもない場合に削除する関数
+    const deleteZeroDate = async () => {
+        setTimeout(() => {
+            setTodos((prevTodos) => {
+                const newTodos: TodoProps[] = [];
+                prevTodos.forEach((todo) => {
+                    if (Object.keys(todo.checkedDates).length > 0) {
+                        newTodos.push(todo);
+                    } else {
+                        deletePractice(todo);
+                    }
+                })
+                return newTodos;
+            });
+        }, 1000)
+    }
+
+    // 上の二つの関数をまとめたもの
+    const toggleDelete = async (id: number, date: string) => {
+        await Promise.all([deleteDate(id, date), deleteZeroDate()])
+        .then(() => {
+            console.log('削除成功！') ;	
+        }) 
+        .catch(() => {
+            console.log('削除失敗');
+        }) ;
     };
 
     return (
@@ -137,8 +195,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 toggleChecked,
                 fetchAllTodos,
                 toggleDelete,
+                loading
             }}>
-            {loading ? <Loader loading={loading} /> : children}
+            {children}
         </TodoContext.Provider>
     );
 };

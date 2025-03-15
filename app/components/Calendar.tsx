@@ -41,7 +41,7 @@ const Calendar = () => {
             title: todo.title,
             start: new Date(dateKey).toISOString(), // 各 checkedDate のキー（日付）を start に設定
             end: new Date(dateKey).toISOString(), // start と同じ値を設定（変更が必要なら修正）
-            color: todo.color,
+            color: todo.color
         })),
     );
 
@@ -67,6 +67,7 @@ const Calendar = () => {
                         center: 'title',
                         right: 'dayGridMonth,timeGridWeek listWeek',
                     }}
+                    displayEventTime={false}
                 />
             </Box>
         </div>

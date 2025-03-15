@@ -1,8 +1,11 @@
 'use client';
 
-import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, Chip, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
+import PulseLoading from '../PulseLoading';
+import DeleteIcon from '@mui/icons-material/Delete';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 const GoalSetting = () => {
     const [text, setText] = useState<string>('');
@@ -12,103 +15,120 @@ const GoalSetting = () => {
 
     const [img, setImg] = useState<string>('');
     const handleSetImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file: File | undefined = e.target.files?.[0];
-        console.log(file);
-        if (!file) {
-            return;
-        } else {
-            const imageUrl = URL.createObjectURL(file);
-            setImg(imageUrl);
-        }
+        const file = e.target.files?.[0];
+        if (!file) return;
+    
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImg(reader.result as string); // Base64 データをセット
+        };
+        reader.readAsDataURL(file);
+
+        e.target.value = ''; // inputのリセット
     };
 
-    const [isComplete, setIsComplete] = useState<boolean>(true); // AIの回答生成が完了したことを示す値
+    const resetImg = () => {
+        setImg('');
+    }
+    
+    const [viewTips, setViewTips] = useState<boolean>(false);
+    const handleViewTips = () => {
+        setViewTips(!viewTips);
+    }
+
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<string>(""); // AIからの回答
+    const [response, setResponse] = useState<string>(''); // AIからの回答
+    const [finalres, setFinalres] = useState<string[]>([]); // 習慣リスト
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
-        //ボタンを押すとAIが分析を開始し応答を表示
         e.preventDefault();
-
+    
         if (text === '') {
             alert('プロンプトを入力してください。');
             return;
         }
+    
+        setIsGenerating(true);
+        setResponse('');
+        setFinalres([]);
 
-        setResponse(""); // 初期化
-        setIsComplete(false); // ストリーミング開始
-        setIsGenerating(true); // 応答生成開始
-
-        // 最新の prompt を使用して SystemPrompt を定義
-        const SystemPrompt: string = `あなたはおすすめの習慣を提案してください。アプリの利用者は自分が憧れている姿やなりたいもの、目標をテキストで書きます。なのであなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。習慣名だけを挙げてください。 憧れている姿、なりたいもの、目標: ${text}`;
-
-        // API呼び出し
-        const res = await fetch('/api/chatgpt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt: SystemPrompt }), // キー名を修正
-        });
-
-        const reader = res.body?.getReader();
-        const decoder = new TextDecoder();
-
-        if (reader) {
-            let done = false;
-            let incompleteChunk = ''; // 不完全なチャンクを一時的に保持
-
-            while (!done) {
-                const { value, done: readerDone } = await reader.read();
-                done = readerDone;
-                const chunk = decoder.decode(value, { stream: true });
-                // 不完全なチャンクが前のチャンクの最後と繋がる可能性があるため、それを追加
-                incompleteChunk += chunk;
-                // 'data: ' で始まる行だけを処理
-                const lines = incompleteChunk
-                    .split('\n')
-                    .filter((line) => line.startsWith('data: '));
-
-                for (const line of lines) {
-                    const jsonString = line.replace('data: ', '').trim();
-
-                    if (jsonString === '[DONE]') {
-                        // ストリーミングが完了した場合
-                        setIsComplete(true); // 完了フラグを立てる
-                        setIsGenerating(false); // 応答生成完了
-                        break;
-                    }
-
-                    try {
-                        // JSONとして有効か確認
-                        const parsedChunk = JSON.parse(jsonString);
-                        const content = parsedChunk.choices[0]?.delta?.content;
-                        if (content) {
-                            // チャンクごとにレスポンスを追加
-                            console.log(content)
-                            setResponse((prev) => prev + content);
-                        }
-                    } catch (error) {
-                        // JSONが未完了の場合は、次のチャンクで処理を続ける
-                        console.error(
-                            'Error parsing JSON (ignoring incomplete chunk):',
-                            error,
-                        );
-                        continue;
-                    }
-                }
-
-                // 最後の行が不完全だった場合、次のチャンクと繋げるため保存
-                incompleteChunk = incompleteChunk.split('\n').slice(-1)[0];
+        // プロンプト設定
+        const SystemPrompt: string = `あなたはおすすめの習慣を提案してください。アプリの利用者は自分が憧れている姿やなりたいもの、目標をテキストで書き、画像があれば画像をアップロードします。なのであなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。習慣名だけを挙げてください。番号や点や記号などは書かずに箇条書き(最初はハイフン)で書いてください。憧れている姿、なりたいもの、目標: ${text} ,画像: ${img}`;
+    
+        try {
+            const res = await fetch('/api/chatgpt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: SystemPrompt, img }),
+            });
+    
+            const data = await res.json();
+    
+            if (!res.ok) {
+                console.error('APIエラー:', data);
+                setIsGenerating(false);
+                alert('APIリクエストに失敗しました。');
+                return;
             }
+    
+            setResponse(data.result);
+            setFinalres(data.result.split(/\s?-\s?/).filter((res: string) => res !== ''));
+        } catch (error) {
+            console.error('エラー:', error);
+            alert('エラーが発生しました。');
+        } finally {
+            setIsGenerating(false);
         }
-        console.log(response);
     };
+    
+
+    // `response`の更新後に`finalres`を更新
+    useEffect(() => {
+        if (response) {
+            const splitres = response.split(/\s?-\s?/).filter((res) => res !== '');
+            setFinalres(splitres);
+        }
+    }, [response]);
 
     return (
         <div>
             <Box sx={{ m: 4 }}>
-                <Typography variant='h5'>おすすめの習慣を提案</Typography>
+                    <Typography variant='h5'>おすすめの習慣を提案</Typography>
+                    <Tooltip title='よりよい習慣を見つけるためのtips'>
+                        <IconButton
+                            aria-label='tips'
+                            onClick={handleViewTips}
+                            sx={{position: "fixed", top: 100, right: 32}}>
+                            <HelpOutlineIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Dialog
+                        open={viewTips}
+                        onClose={handleViewTips}
+                        fullWidth>
+                        <DialogTitle>よりよい習慣を見つけるためのtips</DialogTitle>
+                        <DialogContent>
+                        <Typography variant="body1" component='p'>
+                            習慣を続けることが目的になってはいけません。
+                        </Typography>
+                        <Typography variant="body2" component='p'>
+                            例えば、「見た目をよくしたい」という目標があったとします。
+                            そのために「週3回の筋トレをする」という習慣を設定するのは良いことです。
+                        </Typography>
+                        <Typography variant="body2" component='p'>
+                            しかし、辛くなったときに「なぜ続けるのか？」が分からないと挫折しやすくなります。
+                            そこで「なぜ見た目をよくしたいのか？」を深掘りしてみましょう。
+                        </Typography>
+                        <Typography variant="body2">
+                            例:
+                            <br />「見た目をよくしたい」→「自信をつけたい」→「モテたい」
+                            <br />このように考えると、本当のモチベーションが明確になり、続けやすくなります！
+                        </Typography>
+                    </DialogContent>
+
+                    </Dialog>
                 <Box sx={{ mt: 3 }}>
                     <Typography variant='subtitle1'>
                         あなたが憧れている姿やなりたいものについて教えてください！
@@ -124,35 +144,31 @@ const GoalSetting = () => {
                     />
                 </Box>
                 <Box sx={{ mt: 3 }}>
-                    <Typography variant='subtitle1'>
-                        モデルとなる画像を貼りましょう！
-                    </Typography>
-                    <input
-                        type='file'
-                        style={{ display: 'none' }}
-                        accept='image/*'
-                        id='img-upload'
-                        onChange={handleSetImg}
-                    />
-                    <Box sx={{ mt: 1 }}>
+                     <Typography variant='subtitle1'>モデルとなる画像を貼りましょう！</Typography>
+                    <input type='file' style={{ display: 'none' }} accept='image/*' id='img-upload' onChange={handleSetImg} />
+                    <Box sx={{ display: "flex", mt: 1 }}>
                         <label htmlFor='img-upload'>
-                            <Button
-                                variant='outlined'
-                                component='span'
-                                startIcon={<ImageIcon />}>
+                            <Button variant='outlined' component='span' startIcon={<ImageIcon />}>
                                 画像をアップロード
                             </Button>
-                            {img && <img src={img} />}
+                            <Tooltip title='アップロードされた画像を削除'>
+                                <IconButton
+                                    aria-label='delete'
+                                    onClick={resetImg}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {img && <img src={img} width="200" height="100"/>}
                         </label>
+                        
                     </Box>
                 </Box>
-                <Button
-                    variant='contained'
-                    onClick={handleSubmit}
-                    sx={{ mt: 4, height: 40, width: 180 }}>
+                <Button variant='contained' onClick={handleSubmit} sx={{ mt: 4, height: 40, width: 180 }}>
                     おすすめの習慣を見る
                 </Button>
-                <Box sx={{ mt: 2 }}>{response}</Box>
+                <Box sx={{ mt: 2 }}>
+                    {isGenerating ? <PulseLoading loading={isGenerating} /> : finalres.map((res, index) => <Chip key={index} label={res} />)}
+                </Box>
             </Box>
         </div>
     );

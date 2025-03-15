@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
-import { List, Typography } from '@mui/material';
+import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
+import Form from '../components/Form';
+import { TodoContext } from '../components/TodoContext';
 
 interface TodoProps {
     id: number;
@@ -17,13 +19,28 @@ interface TodoProps {
 }
 
 interface TodoListProps {
-    todos: TodoProps[];
+    locate: string;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+const TodoList: React.FC<TodoListProps> = ({ locate }) => {
+    const todoContext = useContext(TodoContext);
+
+    if (!todoContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { todos } = todoContext;
+
+    // フォームのオープン
+    const [open, setOpen] = useState<boolean>(false);
+    const handleClickOpen = () => setOpen(true);
+
     const todayDay: string = new Date().toLocaleDateString('ja-JP', {
         weekday: 'short',
     }); //今日の曜日
+
     const today: Date = new Date(); //今日の日付(Date型)
 
     const todayslash: string = ChangeSlashDay(today); //今日の日付("yyyy/mm/dd"型)
@@ -71,6 +88,20 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
                         todo={todo}
                     />
                 ))}
+                <ListItem>
+                    <Box sx={{ display: "flex", justifyContent: "center",
+                        width: '100%', mt: 1 }}>
+                        <Button variant='outlined' fullWidth
+                        sx={{ border: "3px dashed #dcdcdc", color: "#a9a9a9",
+                            height: 45, '&:hover': {
+                            color: '#c0c0c0',
+                            backgroundColor: '#f5f5f5',
+                            }}}
+                        onClick={handleClickOpen}>
+                            新しい習慣を追加
+                        </Button>
+                    </Box>
+                </ListItem>
             </List>
             <br />
 
@@ -90,6 +121,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
                     />
                 ))}
             </List>
+
+            {open && <Form open={open} setOpen={setOpen} locate={locate}/>}
         </div>
     );
 };

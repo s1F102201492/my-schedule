@@ -5,6 +5,7 @@ import { TodoContext } from './components/TodoContext';
 import { Typography } from '@mui/material';
 import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
+import FadeLoading from './components/FadeLoading';
 
 export default function Home() {
     const today = new Date();
@@ -20,7 +21,7 @@ export default function Home() {
         );
     }
 
-    const { todos } = todoContext;
+    const { loading } = todoContext;
 
     return (
         <div>
@@ -32,7 +33,7 @@ export default function Home() {
                 sx={{ m: 4 }}>
                 {`${year}年${month}月${day}日`}のやることリスト
             </Typography>
-            <TodoList todos={todos} />
+            { loading ? <FadeLoading loading={loading} /> : <TodoList locate={"/"} />}
         </div>
     );
 }

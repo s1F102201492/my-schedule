@@ -5,6 +5,8 @@ import { TodoContext } from '../components/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import {
     Box,
+    Card,
+    Fab,
     FormControl,
     InputLabel,
     MenuItem,
@@ -13,10 +15,15 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
+    Tooltip,
+    Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
+import Form from '../components/Form';
+import AddIcon from '@mui/icons-material/Add';
+import FadeLoading from '../components/FadeLoading';
 
 interface TodoProps {
     id: number;
@@ -32,6 +39,11 @@ interface TodoProps {
 }
 
 const AllTodoList = () => {
+
+    // 追加フォームの開閉
+    const [open, setOpen] = useState<boolean>(false);
+    const handleClickOpen = () => setOpen(true);
+
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -40,7 +52,7 @@ const AllTodoList = () => {
         );
     }
 
-    const { todos, fetchAllTodos } = todoContext;
+    const { todos, fetchAllTodos, loading } = todoContext;
 
     // const checkrate = CheckRate(todo)
 
@@ -66,12 +78,14 @@ const AllTodoList = () => {
         setSort(e.target.value);
     };
 
+    //文字検索
     const searchtodos = todos.filter((todo) =>
         todo.title.match(new RegExp('.*' + search + '.*')),
-    ); //文字検索
+    ); 
 
+    //フィルター
     const filtertodos = searchtodos.filter((todo) => {
-        //フィルター
+        
         const todayslash = ChangeSlashDay(new Date());
 
         if (active === 'active') {
@@ -95,10 +109,7 @@ const AllTodoList = () => {
     const compareProgress = (a: TodoProps, b: TodoProps) =>
         CheckRate(a) - CheckRate(b);
 
-    const sortFunctions: Record<
-        string,
-        (a: TodoProps, b: TodoProps) => number
-    > = {
+    const sortFunctions: Record<string, (a: TodoProps, b: TodoProps) => number> = {
         startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
         startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),
         endDateAsc: (a, b) => compareDates(a.enddate, b.enddate),
@@ -181,17 +192,32 @@ const AllTodoList = () => {
                         </FormControl>
                     </Box>
                 </Box>
+                { loading ? <FadeLoading loading={loading} /> :
                 <Grid
-                    container
-                    spacing={3}>
-                    {finaltodos.map((todo) => (
-                        <AllTodoItem
-                            key={todo.id}
-                            todo={todo}
-                        />
-                    ))}
-                </Grid>
+                container
+                spacing={3}>
+                {finaltodos.map((todo) => (
+                    <AllTodoItem
+                        key={todo.id}
+                        todo={todo}
+                    />
+                ))}
+                </Grid>}
+                
+                <Tooltip title='新しい習慣を追加'>
+                    <Fab color="primary"
+                    aria-label="add"
+                    sx={{ position: "fixed", bottom: 32, right: 32 }}
+                    onClick={handleClickOpen} >
+                        <AddIcon />
+                    </Fab>
+                </Tooltip>
             </Box>
+            <Form
+                open={open}
+                setOpen={setOpen}
+                locate={"/list"}
+            />
         </div>
     );
 };

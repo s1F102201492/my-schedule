@@ -10,7 +10,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    FormControlLabel,
     FormGroup,
     MenuItem,
     Select,
@@ -23,6 +22,7 @@ import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import Pickcolor from './Pickcolor';
 import { useRouter } from 'next/navigation';
+import CreateCheckedDates from './calculate/CreateCheckedDates';
 
 dayjs.locale('ja');
 
@@ -56,7 +56,13 @@ const addTodo = async (
     return res.json();
 };
 
-const Form = () => {
+interface FormProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  locate: string;
+}
+
+const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -69,13 +75,11 @@ const Form = () => {
 
     const { fetchAllTodos } = todoContext;
 
-    // フォームのオープン
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
+    // フォームのクローズ
     const handleClose = () => {
-        //閉じたらすべてリセット
-        setOpen(false);
-        formReset();
+      //閉じたらすべてリセット
+      setOpen(false);
+      formReset();
     };
 
     const formReset = () => {
@@ -144,12 +148,12 @@ const Form = () => {
     }, [ndays]);
 
     // color
-    const [selectColor, setSelectColor] = useState<string>('#ffffff');
+    const [selectColor, setSelectColor] = useState<string>('#f44336');
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
+        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す(interval)
         const setint = (ndays: boolean) => {
             if (ndays) {
                 return number;
@@ -158,41 +162,13 @@ const Form = () => {
             }
         };
 
-        const createCheckedDates = (
-            sd: Dayjs,
-            ed: Dayjs,
-            interval: number | string[],
-        ) => {
-            let objdate: Record<string, boolean> = {};
-            if (typeof interval === 'number') {
-                // 日ごとの場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const slashdate = dayjs(date).format('YYYY/MM/DD');
-                    objdate[slashdate] = false;
-                    date = dayjs(date).add(interval, 'd');
-                }
-                return objdate;
-            } else {
-                // 曜日の場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const day = dayjs(date).format('ddd');
-                    if (selectedDays.includes(day)) {
-                        const slashdate = dayjs(date).format('YYYY/MM/DD');
-                        objdate[slashdate] = false;
-                    }
-                    date = dayjs(date).add(1, 'd');
-                }
-                return objdate;
-            }
-        };
-
-        const checkdates: Record<string, boolean> = createCheckedDates(
+        const checkdates: Record<string, boolean> = CreateCheckedDates(
             sd,
             ed,
             setint(ndays),
+            selectedDays
         ); // 日付: falseの辞書を作成
+
         let contdays: number = 0; // continuedays 登録したてなので最初は0
 
         await addTodo(
@@ -207,156 +183,142 @@ const Form = () => {
         );
 
         await fetchAllTodos();
-        router.push('/calendar');
+        router.push(locate);
         router.refresh();
         setOpen(false);
         formReset();
     };
 
     return (
-        <div>
-            <Box sx={{ m: 2 }}>
-                <Button
-                    variant='contained'
-                    onClick={handleClickOpen}>
-                    予定を追加
-                </Button>
-            </Box>
-            <Dialog
-                fullWidth
-                open={open}
-                onClose={handleClose}>
-                <form onSubmit={handleSubmit}>
-                    <DialogTitle
-                        sx={{ m: 1 }}
-                        variant='h4'>
-                        タスクや習慣を追加する
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText variant='h6'>
-                            タイトル
-                        </DialogContentText>
-                        <TextField
-                            required
-                            margin='dense'
-                            fullWidth
-                            variant='outlined'
-                            value={title}
-                            onChange={handletitle}
-                        />
-                        <DialogContentText variant='h6'>詳細</DialogContentText>
-                        <TextField
-                            multiline
-                            rows={3}
-                            margin='dense'
-                            fullWidth
-                            variant='outlined'
-                            value={desc}
-                            onChange={handledesc}
-                        />
-                        <Box sx={{ flexDirection: 'row' }}>
-                            <DialogContentText
-                                sx={{ mt: 3 }}
-                                variant='h6'>
-                                開始日
-                            </DialogContentText>
-                            <DateComponents
-                                label='開始日'
-                                date={sd}
-                                setDate={setSd}
-                                minDate={dayjs(new Date('2000/01/01'))}
-                                maxDate={dayjs(new Date('2299/12/31'))}
-                            />
-                        </Box>
-                        <Box sx={{ flexDirection: 'row' }}>
-                            <DialogContentText
-                                sx={{ mt: 3 }}
-                                variant='h6'>
-                                終了日
-                            </DialogContentText>
-                            <DateComponents
-                                label='終了日'
-                                date={ed}
-                                setDate={setEd}
-                                minDate={sd}
-                                maxDate={dayjs(new Date('2299/12/31'))}
-                            />
-                        </Box>
+      <div>
+        <Dialog
+            fullWidth
+            open={open}
+            onClose={handleClose}>
+            <form onSubmit={handleSubmit}>
+                <DialogTitle
+                    sx={{ m: 1 }}
+                    variant='h4'>
+                    タスクや習慣を追加する
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText variant='h6'>
+                        タイトル
+                    </DialogContentText>
+                    <TextField
+                        required
+                        margin='dense'
+                        fullWidth
+                        variant='outlined'
+                        value={title}
+                        onChange={handletitle}
+                    />
+                    <DialogContentText variant='h6'>詳細</DialogContentText>
+                    <TextField
+                        multiline
+                        rows={3}
+                        margin='dense'
+                        fullWidth
+                        variant='outlined'
+                        value={desc}
+                        onChange={handledesc}
+                    />
+                    <Box sx={{ flexDirection: 'row' }}>
                         <DialogContentText
                             sx={{ mt: 3 }}
                             variant='h6'>
-                            繰り返し日
+                            開始日
                         </DialogContentText>
-                        {ndays ? 'N日ごと' : '曜日'}
-                        <Switch
-                            checked={ndays}
-                            onChange={handleNdays}
+                        <DateComponents
+                            label='開始日'
+                            date={sd}
+                            setDate={setSd}
+                            minDate={dayjs(new Date('2000/01/01'))}
+                            maxDate={dayjs(new Date('2299/12/31'))}
                         />
-                        <Box>
-                            {ndays ? (
-                                <Select
-                                    required
-                                    labelId='demo-multiple-name-label'
-                                    id='demo-multiple-name'
-                                    value={number}
-                                    onChange={handleNumber}>
-                                    {numberofdays.map((num) => (
-                                        <MenuItem
-                                            key={num}
-                                            value={num}>
-                                            {num}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            ) : (
-                                <FormGroup row>
-                                    {[
-                                        '月',
-                                        '火',
-                                        '水',
-                                        '木',
-                                        '金',
-                                        '土',
-                                        '日',
-                                    ].map((day) => (
-                                        <Chip
-                                            key={day}
-                                            label={day}
-                                            variant={
-                                                selectedDays.includes(day)
-                                                    ? 'filled'
-                                                    : 'outlined'
-                                            }
-                                            color={
-                                                selectedDays.includes(day)
-                                                    ? 'primary'
-                                                    : 'default'
-                                            }
-                                            onClick={() => handleChip(day)}
-                                        />
-                                    ))}
-                                </FormGroup>
-                            )}
-                        </Box>
-                        <Box>
-                            <Pickcolor
-                                selectColor={selectColor}
-                                setSelectColor={setSelectColor}
-                            />
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>閉じる</Button>
-                        <Button
-                            type='submit'
-                            value='submit'
-                            variant='contained'>
-                            追加
-                        </Button>
-                    </DialogActions>
-                </form>
-            </Dialog>
-        </div>
+                    </Box>
+                    <Box sx={{ flexDirection: 'row' }}>
+                        <DialogContentText
+                            sx={{ mt: 3 }}
+                            variant='h6'>
+                            終了日
+                        </DialogContentText>
+                        <DateComponents
+                            label='終了日'
+                            date={ed}
+                            setDate={setEd}
+                            minDate={sd}
+                            maxDate={dayjs(new Date('2299/12/31'))}
+                        />
+                    </Box>
+                    <DialogContentText
+                        sx={{ mt: 3 }}
+                        variant='h6'>
+                        繰り返し日
+                    </DialogContentText>
+                    {ndays ? 'N日ごと' : '曜日'}
+                    <Switch
+                        checked={ndays}
+                        onChange={handleNdays}
+                    />
+                    <Box>
+                        {ndays ? (
+                            <Select
+                                required
+                                labelId='demo-multiple-name-label'
+                                id='demo-multiple-name'
+                                value={number}
+                                onChange={handleNumber}>
+                                {numberofdays.map((num) => (
+                                    <MenuItem
+                                      key={num}
+                                      value={num}>
+                                      {num}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        ) : (
+                            <FormGroup row>
+                                {['月','火','水','木','金','土','日',
+                                ].map((day) => (
+                                    <Chip
+                                        key={day}
+                                        label={day}
+                                        variant={
+                                            selectedDays.includes(day)
+                                                ? 'filled'
+                                                : 'outlined'
+                                        }
+                                        color={
+                                            selectedDays.includes(day)
+                                                ? 'primary'
+                                                : 'default'
+                                        }
+                                        onClick={() => handleChip(day)}
+                                    />
+                                ))}
+                            </FormGroup>
+                        )}
+                    </Box>
+                    <Box>
+                        <Pickcolor
+                            selectColor={selectColor}
+                            setSelectColor={setSelectColor}
+                        />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>閉じる</Button>
+                    <Button
+                        type='submit'
+                        value='submit'
+                        variant='contained'>
+                        追加
+                    </Button>
+                </DialogActions>
+            </form>
+        </Dialog>
+      </div>
     );
 };
 

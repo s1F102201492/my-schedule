@@ -1,11 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+    Button,
     Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     IconButton,
     ListItem,
     ListItemText,
     Tooltip,
-    Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoContext } from '../components/TodoContext';
@@ -25,6 +29,17 @@ interface TodoProps {
 
 interface TodoItemProps {
     todo: TodoProps;
+}
+
+const deletePractice = async (todo: TodoProps) => {
+    const res = await fetch(`/api/todo/${todo.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json',
+        },
+    });
+
+    return res.json();
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
@@ -48,6 +63,12 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
         await toggleChecked(todo.id, todayslash);
     };
 
+    // 削除の警告フォームオープン
+    const [warning, setWarning] = useState<boolean>(false);
+    const handleWarning = () => {
+        setWarning(!warning)
+    }
+
     const handleDelete = async () => {
         await toggleDelete(todo.id, todayslash);
     };
@@ -64,11 +85,27 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                 <Tooltip title='削除'>
                     <IconButton
                         aria-label='delete'
-                        onClick={handleDelete}>
+                        onClick={handleWarning}>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
             </ListItem>
+            <Dialog open={warning} onClose={handleWarning} fullWidth>
+                <DialogTitle>今日のタスクを削除しますか？</DialogTitle>
+                <DialogContent sx={{ whiteSpace: "pre-wrap" }}>
+                    {`タスク名：${todo.title}\n`}
+                    ※タスクを行う日が1日もない場合は習慣自体が削除されます。
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleWarning}>
+                        戻る
+                    </Button>
+                    <Button variant='contained' color='error'
+                        onClick={handleDelete}>
+                        削除
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
