@@ -92,8 +92,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             </ListItem>
             <Dialog open={warning} onClose={handleWarning} fullWidth>
                 <DialogTitle>今日のタスクを削除しますか？</DialogTitle>
-                <DialogContent>
-                    タスク名：{todo.title}
+                <DialogContent sx={{ whiteSpace: "pre-wrap" }}>
+                    {`タスク名：${todo.title}\n`}
+                    ※タスクを行う日が1日もない場合は習慣自体が削除されます。
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleWarning}>

@@ -55,7 +55,9 @@ export const PUT = async (req: Request, res: NextResponse) => {
 
   return NextResponse.json({ message: 'success', todoedit }, { status: 200 });
  } catch (err) {
-  console.error('更新エラー:', err);
+    if (err instanceof Error){
+        console.log("Error: ", err.stack)
+    }
   return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
  } finally {
   await prisma.$disconnect();
