@@ -22,6 +22,7 @@ import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import Pickcolor from './Pickcolor';
 import { useRouter } from 'next/navigation';
+import CreateCheckedDates from './calculate/CreateCheckedDates';
 
 dayjs.locale('ja');
 
@@ -147,12 +148,12 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     }, [ndays]);
 
     // color
-    const [selectColor, setSelectColor] = useState<string>('#ffffff');
+    const [selectColor, setSelectColor] = useState<string>('#f44336');
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
+        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す(interval)
         const setint = (ndays: boolean) => {
             if (ndays) {
                 return number;
@@ -161,41 +162,13 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             }
         };
 
-        const createCheckedDates = (
-            sd: Dayjs,
-            ed: Dayjs,
-            interval: number | string[],
-        ) => {
-            let objdate: Record<string, boolean> = {};
-            if (typeof interval === 'number') {
-                // 日ごとの場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const slashdate = dayjs(date).format('YYYY/MM/DD');
-                    objdate[slashdate] = false;
-                    date = dayjs(date).add(interval, 'd');
-                }
-                return objdate;
-            } else {
-                // 曜日の場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const day = dayjs(date).format('ddd');
-                    if (selectedDays.includes(day)) {
-                        const slashdate = dayjs(date).format('YYYY/MM/DD');
-                        objdate[slashdate] = false;
-                    }
-                    date = dayjs(date).add(1, 'd');
-                }
-                return objdate;
-            }
-        };
-
-        const checkdates: Record<string, boolean> = createCheckedDates(
+        const checkdates: Record<string, boolean> = CreateCheckedDates(
             sd,
             ed,
             setint(ndays),
+            selectedDays
         ); // 日付: falseの辞書を作成
+
         let contdays: number = 0; // continuedays 登録したてなので最初は0
 
         await addTodo(
