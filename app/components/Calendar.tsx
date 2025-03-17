@@ -7,6 +7,7 @@ import React, { useContext, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TodoContext } from './TodoContext';
+import GetStickyCellStyle from './theme/GetStickyCellStyle';
 
 interface CalendarViewProps {
     title: string;
@@ -37,8 +38,11 @@ const Calendar = () => {
         })),
     );
 
+    const [todaytodolist, setTodaytodolist] = useState<CalendarViewProps[]>([]);
+
     const [current, setCurrent] = useState<Dayjs>(dayjs()) // その月のカレンダーを表示
     const [select, setSelect] = useState<boolean>(false) // その日付をクリックするとその日の予定が出てくる
+    const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null) // クリックされた日付を管理
     
     const nextMonthPage = () => {
         setCurrent(current.add(1, 'M'));
@@ -51,6 +55,15 @@ const Calendar = () => {
     const monthStart = dayjs(current).startOf('month') // 月初めの日付
     const monthEnd = dayjs(current).endOf('month'); // 月末の日付
     const cntMonth = dayjs(monthEnd).diff(monthStart, "day") // その月の日数
+    const nextMonthStart = dayjs(current).add(1,'M').startOf('month');
+    const nextMonthempty = () => { // 次の月の空白を数える
+        if (nextMonthStart.day() === 0) {
+            return 7;
+        } else {
+            return nextMonthStart.day();
+        }
+    }
+
     const daysInMonth: Dayjs[] = []; // その月の日付すべて
     for (let i = 0; i < cntMonth+1; i++) {
         // 初日から i 日加算した日付を配列に追加
@@ -62,7 +75,7 @@ const Calendar = () => {
 
     // 日付にイベントがあるかチェック
     const hasEvents = (d: Dayjs) => {
-        return todolist.some((todo) => todo.date.isSame(d))
+        return todolist.some((todo) => todo.date.isSame(d, 'day'))
     }
 
     const isCurrentMonth = () => {
@@ -74,15 +87,10 @@ const Calendar = () => {
     const holiday = (day: string) => day === "土" || day === "日";
     const satsun = (day: string) => day === "土";
 
-    let todaytodolist:CalendarViewProps[] = []
     const clickCalendar = (d: Dayjs) => {
         setSelect(true);
-        todolist.forEach((todo) => {
-            if (todo.date === d) {
-                todaytodolist.push(todo);
-            }
-        })
-
+        setSelectedDate(d);
+        setTodaytodolist(todolist.filter((todo) => todo.date.isSame(d, 'day')));
     }
   
     return (
@@ -148,6 +156,7 @@ const Calendar = () => {
                     {/* 日付のセル */}
                     {daysInMonth.map((date, index) => {
                         const dayHasEvents: boolean = hasEvents(date) // その日タスクがあればtrue
+                        const isSelected = selectedDate && dayjs(date).isSame(selectedDate, 'day')
                         const isTodayDate = () => {
                             return dayjs(date).isSame(dayjs(), 'day');
                           }
@@ -178,7 +187,7 @@ const Calendar = () => {
                                 padding: 1,
                                 position: "relative",
                                 color: !isCurrentMonth ? "text.disabled" : "text.primary",
-                                backgroundColor: isTodayDate() ? "#dcdcdc" : "transparent",
+                                backgroundColor: isSelected ? "#dcdcdc" : (isTodayDate() ? "#f0f0f0" : "transparent"),
                                 "&:hover": {
                                 backgroundColor: "#dcdcdc",
                                 },
@@ -204,37 +213,59 @@ const Calendar = () => {
                         </Grid>
                         )
                     })}
+
+                    {/* 空のセル（月の最初の日の前） */}
+                    {Array(7 - nextMonthempty())
+                        .fill(null)
+                        .map((_, index) => (
+                        <Grid
+                            size={{xs:12/7}}
+                            key={`empty-${index}`}
+                            sx={{
+                            height: 56,
+                            borderBottom: 1,
+                            borderRight: 1,
+                            borderColor: "divider",
+                            "&:nth-of-type(7n)": {
+                                borderRight: 0,
+                            },
+                            }}
+                        />
+                        ))}
                     </Grid>
                 </Paper>
             </Box>
-            { select && 
+            { select ? 
             <Box sx={{m: 2}}>
-            <TableContainer>
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                <TableHead>
-                <TableRow>
-                    <TableCell>タスク名</TableCell>
-                    <TableCell align="right">日付</TableCell>
-                    <TableCell align="right">チェック</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                    {todaytodolist.map((todo) => (
-                        <TableRow
-                            key={todo.title}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {todo.title}
-                            </TableCell>
-                            <TableCell align="right">{todo.date.format('YYYY/MM/DD')}</TableCell>
-                            <TableCell align="right">{todo.completed}</TableCell>
+                <TableContainer>
+                    <Table sx={{ width: '100%' }} size="small" aria-label="a dense table">
+                        <TableHead>
+                        <TableRow>
+                        <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>タスク名</TableCell>
+                        <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>日付</TableCell>
+                        <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>チェック</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {todaytodolist.map((todo) => (
+                                <TableRow
+                                    key={todo.title}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                    <TableCell component="th" scope="row" sx={GetStickyCellStyle(90,90,0,"left")}>
+                                        {todo.title}
+                                    </TableCell>
+                                    <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.date.format('YYYY/MM/DD')}</TableCell>
+                                    <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.completed ? "済":"未"}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </TableContainer>
-            </Box>}
+            </Box> :
+            <Typography variant='subtitle1' 
+                sx={{m:4}}>
+                日付をクリックすると情報が確認できます。</Typography>}
             
         </div>
     );
