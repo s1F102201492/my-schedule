@@ -216,7 +216,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                         value={title}
                         onChange={handletitle}
                     />
-                    <DialogContentText variant='h6'>詳細</DialogContentText>
+                    <DialogContentText variant='h6'>具体的にやることや現状の記録</DialogContentText>
                     <TextField
                         multiline
                         rows={3}
