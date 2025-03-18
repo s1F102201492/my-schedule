@@ -27,7 +27,7 @@ interface TodoProps {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    color: string;
+    purpose: string;
 }
 
 const deletePractice = async (todo: TodoProps) => {

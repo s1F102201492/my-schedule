@@ -16,11 +16,11 @@ import {
     SelectChangeEvent,
     Switch,
     TextField,
+    Typography,
 } from '@mui/material';
 import { DateComponents } from '../components/DateComponents';
 import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
-import Pickcolor from './Pickcolor';
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
 
@@ -34,7 +34,7 @@ const addTodo = async (
     startdate: string,
     enddate: string,
     interval: number | string[],
-    color: string,
+    purpose: string
 ) => {
     const res = await fetch('/api/todo', {
         method: 'POST',
@@ -46,7 +46,7 @@ const addTodo = async (
             startdate,
             enddate,
             interval,
-            color,
+            purpose
         }),
         headers: {
             'Content-type': 'application/json',
@@ -89,7 +89,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         setNumber(1);
         setSelectedDays([]);
         setNdays(true);
-        setSelectColor('');
+        setpurp('');
     };
 
     // タイトルに書き込まれたか判定
@@ -138,6 +138,12 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         setNdays(!ndays);
     };
 
+    // 目的のテキストを管理
+    const [purp, setpurp] = useState<string>("");
+    const handlepurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setpurp(e.target.value);
+    }
+
     // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
     useEffect(() => {
         if (ndays === true) {
@@ -146,9 +152,6 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             setNumber(0);
         }
     }, [ndays]);
-
-    // color
-    const [selectColor, setSelectColor] = useState<string>('#f44336');
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -179,7 +182,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             sd?.format('YYYY/MM/DD'),
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
-            selectColor,
+            purp
         );
 
         await fetchAllTodos();
@@ -300,12 +303,16 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                             </FormGroup>
                         )}
                     </Box>
-                    <Box>
-                        <Pickcolor
-                            selectColor={selectColor}
-                            setSelectColor={setSelectColor}
-                        />
-                    </Box>
+                    <DialogContentText variant='h6'>目的</DialogContentText>
+                    <TextField
+                        multiline
+                        rows={3}
+                        margin='dense'
+                        fullWidth
+                        variant='outlined'
+                        value={purp}
+                        onChange={handlepurpose}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>閉じる</Button>

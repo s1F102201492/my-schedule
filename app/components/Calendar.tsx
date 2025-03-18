@@ -14,7 +14,6 @@ interface CalendarViewProps {
     description: string;
     date: Dayjs;
     completed: boolean;
-    color: string;
 }
 
 const Calendar = () => {
@@ -33,8 +32,7 @@ const Calendar = () => {
             title: todo.title,
             description: todo.description,
             date: dayjs(dateKey),
-            completed: todo.checkedDates[dateKey],
-            color: todo.color
+            completed: todo.checkedDates[dateKey]
         })),
     );
 

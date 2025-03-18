@@ -19,7 +19,6 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { DateComponents } from './DateComponents';
 import dayjs, { Dayjs } from 'dayjs';
-import Pickcolor from './Pickcolor';
 import { useRouter } from 'next/navigation';
 import { TodoContext } from './TodoContext';
 
@@ -39,7 +38,7 @@ interface todo {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    color: string;
+    purpose: string;
 }
 
 const editPractice = async (
@@ -51,7 +50,7 @@ const editPractice = async (
     startdate: string,
     enddate: string,
     interval: number | string[],
-    color: string,
+    purpose: string,
 ) => {
     const res = await fetch(`/api/todo/${id}`, {
         method: 'PUT',
@@ -64,7 +63,7 @@ const editPractice = async (
             startdate,
             enddate,
             interval,
-            color,
+            purpose
         }),
         headers: {
             'Content-type': 'application/json',
@@ -102,7 +101,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         setNumber(initialinterval() as number);
         setSelectedDays(initialinterval() as string[]);
         setNdays(intervaltype());
-        setSelectColor(todo.color);
+        setpurp(todo.purpose);
     };
 
     // タイトルに書き込まれたか判定
@@ -179,8 +178,11 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         }
     }, [ndays]);
 
-    // color
-    const [selectColor, setSelectColor] = useState<string>(todo.color);
+    // 目的のテキストを管理
+    const [purp, setpurp] = useState<string>(todo.purpose);
+    const handlepurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setpurp(e.target.value);
+    }
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -240,7 +242,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
             sd?.format('YYYY/MM/DD'),
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
-            selectColor,
+            purp
         );
 
         await fetchAllTodos();
@@ -368,14 +370,18 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                                 </FormGroup>
                             )}
                         </Box>
-                        <Box>
-                            <Pickcolor
-                                selectColor={selectColor}
-                                setSelectColor={setSelectColor}
-                            />
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
+                        <DialogContentText variant='h6'>目的</DialogContentText>
+                        <TextField
+                            multiline
+                            rows={3}
+                            margin='dense'
+                            fullWidth
+                            variant='outlined'
+                            value={purp}
+                            onChange={handlepurpose}
+                        />
+                        </DialogContent>
+                        <DialogActions>
                         <Button onClick={handleEditClose}>閉じる</Button>
                         <Button
                             type='submit'

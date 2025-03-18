@@ -34,7 +34,7 @@ interface TodoProps {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    color: string;
+    purpose: string;
     // intervalには数字か配列（曜日を格納する）
 }
 

@@ -32,7 +32,7 @@ interface TodoProps {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    color: string;
+    purpose: string;
     // intervalには数字か配列（曜日を格納する）
 }
 
@@ -139,7 +139,7 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                 {/* 間隔 */}
                 <Grid2
                     size={{ xs: 12, sm: 6 }}
-                    sx={{ my: 1 }}>
+                    sx={{ mt: 2, mb: 1 }}>
                     <Typography
                         variant='subtitle2'
                         color='text.secondary'>
@@ -151,6 +151,21 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                         {intervaltype(todo.interval)
                             ? `${todo.interval}日ごと`
                             : `曜日：${todo.interval}`}
+                    </Typography>
+                </Grid2>
+
+                <Grid2
+                    size={{ xs: 12, sm: 6 }}
+                    sx={{ mt: 3, mb: 1 }}>
+                    <Typography
+                        variant='subtitle2'
+                        color='text.secondary'>
+                        目的
+                    </Typography>
+                    <Typography
+                        variant='body1'
+                        gutterBottom>
+                        {todo.purpose}
                     </Typography>
                 </Grid2>
 

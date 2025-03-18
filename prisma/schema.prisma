@@ -23,5 +23,5 @@ model todos {
   startdate DateTime @db.Date
   enddate DateTime @db.Date
   interval Json
-  color String
+  purpose String?
 }

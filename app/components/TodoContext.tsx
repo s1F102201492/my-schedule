@@ -14,7 +14,7 @@ interface TodoProps {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    color: string;
+    purpose: string;
 }
 
 interface TodoContextType {
