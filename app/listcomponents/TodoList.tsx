@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import Form from '../components/Form';
 import { TodoContext } from '../components/TodoContext';
+import Confetti from '../components/parts/Confetti';
 
 interface TodoProps {
     id: number;
@@ -72,9 +73,19 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     const notchecktodos = todaytodos.filter(
         (todo) => todo.checkedDates[todayslash] == false,
     );
+
     const checkedtodos = todaytodos.filter(
         (todo) => todo.checkedDates[todayslash] == true,
     );
+
+    // 今日のタスクがゼロになったら紙吹雪
+    const [showConfetti, setShowConfetti] = useState(false);
+    useEffect(() => {
+        if (notchecktodos.length === 0) {
+            setShowConfetti(true);
+        }
+    }, [notchecktodos.length]); // notchecktodos.length が変化したときのみ実行
+    
 
     return (
         <div>
@@ -121,6 +132,8 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                     />
                 ))}
             </List>
+
+            {showConfetti && <Confetti showConfetti={showConfetti} setShowConfetti={setShowConfetti}/>}
 
             {open && <Form open={open} setOpen={setOpen} locate={locate}/>}
         </div>

@@ -3,7 +3,7 @@
 import { Box, Button, Chip, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
-import PulseLoading from '../PulseLoading';
+import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 

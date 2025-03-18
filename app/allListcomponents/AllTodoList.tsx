@@ -23,7 +23,7 @@ import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
 import Form from '../components/Form';
 import AddIcon from '@mui/icons-material/Add';
-import FadeLoading from '../components/FadeLoading';
+import FadeLoading from '../components/parts/FadeLoading';
 
 interface TodoProps {
     id: number;

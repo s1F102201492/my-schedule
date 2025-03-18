@@ -5,7 +5,7 @@ import { TodoContext } from './components/TodoContext';
 import { Typography } from '@mui/material';
 import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
-import FadeLoading from './components/FadeLoading';
+import FadeLoading from './components/parts/FadeLoading';
 
 export default function Home() {
     const today = new Date();
