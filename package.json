@@ -18,6 +18,7 @@
         "@fullcalendar/list": "^6.1.15",
         "@fullcalendar/react": "^6.1.15",
         "@fullcalendar/timegrid": "^6.1.15",
+        "@lottiefiles/react-lottie-player": "^3.6.0",
         "@mui/icons-material": "^6.4.7",
         "@mui/material": "^6.4.7",
         "@mui/material-nextjs": "^6.2.0",
@@ -26,6 +27,7 @@
         "@supabase/supabase-js": "^2.48.1",
         "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
+        "lottie-react": "^2.4.1",
         "next": "15.0.4",
         "openai": "^4.86.2",
         "react": "^19.0.0",
@@ -33,6 +35,7 @@
         "react-dom": "^19.0.0",
         "react-hot-toast": "^2.5.1",
         "react-modal": "^3.16.3",
+        "react-rewards": "^2.1.0",
         "react-router-dom": "^7.1.1",
         "react-spinners": "^0.15.0",
         "styled-components": "^6.1.15"
