@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import Header from '../components/Header';
 import GoalSetting from '../components/goal/GoalSetting';
 import { TodoContext } from '../components/TodoContext';
-import FadeLoading from '../components/FadeLoading';
+import FadeLoading from '../components/parts/FadeLoading';
 
 const page = () => {
     const todoContext = useContext(TodoContext);

@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import Form from '../components/Form';
 import { TodoContext } from '../components/TodoContext';
+import RewardDialog from '../components/RewardDialog';
 
 interface TodoProps {
     id: number;
@@ -72,9 +73,28 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     const notchecktodos = todaytodos.filter(
         (todo) => todo.checkedDates[todayslash] == false,
     );
+
     const checkedtodos = todaytodos.filter(
         (todo) => todo.checkedDates[todayslash] == true,
     );
+
+    // お祝いのアニメーションを管理
+    const [reward, setReward] = useState<boolean>(false);
+    const isFirstRender = useRef(true); // 初回レンダリングを判定
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        if (!notchecktodos.length && !reward) {
+            setReward(true);
+        }
+    }, [notchecktodos.length]);
+
+
+        
 
     return (
         <div>
@@ -121,6 +141,8 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                     />
                 ))}
             </List>
+
+            {reward && <RewardDialog open={reward} setOpen={setReward} />}
 
             {open && <Form open={open} setOpen={setOpen} locate={locate}/>}
         </div>

@@ -2,8 +2,6 @@
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import { CountContinueDays } from './calculate/CountContinueDays';
-import FadeLoading from './FadeLoading';
-import Header from './Header';
 
 interface TodoProps {
     id: number;
