@@ -1,13 +1,17 @@
 'use client';
 
-import { Box, Button, Chip, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Chip, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
 import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const GoalSetting = () => {
+interface modelPageProps {
+    setRecommendPage: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
     const [text, setText] = useState<string>('');
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -29,11 +33,6 @@ const GoalSetting = () => {
 
     const resetImg = () => {
         setImg('');
-    }
-    
-    const [viewTips, setViewTips] = useState<boolean>(false);
-    const handleViewTips = () => {
-        setViewTips(!viewTips);
     }
 
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
@@ -94,41 +93,15 @@ const GoalSetting = () => {
 
     return (
         <div>
-            <Box sx={{ m: 4 }}>
-                    <Typography variant='h5'>おすすめの習慣を提案</Typography>
-                    <Tooltip title='よりよい習慣を見つけるためのtips'>
-                        <IconButton
-                            aria-label='tips'
-                            onClick={handleViewTips}
-                            sx={{position: "fixed", top: 100, right: 32}}>
-                            <HelpOutlineIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Dialog
-                        open={viewTips}
-                        onClose={handleViewTips}
-                        fullWidth>
-                        <DialogTitle>よりよい習慣を見つけるためのtips</DialogTitle>
-                        <DialogContent>
-                        <Typography variant="body1" component='p'>
-                            習慣を続けることが目的になってはいけません。
-                        </Typography>
-                        <Typography variant="body2" component='p'>
-                            例えば、「見た目をよくしたい」という目標があったとします。
-                            そのために「週3回の筋トレをする」という習慣を設定するのは良いことです。
-                        </Typography>
-                        <Typography variant="body2" component='p'>
-                            しかし、辛くなったときに「なぜ続けるのか？」が分からないと挫折しやすくなります。
-                            そこで「なぜ見た目をよくしたいのか？」を深掘りしてみましょう。
-                        </Typography>
-                        <Typography variant="body2">
-                            例:
-                            <br />「見た目をよくしたい」→「自信をつけたい」→「モテたい」
-                            <br />このように考えると、本当のモチベーションが明確になり、続けやすくなります！
-                        </Typography>
-                    </DialogContent>
-
-                    </Dialog>
+            <Tooltip title="戻る">
+                <IconButton onClick={() => setRecommendPage(false)}
+                    sx={{ ml: 2, mt: 2}}>
+                    <ArrowBackIcon />
+                </IconButton>
+            </Tooltip>
+            <Box sx={{ ml: 4, mt:2 }}>
+                <Typography variant='h5'>おすすめの習慣を提案</Typography>
+                    
                 <Box sx={{ mt: 3 }}>
                     <Typography variant='subtitle1'>
                         あなたが憧れている姿やなりたいものについて教えてください！
@@ -174,4 +147,4 @@ const GoalSetting = () => {
     );
 };
 
-export default GoalSetting;
+export default AIrecommend;
