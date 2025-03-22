@@ -1,5 +1,5 @@
-import { Box, IconButton, Tooltip, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 interface modelPageProps {
@@ -7,6 +7,18 @@ interface modelPageProps {
 }
 
 const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
+
+
+    // AIと情報をやり取りするための変数を管理
+    const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
+    const [response, setResponse] = useState<string>(''); // AIからの回答
+
+    const handleAIModel = (e: { preventDefault: () => void }) => {
+        e.preventDefault();
+
+
+    }
+
   return (
     <div>
         <Tooltip title="戻る">
@@ -20,6 +32,7 @@ const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
             <Typography variant='subtitle1' sx={{ mt: 2}}>
                 あなたが頑張っている習慣からそれらを達成した姿をイメージしてみましょう！
             </Typography>
+            <Button onClick={handleAIModel} />
         </Box>
         
     </div>

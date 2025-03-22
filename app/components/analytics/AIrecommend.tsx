@@ -46,13 +46,10 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
             alert('プロンプトを入力してください。');
             return;
         }
-    
+        
         setIsGenerating(true);
         setResponse('');
         setFinalres([]);
-
-        // プロンプト設定
-        const SystemPrompt: string = `あなたはおすすめの習慣を提案してください。アプリの利用者は自分が憧れている姿やなりたいもの、目標をテキストで書き、画像があれば画像をアップロードします。なのであなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。習慣名だけを挙げてください。番号や点や記号などは書かずに箇条書き(最初はハイフン)で書いてください。憧れている姿、なりたいもの、目標: ${text} ,画像: ${img}`;
     
         try {
             const res = await fetch('/api/chatgpt', {
@@ -60,7 +57,7 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: SystemPrompt, img }),
+                body: JSON.stringify({ type: "recommend", prompt: text, img }),
             });
     
             const data = await res.json();

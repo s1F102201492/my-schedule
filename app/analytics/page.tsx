@@ -22,16 +22,6 @@ const page = () => {
         setModelPage(true);
     }
 
-    const todoContext = useContext(TodoContext);
-
-    if (!todoContext) {
-        throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
-        );
-    }
-
-    const { loading } = todoContext;
-
     return (
         <div>
             <Header />
