@@ -24,4 +24,5 @@ model todos {
   enddate DateTime @db.Date
   interval Json
   purpose String?
+  tag String
 }

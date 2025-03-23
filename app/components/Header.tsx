@@ -11,9 +11,9 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
 
 const Header = () => {
     const pathname = usePathname();
@@ -83,15 +83,15 @@ const Header = () => {
                             }}
                         />
                         <BottomNavigationAction
-                            label='My Goal'
-                            value='/goal'
-                            icon={<SportsScoreIcon />}
+                            label='AI Analytics'
+                            value='/analytics'
+                            icon={<EqualizerOutlinedIcon />}
                             component={Link}
-                            href='/goal'
+                            href='/analytics'
                             sx={{
                                 '&.Mui-selected': {
                                     color:
-                                        pathname === '/goal'
+                                        pathname === '/analytics'
                                             ? 'primary.light'
                                             : 'inherit',
                                 },

@@ -54,8 +54,6 @@ const AllTodoList = () => {
 
     const { todos, fetchAllTodos, loading } = todoContext;
 
-    // const checkrate = CheckRate(todo)
-
     useEffect(() => {
         fetchAllTodos();
     }, []);

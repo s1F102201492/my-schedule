@@ -10,7 +10,9 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    FormControl,
     FormGroup,
+    InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -34,7 +36,8 @@ const addTodo = async (
     startdate: string,
     enddate: string,
     interval: number | string[],
-    purpose: string
+    purpose: string,
+    tag: string
 ) => {
     const res = await fetch('/api/todo', {
         method: 'POST',
@@ -73,7 +76,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         );
     }
 
-    const { fetchAllTodos } = todoContext;
+    const { fetchAllTodos, todos } = todoContext;
 
     // フォームのクローズ
     const handleClose = () => {
@@ -140,8 +143,14 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
 
     // 目的のテキストを管理
     const [purp, setpurp] = useState<string>("");
-    const handlepurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
         setpurp(e.target.value);
+    }
+
+    const [tag, setTag] = useState<string>("");
+    const taglist: string[] = todos.map((todo) => todo.tag)
+    const handleTag = (e: SelectChangeEvent) => {
+        setTag(e.target.value)
     }
 
     // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
@@ -182,7 +191,8 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             sd?.format('YYYY/MM/DD'),
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
-            purp
+            purp,
+            tag
         );
 
         await fetchAllTodos();
@@ -311,8 +321,23 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                         fullWidth
                         variant='outlined'
                         value={purp}
-                        onChange={handlepurpose}
+                        onChange={handlePurpose}
                     />
+                    <FormControl fullWidth>
+                        <InputLabel id="tag-select">タグを選択</InputLabel>
+                        <Select
+                            labelId="tag-select"
+                            id="tag-select"
+                            value={tag}
+                            label="タグを選択"
+                            onChange={handleTag}
+                        >
+                            {taglist.map((tag) => 
+                                <MenuItem value={tag}>{tag}</MenuItem>
+                                
+                            )}
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>閉じる</Button>

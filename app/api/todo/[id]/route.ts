@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { main } from '../route';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -8,14 +7,11 @@ const prisma = new PrismaClient();
 export const GET = async (req: Request, res: NextResponse) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
-  await main();
   const tododetail = await prisma.todos.findFirst({ where: { id } });
 
   return NextResponse.json({ message: 'success', tododetail }, { status: 200 });
  } catch (err) {
   return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
- } finally {
-  await prisma.$disconnect();
  }
 };
 
@@ -33,12 +29,12 @@ export const PUT = async (req: Request, res: NextResponse) => {
    startdate,
    enddate,
    interval,
-   purpose
+   purpose,
+   tag
   } = jsondata;
   const formattedStartDate = new Date(startdate.replace(/\//g, '-'));
   const formattedEndDate = new Date(enddate.replace(/\//g, '-'));
 
-  await main();
   const todoedit = await prisma.todos.update({
    data: {
     title,
@@ -48,7 +44,8 @@ export const PUT = async (req: Request, res: NextResponse) => {
     startdate: formattedStartDate,
     enddate: formattedEndDate,
     interval,
-    purpose
+    purpose,
+    tag
    },
    where: { id },
   });
@@ -59,8 +56,6 @@ export const PUT = async (req: Request, res: NextResponse) => {
         console.log("Error: ", err.stack)
     }
   return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
- } finally {
-  await prisma.$disconnect();
  }
 };
 
@@ -69,7 +64,6 @@ export const DELETE = async (req: Request, res: NextResponse) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
 
-  await main();
   const tododelete = await prisma.todos.delete({
    where: { id },
   });
@@ -77,7 +71,5 @@ export const DELETE = async (req: Request, res: NextResponse) => {
   return NextResponse.json({ message: 'success', tododelete }, { status: 200 });
  } catch (err) {
   return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
- } finally {
-  await prisma.$disconnect();
  }
 };
