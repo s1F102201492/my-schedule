@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export const GET = async (req: Request, res: NextResponse) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
-  const tododetail = await prisma.todos.findFirst({ where: { id } });
+  const tododetail = await prisma.todos.findFirst({ where: { id }, include: { tag: true } });
 
   return NextResponse.json({ message: 'success', tododetail }, { status: 200 });
  } catch (err) {
@@ -30,7 +30,7 @@ export const PUT = async (req: Request, res: NextResponse) => {
    enddate,
    interval,
    purpose,
-   tag
+   tagId
   } = jsondata;
   const formattedStartDate = new Date(startdate.replace(/\//g, '-'));
   const formattedEndDate = new Date(enddate.replace(/\//g, '-'));
@@ -45,7 +45,7 @@ export const PUT = async (req: Request, res: NextResponse) => {
     enddate: formattedEndDate,
     interval,
     purpose,
-    tag
+    tagId
    },
    where: { id },
   });

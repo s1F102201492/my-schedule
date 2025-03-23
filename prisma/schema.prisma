@@ -16,13 +16,21 @@ datasource db {
 
 model todos {
   id Int @id @default(autoincrement())
-  title String @unique
-  description String
+  title String
+  description  String
   continuedays Int
   checkedDates Json
   startdate DateTime @db.Date
   enddate DateTime @db.Date
   interval Json
   purpose String?
-  tag String
+  tagId Int?   // 外部キー
+  tag tags?  @relation(fields: [tagId], references: [id], onDelete: SetNull)
 }
+
+model tags {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  todos todos[]
+}
+
