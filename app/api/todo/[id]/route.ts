@@ -29,7 +29,8 @@ export const PUT = async (req: Request, res: NextResponse) => {
    startdate,
    enddate,
    interval,
-   purpose
+   purpose,
+   tag
   } = jsondata;
   const formattedStartDate = new Date(startdate.replace(/\//g, '-'));
   const formattedEndDate = new Date(enddate.replace(/\//g, '-'));
@@ -43,7 +44,8 @@ export const PUT = async (req: Request, res: NextResponse) => {
     startdate: formattedStartDate,
     enddate: formattedEndDate,
     interval,
-    purpose
+    purpose,
+    tag
    },
    where: { id },
   });

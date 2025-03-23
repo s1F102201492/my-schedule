@@ -17,12 +17,12 @@ export const GET = async () => {
 export const POST = async (req: Request, res: NextResponse) => {
  try {
   const jsondata = await req.json();
-  const { title, description, continuedays, checkedDates, startdate, enddate, interval, purpose } = jsondata;
+  const { title, description, continuedays, checkedDates, startdate, enddate, interval, purpose, tag } = jsondata;
   const formattedStartDate = new Date(startdate.replace(/\//g, '-'));
   const formattedEndDate = new Date(enddate.replace(/\//g, '-'));
 
   const posttodo = await prisma.todos.create({
-   data: {title,description,continuedays,checkedDates,startdate: formattedStartDate,enddate: formattedEndDate,interval,purpose},
+   data: {title,description,continuedays,checkedDates,startdate: formattedStartDate,enddate: formattedEndDate,interval,purpose,tag},
   });
   return NextResponse.json({ message: 'success', posttodo }, { status: 201 });
  } catch (err) {

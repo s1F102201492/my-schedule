@@ -13,6 +13,7 @@ interface TodoProps {
     enddate: string;
     interval: number | string[];
     purpose: string;
+    tag: string;
 }
 
 interface TodoContextType {
