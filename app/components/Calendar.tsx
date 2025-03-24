@@ -14,6 +14,7 @@ interface CalendarViewProps {
     description: string;
     date: Dayjs;
     completed: boolean;
+    tag: string;
 }
 
 const Calendar = () => {
@@ -32,7 +33,8 @@ const Calendar = () => {
             title: todo.title,
             description: todo.description,
             date: dayjs(dateKey),
-            completed: todo.checkedDates[dateKey]
+            completed: todo.checkedDates[dateKey],
+            tag: todo.tag
         })),
     );
 
@@ -242,6 +244,7 @@ const Calendar = () => {
                         <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>タスク名</TableCell>
                         <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>日付</TableCell>
                         <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>チェック</TableCell>
+                        <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>タグ</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
@@ -250,11 +253,10 @@ const Calendar = () => {
                                     key={todo.title}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
-                                    <TableCell component="th" scope="row" sx={GetStickyCellStyle(90,90,0,"left")}>
-                                        {todo.title}
-                                    </TableCell>
+                                    <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.title}</TableCell>
                                     <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.date.format('YYYY/MM/DD')}</TableCell>
                                     <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.completed ? "済":"未"}</TableCell>
+                                    <TableCell sx={GetStickyCellStyle(90,90,0,"left")}>{todo.tag}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
