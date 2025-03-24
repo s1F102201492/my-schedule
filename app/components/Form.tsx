@@ -96,6 +96,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         setSelectedDays([]);
         setNdays(true);
         setpurp('');
+        setTag("");
     };
 
     // タイトルに書き込まれたか判定
@@ -154,7 +155,6 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const tags = taglist
     const [tag, setTag] = useState<string>("");
     const handleTagSelect = (e: SelectChangeEvent) => { // 選択
-        console.log(e.target.value as string)
         setTag(e.target.value as string)
     }
 

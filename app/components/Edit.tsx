@@ -9,7 +9,9 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    FormControl,
     FormGroup,
+    InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -21,6 +23,7 @@ import { DateComponents } from './DateComponents';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { TodoContext } from './TodoContext';
+import { taglist } from './tags';
 
 interface oneTodo {
     id: number;
@@ -39,6 +42,7 @@ interface todo {
     enddate: string;
     interval: number | string[];
     purpose: string;
+    tag: string;
 }
 
 const editPractice = async (
@@ -51,6 +55,7 @@ const editPractice = async (
     enddate: string,
     interval: number | string[],
     purpose: string,
+    tag: string
 ) => {
     const res = await fetch(`/api/todo/${id}`, {
         method: 'PUT',
@@ -63,7 +68,8 @@ const editPractice = async (
             startdate,
             enddate,
             interval,
-            purpose
+            purpose,
+            tag
         }),
         headers: {
             'Content-type': 'application/json',
@@ -102,6 +108,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         setSelectedDays(initialinterval() as string[]);
         setNdays(intervaltype());
         setpurp(todo.purpose);
+        setTag(todo.tag);
     };
 
     // タイトルに書き込まれたか判定
@@ -184,6 +191,13 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         setpurp(e.target.value);
     }
 
+    // タグの選択
+    const tags = taglist
+    const [tag, setTag] = useState<string>(todo.tag);
+    const handleTagSelect = (e: SelectChangeEvent) => { // 選択
+        setTag(e.target.value as string)
+    }
+
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
@@ -242,7 +256,8 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
             sd?.format('YYYY/MM/DD'),
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
-            purp
+            purp,
+            tag
         );
 
         await fetchAllTodos();
@@ -380,6 +395,22 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             value={purp}
                             onChange={handlepurpose}
                         />
+                        <FormControl fullWidth sx={{my: 4}}>
+                        <InputLabel id="tag-select">タグを選択</InputLabel>
+                        <Select
+                            labelId="tag-select"
+                            id="tag-select"
+                            value={tag}
+                            label="タグを選択"
+                            onChange={handleTagSelect}
+                            MenuProps={{PaperProps: {height: 300}}}
+                            >
+                                {tags.map((tag) => 
+                                    <MenuItem key={tag} value={tag} sx={{ height: 40 }}>{tag}</MenuItem>
+                                    
+                                )}
+                            </Select>
+                        </FormControl>
                         </DialogContent>
                         <DialogActions>
                         <Button onClick={handleEditClose}>閉じる</Button>
