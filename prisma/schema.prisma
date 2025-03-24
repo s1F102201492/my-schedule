@@ -17,14 +17,13 @@ datasource db {
 model todos {
   id Int @id @default(autoincrement())
   title String
-  description  String
+  description String
   continuedays Int
   checkedDates Json
   startdate DateTime @db.Date
   enddate DateTime @db.Date
   interval Json
   purpose String?
-  tagId Int?   // 外部キー
   tag String?
 }
 

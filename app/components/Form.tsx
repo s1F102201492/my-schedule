@@ -26,7 +26,6 @@ import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
-import AddIcon from '@mui/icons-material/Add';
 import { taglist } from './tags';
 
 dayjs.locale('ja');
@@ -52,7 +51,8 @@ const addTodo = async (
             startdate,
             enddate,
             interval,
-            purpose
+            purpose,
+            tag
         }),
         headers: {
             'Content-type': 'application/json',
@@ -61,18 +61,6 @@ const addTodo = async (
 
     return res.json();
 };
-
-const addTag = async (name: string) => {
-    const res = await fetch('/api/tags', {
-        method: 'POST',
-        body: JSON.stringify({ name }),
-        headers: {
-            'Content-type': 'application/json',
-        },
-    });
-
-    return res.json();
-}
 
 interface FormProps {
   open: boolean;
@@ -91,7 +79,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         );
     }
 
-    const { fetchAllTodos, todos } = todoContext;
+    const { fetchAllTodos } = todoContext;
 
     // フォームのクローズ
     const handleClose = () => {
@@ -166,6 +154,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const tags = taglist
     const [tag, setTag] = useState<string>("");
     const handleTagSelect = (e: SelectChangeEvent) => { // 選択
+        console.log(e.target.value as string)
         setTag(e.target.value as string)
     }
 
@@ -350,7 +339,7 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                             MenuProps={{PaperProps: {height: 300}}}
                         >
                             {tags.map((tag) => 
-                                <MenuItem value={tag} sx={{ height: 70 }}>{tag}</MenuItem>
+                                <MenuItem key={tag} value={tag} sx={{ height: 40 }}>{tag}</MenuItem>
                                 
                             )}
                         </Select>

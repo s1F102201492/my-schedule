@@ -9,12 +9,13 @@ export const GET = async () => {
   const alltodos = await prisma.todos.findMany();
   return NextResponse.json({ message: 'success', alltodos }, { status: 200 });
  } catch (err) {
+    console.log(err)
   return NextResponse.json({ message: 'Error', err }, { status: 500 });
  }
 };
 
 // タスク追加用API
-export const POST = async (req: Request, res: NextResponse) => {
+export const POST = async (req: Request) => {
  try {
   const jsondata = await req.json();
   const { title, description, continuedays, checkedDates, startdate, enddate, interval, purpose, tag } = jsondata;

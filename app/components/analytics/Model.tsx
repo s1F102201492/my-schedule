@@ -1,22 +1,25 @@
-import { Box, Button, IconButton, Paper, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Lottie from 'lottie-react';
 import penAnimation from "@/public/animations/Animation - 1742629439123.json";
+import { taglist } from '../tags';
 
 interface modelPageProps {
     setModelPage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
-    const [search, setSearch] = useState<string>(''); // 条件を絞る機能
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
-    };
+    // タグの選択
+    const tags = taglist
+    const [tag, setTag] = useState<string>("絞らない");
+    const handleTagSelect = (e: SelectChangeEvent) => { // 選択
+        setTag(e.target.value as string)
+    }
 
     // AIと情報をやり取りするための変数を管理
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<string>(''); // AIからの回答
+    const [response, setResponse] = useState<string>(""); // AIからの回答
     const [isComplete, setIsComplete] = useState<boolean>(true); // AIが回答を生成している途中であることを示す値
 
     const handleAIModel = async (e: { preventDefault: () => void }) => {
@@ -29,7 +32,7 @@ const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
         const res = await fetch('/api/chatgpt', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'model', search }),
+            body: JSON.stringify({ type: 'model', tag }),
         });
 
         if (!res.body) {
@@ -99,18 +102,26 @@ const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
             <Typography variant='subtitle1' sx={{ mt: 2}}>
                 あなたが頑張っている習慣からそれらを達成した姿をイメージしてみましょう！
             </Typography>
-            <Box sx={{display: 'flex', flexDirection: 'row', my: 2, maxHeight: 55}}>
-                <TextField
-                    fullWidth
-                    variant='outlined'
-                    label='条件があれば絞る'
-                    sx={{
-                        mr: 2,
-                        '& .MuiOutlinedInput-root': { height: 50 } // 高さを統一
-                    }}
-                    value={search}
-                    onChange={handleSearch}
-                    />
+            <Box sx={{display: 'flex', flexDirection: 'row', my: 2, maxHeight: 50}}>
+                <FormControl>
+                    <InputLabel id="tag-select">タグで絞る</InputLabel>
+                    <Select
+                        defaultValue='絞らない'
+                        sx={{width: 200, height:50, mr: 4}}
+                        labelId="tag-select"
+                        id="tag-select"
+                        value={tag}
+                        label="タグを選択"
+                        onChange={handleTagSelect}
+                        MenuProps={{PaperProps: {height: 300}}}
+                    >
+                        <MenuItem key="なし" value="絞らない" sx={{ height: 40 }} >絞らない</MenuItem>
+                        {tags.map((tag) => 
+                            <MenuItem key={tag} value={tag} sx={{ height: 40 }}>{tag}</MenuItem>
+                            
+                        )}
+                    </Select>
+                </FormControl>
                 <Button onClick={handleAIModel} variant='contained'
                 sx={{ height: 50 }} >
                     イメージ

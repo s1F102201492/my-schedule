@@ -16,7 +16,8 @@ interface TodoProps {
     startdate: string;
     enddate: string;
     interval: number | string[];
-    // intervalには数字か配列（曜日を格納する）
+    purpose: string;
+    tag: string;
 }
 
 interface TodoListProps {

@@ -90,6 +90,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // checkedDateが空のときに実行
     const deletePractice = async (todo: TodoProps) => {
         try {
             const res = await fetch(`/api/todo/${todo.id}`, {

@@ -86,7 +86,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ result: data.choices[0]?.message?.content });
 
     } else if (type === "model") { // modelページに返答
-        if (prompt === '') {
+        if (prompt === '絞らない') {
             SystemPrompt = `あなたは、ユーザーのタスクデータをもとに、ユーザーが目指している「理想の自分」をイメージする役割です。
         ユーザーが行っている習慣の一覧:${JSON.stringify(alltodos)}
         主にtitle(タスク名),description(タスクの詳細や現状の記録),purpose(そのタスクを行う目的)から考えてください。
@@ -94,12 +94,10 @@ export async function POST(req: Request) {
         理想の姿については、少し話を盛ってもかまいませんが、具体的に書いてください。（ユーザーがイメージしやすいように）`;
         } else {
             SystemPrompt = `あなたは、ユーザーのタスクデータをもとに、ユーザーが目指している「理想の自分」をイメージする役割です。
-        ユーザーが行っている習慣の一覧:${JSON.stringify(alltodos)}
+        ユーザーが行っている習慣の一覧:${JSON.stringify(alltodos.filter((todo) => todo.tag === prompt))}
         主にtitle(タスク名),description(タスクの詳細や現状の記録),purpose(そのタスクを行う目的)から考えてください。
         これらの情報から、ユーザーのなりたい理想の姿を400文字以内で表現してください。
-        理想の姿については、少し話を盛ってもかまいませんが、具体的に書いてください。（ユーザーがイメージしやすいように）
-        また、ユーザーが条件を設定するのでその条件に関係のあるタスクのみに絞って回答をしてください。
-        その条件に関係のないタスクについて言及するのは厳禁です。条件:${prompt}`;
+        理想の姿については、少し話を盛ってもかまいませんが、具体的に書いてください。（ユーザーがイメージしやすいように）`
         }
         
         const response = await fetch(`${gptApiEndPoint}`, {
