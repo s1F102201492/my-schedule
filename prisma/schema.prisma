@@ -25,12 +25,6 @@ model todos {
   interval Json
   purpose String?
   tagId Int?   // 外部キー
-  tag tags?  @relation(fields: [tagId], references: [id], onDelete: SetNull)
-}
-
-model tags {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  todos todos[]
+  tag String?
 }
 

@@ -12,6 +12,7 @@ import {
     DialogTitle,
     FormControl,
     FormGroup,
+    IconButton,
     InputLabel,
     MenuItem,
     Select,
@@ -25,6 +26,8 @@ import { TodoContext } from './TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
+import AddIcon from '@mui/icons-material/Add';
+import { taglist } from './tags';
 
 dayjs.locale('ja');
 
@@ -58,6 +61,18 @@ const addTodo = async (
 
     return res.json();
 };
+
+const addTag = async (name: string) => {
+    const res = await fetch('/api/tags', {
+        method: 'POST',
+        body: JSON.stringify({ name }),
+        headers: {
+            'Content-type': 'application/json',
+        },
+    });
+
+    return res.json();
+}
 
 interface FormProps {
   open: boolean;
@@ -147,10 +162,11 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         setpurp(e.target.value);
     }
 
+    // タグの選択
+    const tags = taglist
     const [tag, setTag] = useState<string>("");
-    const taglist: string[] = todos.map((todo) => todo.tag)
-    const handleTag = (e: SelectChangeEvent) => {
-        setTag(e.target.value)
+    const handleTagSelect = (e: SelectChangeEvent) => { // 選択
+        setTag(e.target.value as string)
     }
 
     // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
@@ -323,17 +339,18 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                         value={purp}
                         onChange={handlePurpose}
                     />
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{my: 4}}>
                         <InputLabel id="tag-select">タグを選択</InputLabel>
                         <Select
                             labelId="tag-select"
                             id="tag-select"
                             value={tag}
                             label="タグを選択"
-                            onChange={handleTag}
+                            onChange={handleTagSelect}
+                            MenuProps={{PaperProps: {height: 300}}}
                         >
-                            {taglist.map((tag) => 
-                                <MenuItem value={tag}>{tag}</MenuItem>
+                            {tags.map((tag) => 
+                                <MenuItem value={tag} sx={{ height: 70 }}>{tag}</MenuItem>
                                 
                             )}
                         </Select>
