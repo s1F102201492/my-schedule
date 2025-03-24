@@ -22,6 +22,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { CheckRate } from './calculate/CheckRate';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 
 interface TodoProps {
     id: number;
@@ -33,6 +34,7 @@ interface TodoProps {
     enddate: string;
     interval: number | string[];
     purpose: string;
+    tag: string;
     // intervalには数字か配列（曜日を格納する）
 }
 
@@ -58,7 +60,7 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
     };
 
     const descriptionnull = (description: string | null) => {
-        if (typeof description === 'string') {
+        if (description === '') {
             //詳細が書かれている場合はtrue,ない場合はfalse
             return true;
         } else {
@@ -97,8 +99,8 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                         gutterBottom
                         sx={{ whiteSpace: "pre-line" }}>
                         {descriptionnull(todo.description)
-                            ? '詳細\n'+ todo.description
-                            : '詳細なし'}
+                            ? '詳細なし'
+                            : '詳細\n'+ todo.description}
                     </Typography>
                 </Grid2>
 
@@ -194,6 +196,16 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                             <Typography variant='body2'>
                                 {CheckRate(todo)}%
                             </Typography>
+                        </Box>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12 }} sx={{ mt: 3 }}>
+                        <Typography
+                            variant='subtitle2'
+                            color='text.secondary'>
+                            タグ
+                        </Typography>
+                        <Box sx={{ mt: 1}}>
+                            <LocalOfferOutlinedIcon sx={{ mr: 2 }}/>{todo.tag}
                         </Box>
                     </Grid2>
                 </Box>

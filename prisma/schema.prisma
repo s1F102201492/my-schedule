@@ -16,7 +16,7 @@ datasource db {
 
 model todos {
   id Int @id @default(autoincrement())
-  title String @unique
+  title String
   description String
   continuedays Int
   checkedDates Json
@@ -24,5 +24,6 @@ model todos {
   enddate DateTime @db.Date
   interval Json
   purpose String?
-  tag String
+  tag String?
 }
+
