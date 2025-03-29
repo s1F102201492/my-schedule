@@ -10,8 +10,8 @@ export default function LoginPage() {
       <TextField type="password" required />
       
       {/* ✅Server Actionsでログイン、サインアップ */}
-      <Button formAction={login}>Log in</Button>
-      <Button formAction={signup}>Sign up</Button>
+      <Button type="submit" formAction={login}>Log in</Button>
+      <Button type="submit" formAction={signup}>Sign up</Button>
     </form>
   )
 }
