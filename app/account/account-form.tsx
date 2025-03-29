@@ -4,8 +4,6 @@ import { createClient } from '@/utils/supabase/client'
 import { type User } from '@supabase/supabase-js'
 import { TextField, Typography } from '@mui/material'
 
-// ...
-
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
@@ -110,7 +108,7 @@ export default function AccountForm({ user }: { user: User | null }) {
           onChange={(e) => setWebsite(e.target.value)}
         />
       </div>
-      
+
       <div>
         <button
           className="button primary block"
