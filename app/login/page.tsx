@@ -1,13 +1,13 @@
 import { Button, Link, TextField, Typography } from '@mui/material'
-import { login } from './actions'
+import { login } from './action'
 
 export default function LoginPage() {
   return (
     <form>
       <Typography>Eメールアドレス</Typography>
-      <TextField id="email" type='email' required />
+      <TextField id="email" name='email' type='email' required />
       <Typography>パスワード</Typography>
-      <TextField id="email" type="password" required />
+      <TextField id="password" name='password' type="password" required />
       
       {/* ✅Server Actionsでログイン、サインアップ */}
       <Button type="submit" formAction={login}>Log in</Button>
