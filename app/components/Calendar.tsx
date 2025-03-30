@@ -52,6 +52,10 @@ const Calendar = () => {
         setCurrent(current.subtract(1, 'M'));
     }
 
+    const resetCurrentPage = () => {
+        setCurrent(dayjs());
+    }
+
     const monthStart = dayjs(current).startOf('month') // 月初めの日付
     const monthEnd = dayjs(current).endOf('month'); // 月末の日付
     const cntMonth = dayjs(monthEnd).diff(monthStart, "day") // その月の日数
@@ -104,6 +108,7 @@ const Calendar = () => {
                         <IconButton onClick={prevMonthPage} size="small">
                             <ChevronLeftIcon />
                         </IconButton>
+                        <Button onClick={resetCurrentPage}>現在</Button>
                         <IconButton onClick={nextMonthPage} size="small">
                             <ChevronRightIcon />
                         </IconButton>
