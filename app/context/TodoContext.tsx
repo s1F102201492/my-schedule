@@ -25,9 +25,7 @@ interface TodoContextType {
     loading: boolean;
 }
 
-export const TodoContext = createContext<TodoContextType | undefined>(
-    undefined,
-);
+export const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     children,
