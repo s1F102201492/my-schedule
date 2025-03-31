@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
-import { TodoContext } from '../components/TodoContext';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import AIrecommend from '../components/analytics/AIrecommend';
 import Model from '../components/analytics/Model';

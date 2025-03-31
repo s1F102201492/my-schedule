@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useContext, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { TodoContext } from './TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import GetStickyCellStyle from './theme/GetStickyCellStyle';
 
 interface CalendarViewProps {

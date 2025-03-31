@@ -12,7 +12,7 @@ import {
     Tooltip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TodoContext } from '../components/TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
 
 interface TodoProps {

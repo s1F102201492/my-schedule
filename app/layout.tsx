@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { TodoProvider } from './components/TodoContext';
+import { TodoProvider } from './context/TodoContext';
 import { ThemeProvider } from '@mui/material';
 import theme from './components/theme/theme';
 

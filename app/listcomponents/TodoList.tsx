@@ -4,7 +4,7 @@ import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import Form from '../components/Form';
-import { TodoContext } from '../components/TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import RewardDialog from '../components/RewardDialog';
 
 interface TodoProps {

@@ -22,7 +22,7 @@ import {
     Typography,
 } from '@mui/material';
 import { DateComponents } from '../components/DateComponents';
-import { TodoContext } from './TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';

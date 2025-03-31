@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { TodoContext } from '../components/TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import {
     Box,

@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import Header from '../components/Header';
 import Calendar from '../components/Calendar';
 import { Box } from '@mui/material';
-import { TodoContext } from '../components/TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import FadeLoading from '../components/parts/FadeLoading';
 
 const page = () => {
