@@ -6,15 +6,17 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  schemas  = ["public"]
 }
 
-model todos {
+model Todos {
   id Int @id @default(autoincrement())
   title String
   description String
@@ -25,5 +27,15 @@ model todos {
   interval Json
   purpose String?
   tag String?
+
+  @@schema("public")
+}
+
+model Users {
+  id String @id
+  username String
+  email String
+
+  @@schema("public")
 }
 
