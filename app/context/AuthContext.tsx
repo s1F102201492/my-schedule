@@ -19,6 +19,7 @@ export const AuthContext = createContext<AuthContextType| null>(null);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const supabase = createClient();
+    
 
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
     const [loading, setLoading] = useState(true)
@@ -27,6 +28,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // ユーザー情報を取得
     const getLoginUser = async () => {
         try {
+            // auth.userテーブルから取得
             const { data: authData , error: authError } = await supabase.auth.getUser();
             
             if (authError) {
@@ -36,9 +38,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
             const userId = authData!.user.id; // auth.users の ID
 
-            // public.user テーブルから username を取得
+            // public.Users テーブルから username を取得
             const { data: profileData, error: profileError } = await supabase
-                .from('user')
+                .from('Users')
                 .select('username')
                 .eq('id', userId)
                 .single(); // 1人のユーザー情報だけ取得

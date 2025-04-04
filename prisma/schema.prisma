@@ -27,14 +27,17 @@ model Todos {
   interval Json
   purpose String?
   tag String?
+  userId String @default(uuid())
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@schema("public")
 }
 
 model Users {
-  id String @id
+  id String @id @default(uuid()) 
   username String
-  email String
+  email String @unique
+  todos Todos[]
 
   @@schema("public")
 }
