@@ -25,6 +25,11 @@ interface TodoListProps {
 }
 
 const TodoList: React.FC<TodoListProps> = ({ locate }) => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -42,8 +47,6 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     const todayDay: string = new Date().toLocaleDateString('ja-JP', {
         weekday: 'short',
     }); //今日の曜日
-
-    const today: Date = new Date(); //今日の日付(Date型)
 
     const todayslash: string = ChangeSlashDay(today); //今日の日付("yyyy/mm/dd"型)
 
@@ -100,6 +103,13 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     return (
         <div>
             {/* 完了していないリスト */}
+            <Typography
+                variant='h6'
+                fontFamily='Monospace'
+                component='div'
+                sx={{ m: 4 }}>
+                {`${year}年${month}月${day}日`}のやることリスト
+            </Typography>
             <List
                 sx={{ width: '100%', maxWidth: 500 }}
                 disablePadding>
@@ -129,7 +139,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
             {/* 完了してしたリスト、うすくする */}
             <Typography
                 variant='h6'
-                m={2}>
+                m={4}>
                 完了したリスト
             </Typography>
             <List

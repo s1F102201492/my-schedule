@@ -28,7 +28,7 @@ interface TodoContextType {
 export const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
-    children,
+    children
 }) => {
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);

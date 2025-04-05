@@ -6,13 +6,9 @@ import { Typography } from '@mui/material';
 import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
 import FadeLoading from './components/parts/FadeLoading';
+import { AuthContext } from './context/AuthContext';
 
 export default function Home() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    const day = today.getDate();
-
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -23,15 +19,21 @@ export default function Home() {
 
     const { loading } = todoContext;
 
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { loginUser } = authContext;
+
     return (
         <div>
             <Header />
-            <Typography
-                variant='h4'
-                fontFamily='Monospace'
-                component='div'
-                sx={{ m: 4 }}>
-                {`${year}年${month}月${day}日`}のやることリスト
+            <Typography variant='h4' sx={{ m: 4 }}>
+                {loginUser!.name}さん！ようこそ！
             </Typography>
             { loading ? <FadeLoading loading={loading} /> : <TodoList locate={"/"} />}
         </div>

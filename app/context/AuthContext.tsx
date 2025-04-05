@@ -1,7 +1,8 @@
 'use client';
 
 import { createClient } from "@/utils/supabase/client";
-import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
+import { UserResponse } from "@supabase/supabase-js";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 interface UserType {
     id: string;
@@ -12,7 +13,6 @@ interface UserType {
 interface AuthContextType {
     loginUser: UserType | null;
     setLoginUser: React.Dispatch<React.SetStateAction<UserType| null>>;
-    getLoginUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType| null>(null);
@@ -20,20 +20,27 @@ export const AuthContext = createContext<AuthContextType| null>(null);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const supabase = createClient();
 
-
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     const [avatar_url, setAvatarUrl] = useState<string | null>(null);
-    const [session, setSession] = useState<boolean>(false);
 
-    // ユーザー情報を取得
-    const getLoginUser = async () => {
+    // ログイン状態を管理
+    const loginSession = async () => {
+        const user = await supabase.auth.getUser();
+
+        if (user) {
+            await getLoginUser(user);
+        }
+    }
+
+    // ログインした場合ユーザー情報を取得
+    const getLoginUser = async (user: UserResponse) => {
         try {
             // auth.userテーブルから取得
-            const { data: authData , error: authError } = await supabase.auth.getUser();
+            const { data: authData , error: authError } = user
             
             if (authError) {
-                console.log(authError)
+                console.log("AuthError:",authError)
                 return;
             } 
 
@@ -56,7 +63,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 name: profileData!.username,
                 email: authData.user.email!,
             }
-            console.log(userInfo)
             setLoginUser(userInfo)
 
         } catch (error) {
@@ -66,13 +72,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     useEffect(() => {
-        if (session) {
-            getLoginUser();
-        }
-    },[session])
+        loginSession();
+    },[])
     
     return (
-        <AuthContext.Provider value={{ loginUser, setLoginUser, getLoginUser }}>
+        <AuthContext.Provider value={{ loginUser, setLoginUser }}>
             {children}
         </AuthContext.Provider>
     );
