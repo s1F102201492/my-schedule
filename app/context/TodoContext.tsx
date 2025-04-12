@@ -1,7 +1,9 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
+import { createClient } from '@/utils/supabase/server';
+import { AuthContext } from './AuthContext';
 
 interface TodoProps {
     id: number;

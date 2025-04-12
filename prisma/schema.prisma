@@ -6,17 +6,15 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas  = ["public"]
 }
 
-model Todos {
+model todos {
   id Int @id @default(autoincrement())
   title String
   description String
@@ -27,18 +25,16 @@ model Todos {
   interval Json
   purpose String?
   tag String?
-  userId String @default(uuid())
-  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.Uuid
+  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@schema("public")
 }
 
-model Users {
-  id String @id @default(uuid()) 
+model users {
+  id String @id @db.Uuid
   username String
   email String @unique
-  todos Todos[]
+  todos todos[]
 
-  @@schema("public")
 }
 

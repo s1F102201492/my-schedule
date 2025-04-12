@@ -19,21 +19,21 @@ export default function Home() {
 
     const { loading } = todoContext;
 
-    const authContext = useContext(AuthContext);
+    // const authContext = useContext(AuthContext);
 
-    if (!authContext) {
-        throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
-        );
-    }
+    // if (!authContext) {
+    //     throw new Error(
+    //         'TodoContext is undefined. Make sure to use TodoProvider.',
+    //     );
+    // }
 
-    const { loginUser } = authContext;
+    // const { loginUser } = authContext;
 
     return (
         <div>
             <Header />
             <Typography variant='h4' sx={{ m: 4 }}>
-                {loginUser!.name}さん！ようこそ！
+                {/* {loginUser!.name}さん！ようこそ！ */}
             </Typography>
             { loading ? <FadeLoading loading={loading} /> : <TodoList locate={"/"} />}
         </div>
