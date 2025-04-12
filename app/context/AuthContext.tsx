@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { User, UserResponse } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
 interface UserType {
@@ -19,6 +20,8 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType| null>(null);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const router = useRouter();
+
     const supabase = createClient();
 
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
@@ -65,7 +68,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // ログインした場合ユーザー情報を取得
     const getLoginUser = async (data: { user: User; }) => {
         try {
-            
             const userId = data!.user.id; // auth.users の ID
             // public.Users テーブルから username を取得
             const { data: profileData, error: profileError } = await supabase
@@ -96,7 +98,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         loginSession();
-    },[])
+    
+        const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log("Auth state changed:", event, session);
+            if (event == "INITIAL_SESSION") {
+                router.push("/")
+            }
+
+          if (session) {
+            await loginSession();
+          } else {
+            setLoginUser(null);
+          }
+        });
+    
+        return () => {
+          listener?.subscription.unsubscribe();
+        };
+      }, []);
+    
     
     return (
         <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession }}>
