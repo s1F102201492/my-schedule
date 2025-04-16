@@ -26,7 +26,7 @@ const page = () => {
                 fontFamily='Monospace'
                 component='div'
                 sx={{ m: 4 }}>
-                {loginUser!.name}さんの習慣一覧
+                {/* {loginUser!.name}さんの習慣一覧 */}
             </Typography>
             <AllTodoList />
         </div>

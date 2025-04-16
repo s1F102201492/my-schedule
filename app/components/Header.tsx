@@ -107,7 +107,7 @@ const Header = () => {
                         />
                     </BottomNavigation>
                     <IconButton onClick={userDrawer} sx={{ p: 0 }}>
-                        <Avatar src="public/img/initialicon.png"
+                        <Avatar src="img/initialicon.png"
                         sx={{ width: 30, height: 30}}/>
                     </IconButton>
                 </Toolbar>

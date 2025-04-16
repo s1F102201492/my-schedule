@@ -101,7 +101,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
         const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
           console.log("Auth state changed:", event, session);
-            if (event == "INITIAL_SESSION") {
+            if (event == "SIGNED_OUT") {
+                router.push("/userauth");
+            } else {
                 router.push("/")
             }
 

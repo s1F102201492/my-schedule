@@ -7,6 +7,7 @@ import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
 import FadeLoading from './components/parts/FadeLoading';
 import { AuthContext } from './context/AuthContext';
+import NullUser from './components/NullUser';
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -31,11 +32,23 @@ export default function Home() {
 
     return (
         <div>
-            <Header />
-            <Typography variant='h4' sx={{ m: 4 }}>
-                {loginUser!.name}さん！ようこそ！
-            </Typography>
-            { loading ? <FadeLoading loading={loading} /> : <TodoList locate={"/"} />}
-        </div>
+  <Header />
+
+  {loginUser ? (
+    <>
+      <Typography variant="h4" sx={{ m: 4 }}>
+        {loginUser.name} さん！ようこそ！
+      </Typography>
+      {loading ? (
+        <FadeLoading loading={loading} />
+      ) : (
+        <TodoList locate="/" />
+      )}
+    </>
+  ) : (
+    <NullUser />
+  )}
+</div>
+
     );
 }
