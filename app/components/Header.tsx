@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,8 +14,9 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import Sidebar from './Sidebar';
+import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
     const pathname = usePathname();
@@ -24,6 +25,16 @@ const Header = () => {
     const userDrawer = () => {
         setDrawer(true);
     }
+
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { loginUser } = authContext;
 
     return (
         <Box>
@@ -106,10 +117,14 @@ const Header = () => {
                             }}
                         />
                     </BottomNavigation>
-                    <IconButton onClick={userDrawer} sx={{ p: 0 }}>
-                        <Avatar src="img/initialicon.png"
-                        sx={{ width: 30, height: 30}}/>
-                    </IconButton>
+                    { loginUser ?
+                        (<IconButton onClick={userDrawer} sx={{ p: 0 }}>
+                            <Avatar src="img/initialicon.png"
+                            sx={{ width: 30, height: 30}}/>
+                        </IconButton>) 
+                        : <Button color='inherit'
+                        component={Link} href="/userauth">ログイン</Button>}
+                    
                 </Toolbar>
             </AppBar>
             {drawer && <Sidebar drawer={drawer} setDrawer={setDrawer} />}
