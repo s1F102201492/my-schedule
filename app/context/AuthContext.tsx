@@ -4,10 +4,11 @@ import { createClient } from "@/utils/supabase/client";
 import { User, UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useEffect, useState } from "react";
+import FadeLoading from "../components/parts/FadeLoading";
 
 interface UserType {
     id: string;
-    name: string;
+    username: string;
     email: string;
 }
 
@@ -22,14 +23,26 @@ export const AuthContext = createContext<AuthContextType| null>(null);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const router = useRouter();
 
-    const supabase = createClient();
-
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
     const [loading, setLoading] = useState(true);
     const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
+    // usersテーブルからユーザーを取って来るAPI
+    const fetchOneUser = async (userId: string) => {
+        try {
+            const res = await fetch(`/api/user/${userId}`, { cache: 'no-store' });
+            const data = await res.json();
+            return data.user;
+        } catch (error) {
+            console.error('ユーザーテーブルからの取得に失敗しました:', error);
+            return null;
+        }
+    };
+
     // ログイン状態を管理
     const loginSession = async () => {
+        const supabase = createClient();
+
         setLoading(true);
         try {
             const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
@@ -60,69 +73,52 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         } catch (error) {
             console.error("loginSession error:", error);
         } finally {
-            setLoading(false);
+            setLoading(false)
+            
         }
     };
     
 
     // ログインした場合ユーザー情報を取得
     const getLoginUser = async (data: { user: User; }) => {
-        try {
-            const userId = data!.user.id; // auth.users の ID
-            // public.Users テーブルから username を取得
-            const { data: profileData, error: profileError } = await supabase
-                .from('users')
-                .select('username')
-                .eq('id', userId)
-                .single(); // 1人のユーザー情報だけ取得
+        const userId = data!.user.id; // auth.users の ID
+        console.log(userId)
 
-            if (profileError) {
-                console.error("Profile fetch error:", profileError);
-            } else {
-                console.log("Username:", profileData.username);
-            }
-            
-            const userInfo:UserType = {
-                id: userId,
-                name: profileData!.username,
-                email: data.user.email!,
-            }
-            console.log(userInfo)
-            setLoginUser(userInfo)
+        const userInfo = await fetchOneUser(userId);
 
-        } catch (error) {
-            console.log(error);
-            alert('Error loading user data!');
+        if (userInfo) {
+            setLoginUser(userInfo);
+        } else {
+            console.error("ユーザー情報が取得できませんでした");
+            setLoginUser(null);
         }
     }
 
     useEffect(() => {
         loginSession();
-    
-        const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-          console.log("Auth state changed:", event, session);
-            if (event == "SIGNED_OUT") {
-                router.push("/userauth");
-            } else {
-                router.push("/")
-            }
+    },[])
 
-          if (session) {
-            await loginSession();
-          } else {
-            setLoginUser(null);
-          }
-        });
+    // useEffect(() => {
+    //     loginSession();
     
-        return () => {
-          listener?.subscription.unsubscribe();
-        };
-      }, []);
+    //     const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
+    //       console.log("Auth state changed:", event, session);
+    //       if (session) {
+    //         await loginSession();
+    //       } else {
+    //         setLoginUser(null);
+    //       }
+    //     });
+    
+    //     return () => {
+    //       listener?.subscription.unsubscribe();
+    //     };
+    //   }, []);
     
     
     return (
         <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession }}>
-            {children}
+            {loading ? <FadeLoading loading={loading}/> : children}
         </AuthContext.Provider>
     );
 };

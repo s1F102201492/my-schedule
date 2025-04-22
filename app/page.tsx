@@ -29,26 +29,27 @@ export default function Home() {
     }
 
     const { loginUser } = authContext;
+    console.log(loginUser)
 
     return (
         <div>
-  <Header />
+            <Header />
 
-  {loginUser ? (
-    <>
-      <Typography variant="h4" sx={{ m: 4 }}>
-        {loginUser.name} さん！ようこそ！
-      </Typography>
-      {loading ? (
-        <FadeLoading loading={loading} />
-      ) : (
-        <TodoList locate="/" />
-      )}
-    </>
-  ) : (
-    <NullUser />
-  )}
-</div>
+            {loginUser ? (
+                <>
+                <Typography variant="h4" sx={{ m: 4 }}>
+                    {loginUser.username} さん！ようこそ！
+                </Typography>
+                {loading ? (
+                    <FadeLoading loading={loading} />
+                ) : (
+                    <TodoList locate="/" />
+                )}
+                </>
+            ) : (
+                <NullUser />
+            )}
+        </div>
 
     );
 }
