@@ -7,6 +7,7 @@ const prisma = new PrismaClient(); // インスタンス化
 export const GET = async () => {
  try {
   const alltodos = await prisma.todos.findMany();
+  console.log(alltodos)
   return NextResponse.json({ message: 'success', alltodos }, { status: 200 });
  } catch (err) {
     console.log(err)

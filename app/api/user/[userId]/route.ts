@@ -11,7 +11,7 @@ export const GET = async () => {
  try {
     // auth.userテーブルから取得
     const { data: authData, error: authError } = await supabase.auth.getUser();
-   
+
     if (authError) {
         console.log(authError)
         return NextResponse.json({ message: 'Error', authError }, { status: 500 });
@@ -19,6 +19,7 @@ export const GET = async () => {
 
     const userId = authData!.user.id; // auth.users の ID
     const user = await prisma.users.findUnique({ where: {id: userId} });
+    console.log(user)
     return NextResponse.json({ message: 'success', user }, { status: 200 });
  } catch (err) {
     console.log(err)

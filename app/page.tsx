@@ -29,7 +29,7 @@ export default function Home() {
     }
 
     const { loginUser } = authContext;
-    console.log(loginUser)
+    console.log(loginUser);
 
     return (
         <div>

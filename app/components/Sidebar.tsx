@@ -7,7 +7,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { signout } from '../userauth/action';
+import { signOut } from '../../utils/supabase/authGoogle';
+import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
     drawer: boolean;
@@ -15,6 +16,13 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ drawer, setDrawer }: SidebarProps) {
+    // Googleログアウト
+    const router = useRouter();
+    const handleGoogleLogout = async () => {
+        const result = await signOut();
+        if (result) router.refresh();
+    }
+
     return (
         <Drawer
             open={drawer}
@@ -34,7 +42,7 @@ export default function Sidebar({ drawer, setDrawer }: SidebarProps) {
                         
                     ))}
                     <ListItem key="logout">
-                        <ListItemButton onClick={signout}>
+                        <ListItemButton onClick={handleGoogleLogout}>
                             <ListItemText primary="ログアウト" />
                         </ListItemButton>
                     </ListItem>

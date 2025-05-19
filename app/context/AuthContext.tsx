@@ -32,6 +32,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const res = await fetch(`/api/user/${userId}`, { cache: 'no-store' });
             const data = await res.json();
+            console.log(data)
             return data.user;
         } catch (error) {
             console.error('ユーザーテーブルからの取得に失敗しました:', error);
@@ -78,13 +79,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
     
-
     // ログインした場合ユーザー情報を取得
     const getLoginUser = async (data: { user: User; }) => {
+
         const userId = data!.user.id; // auth.users の ID
         console.log(userId)
 
+        if (!userId) {
+            console.log("userIdの取得に失敗しました")
+            setLoginUser(null);
+        } 
+
         const userInfo = await fetchOneUser(userId);
+        console.log(userInfo)
 
         if (userInfo) {
             setLoginUser(userInfo);
