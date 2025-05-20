@@ -1,4 +1,3 @@
-// lib/supabase-auth/authGoogle.ts
 "use server";
 
 import { createClient } from "@/utils/supabase/server";

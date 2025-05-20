@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const getLoginUser = async (data: { user: User; }) => {
 
         const userId = data!.user.id; // auth.users の ID
-        console.log(userId)
+        console.log(userId);
 
         if (!userId) {
             console.log("userIdの取得に失敗しました")
@@ -125,7 +125,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     return (
         <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession }}>
-            {loading ? <FadeLoading loading={loading}/> : children}
+            {children}
         </AuthContext.Provider>
     );
 };

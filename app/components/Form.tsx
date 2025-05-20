@@ -27,6 +27,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
 import { taglist } from './tags';
+import { AuthContext } from '../context/AuthContext';
+import { UUID } from 'crypto';
 
 dayjs.locale('ja');
 
@@ -39,7 +41,8 @@ const addTodo = async (
     enddate: string,
     interval: number | string[],
     purpose: string,
-    tag: string
+    tag: string,
+    userId: string
 ) => {
     const res = await fetch('/api/todo', {
         method: 'POST',
@@ -52,7 +55,8 @@ const addTodo = async (
             enddate,
             interval,
             purpose,
-            tag
+            tag,
+            userId
         }),
         headers: {
             'Content-type': 'application/json',
@@ -80,6 +84,16 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     }
 
     const { fetchAllTodos } = todoContext;
+
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { loginUser } = authContext;
 
     // フォームのクローズ
     const handleClose = () => {
@@ -197,7 +211,8 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
             purp,
-            tag
+            tag,
+            loginUser!.id
         );
 
         await fetchAllTodos();

@@ -8,6 +8,7 @@ import TodoList from './listcomponents/TodoList';
 import FadeLoading from './components/parts/FadeLoading';
 import { AuthContext } from './context/AuthContext';
 import NullUser from './components/NullUser';
+import FadeLoader from 'react-spinners/FadeLoader';
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -47,7 +48,7 @@ export default function Home() {
                 )}
                 </>
             ) : (
-                <NullUser />
+                <FadeLoading loading={true} />
             )}
         </div>
 
