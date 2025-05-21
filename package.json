@@ -24,8 +24,11 @@
         "@mui/material-nextjs": "^6.2.0",
         "@mui/x-date-pickers": "^7.23.3",
         "@prisma/client": "^6.3.1",
+        "@supabase/auth-ui-react": "^0.4.7",
+        "@supabase/auth-ui-shared": "^0.1.8",
         "@supabase/ssr": "^0.6.1",
-        "@supabase/supabase-js": "^2.49.3",
+        "@supabase/supabase-js": "^2.49.7",
+        "client-only": "^0.0.1",
         "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
         "lottie-react": "^2.4.1",
@@ -39,6 +42,7 @@
         "react-rewards": "^2.1.0",
         "react-router-dom": "^7.1.1",
         "react-spinners": "^0.15.0",
+        "server-only": "^0.0.1",
         "styled-components": "^6.1.15"
     },
     "devDependencies": {

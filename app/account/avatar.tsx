@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import Image from 'next/image'
+import ImageIcon from '@mui/icons-material/Image';
+import { Box, Button, IconButton, Tooltip } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Avatar({
   uid,
@@ -15,13 +18,13 @@ export default function Avatar({
   onUpload: (url: string) => void
 }) {
   const supabase = createClient()
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(url)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     async function downloadImage(path: string) {
       try {
-        const { data, error } = await supabase.storage.from('avatars').download(path)
+        const { data, error } = await supabase.storage.from('imageicon').download(path)
         if (error) {
           throw error
         }
@@ -48,7 +51,7 @@ export default function Avatar({
       const fileExt = file.name.split('.').pop()
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+      const { error: uploadError } = await supabase.storage.from('imageicon').upload(filePath, file)
 
       if (uploadError) {
         throw uploadError
@@ -91,6 +94,23 @@ export default function Avatar({
           onChange={uploadAvatar}
           disabled={uploading}
         />
+        {/* <input type='file' style={{ display: 'none' }} accept='image/*' id='Avatar' onChange={handleSetImg} />
+        <Box sx={{ display: "flex", mt: 1 }}>
+            <label htmlFor='Avatar'>
+                <Button variant='contained' component='span' startIcon={<ImageIcon />}>
+                    画像をアップロード
+                </Button>
+                <Tooltip title='アップロードされた画像を削除'>
+                    <IconButton
+                        aria-label='delete'
+                        onClick={resetAvatar}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+                {img && <img src={img} width="200" height="100"/>}
+            </label>
+            
+        </Box> */}
       </div>
     </div>
   )

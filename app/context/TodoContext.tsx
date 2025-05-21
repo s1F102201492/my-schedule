@@ -1,7 +1,9 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import { CountContinueDays } from './calculate/CountContinueDays';
+import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
+import { CountContinueDays } from '../components/calculate/CountContinueDays';
+import { createClient } from '@/utils/supabase/server';
+import { AuthContext } from './AuthContext';
 
 interface TodoProps {
     id: number;
@@ -25,12 +27,10 @@ interface TodoContextType {
     loading: boolean;
 }
 
-export const TodoContext = createContext<TodoContextType | undefined>(
-    undefined,
-);
+export const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
-    children,
+    children
 }) => {
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
@@ -38,9 +38,10 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     // データベースから情報を取得
     const fetchAllTodos = async () => {
         try {
+            setLoading(true);
             const res = await fetch('/api/todo', { cache: 'no-store' });
             const data = await res.json();
-            setTodos(data.alltodos);
+            setTodos(() => data.alltodos);
         } catch (error) {
             console.error('データの取得に失敗しました:', error);
         } finally {

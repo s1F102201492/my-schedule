@@ -11,7 +11,6 @@ import React, { useState } from 'react';
 import Detail from '../components/Detail';
 import Grid from '@mui/material/Grid2';
 import { CheckRate } from '../components/calculate/CheckRate';
-import Form from '../components/Form';
 
 interface TodoProps {
     id: number;
@@ -23,6 +22,7 @@ interface TodoProps {
     enddate: string;
     interval: number | string[];
     purpose: string;
+    tag: string;
     // intervalには数字か配列（曜日を格納する）
 }
 

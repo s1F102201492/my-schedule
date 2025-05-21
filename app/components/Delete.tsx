@@ -9,7 +9,7 @@ import {
     DialogTitle,
 } from '@mui/material';
 import React, { useContext, useState } from 'react';
-import { TodoContext } from './TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import { useRouter } from 'next/navigation';
 
 interface oneTodo {

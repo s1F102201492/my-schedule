@@ -22,7 +22,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { DateComponents } from './DateComponents';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { TodoContext } from './TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import { taglist } from './tags';
 
 interface oneTodo {

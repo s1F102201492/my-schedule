@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useContext, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { TodoContext } from './TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import GetStickyCellStyle from './theme/GetStickyCellStyle';
 
 interface CalendarViewProps {
@@ -50,6 +50,10 @@ const Calendar = () => {
 
     const prevMonthPage = () => {
         setCurrent(current.subtract(1, 'M'));
+    }
+
+    const resetCurrentPage = () => {
+        setCurrent(dayjs());
     }
 
     const monthStart = dayjs(current).startOf('month') // 月初めの日付
@@ -104,6 +108,7 @@ const Calendar = () => {
                         <IconButton onClick={prevMonthPage} size="small">
                             <ChevronLeftIcon />
                         </IconButton>
+                        <Button onClick={resetCurrentPage}>現在</Button>
                         <IconButton onClick={nextMonthPage} size="small">
                             <ChevronRightIcon />
                         </IconButton>

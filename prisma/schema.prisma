@@ -25,5 +25,16 @@ model todos {
   interval Json
   purpose String?
   tag String?
+  userId String @db.Uuid
+  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+model users {
+  id String @id @db.Uuid
+  username String
+  email String @unique
+  todos todos[]
+
 }
 

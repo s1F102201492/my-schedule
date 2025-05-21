@@ -8,7 +8,7 @@ export async function updateSession(request: NextRequest) {
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -27,8 +27,19 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // refreshing the auth token
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith("/userauth")
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/userauth"
+
+    return NextResponse.redirect(url)
+  }
 
   return supabaseResponse
 }

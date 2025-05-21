@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,9 +14,27 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
+import { Button, IconButton } from '@mui/material';
+import Sidebar from './Sidebar';
+import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
     const pathname = usePathname();
+
+    const [drawer, setDrawer] = useState<boolean>(false);
+    const userDrawer = () => {
+        setDrawer(true);
+    }
+
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error(
+            'TodoContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { loginUser } = authContext;
 
     return (
         <Box>
@@ -99,9 +117,17 @@ const Header = () => {
                             }}
                         />
                     </BottomNavigation>
-                    <Button color='inherit'>Login</Button>
+                    { loginUser ?
+                        (<IconButton onClick={userDrawer} sx={{ p: 0 }}>
+                            <Avatar src="img/initialicon.png"
+                            sx={{ width: 30, height: 30}}/>
+                        </IconButton>) 
+                        : <Button color='inherit'
+                        component={Link} href="/userauth">ログイン</Button>}
+                    
                 </Toolbar>
             </AppBar>
+            {drawer && <Sidebar drawer={drawer} setDrawer={setDrawer} />}
         </Box>
     );
 };
