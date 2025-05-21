@@ -9,7 +9,7 @@ import { createClient } from './server';
 // 管理者として許可するメールアドレスのリスト
 // ---------------------------------------------
 export const adminUsers = [
-    "wakako4170@icloud.com",
+    process.env.ADMIN_USER!, //本番環境は環境変数を使用する
 ];
 
 // ---------------------------------------------

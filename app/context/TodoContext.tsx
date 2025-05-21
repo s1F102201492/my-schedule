@@ -38,9 +38,10 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     // データベースから情報を取得
     const fetchAllTodos = async () => {
         try {
+            setLoading(true);
             const res = await fetch('/api/todo', { cache: 'no-store' });
             const data = await res.json();
-            setTodos(data.alltodos);
+            setTodos(() => data.alltodos);
         } catch (error) {
             console.error('データの取得に失敗しました:', error);
         } finally {

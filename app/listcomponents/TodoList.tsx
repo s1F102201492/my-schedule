@@ -39,7 +39,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     }
 
     const { todos } = todoContext;
-
+    console.log(todos)
     // フォームのオープン
     const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => setOpen(true);

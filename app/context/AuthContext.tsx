@@ -4,7 +4,6 @@ import { createClient } from "@/utils/supabase/client";
 import { User, UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import FadeLoading from "../components/parts/FadeLoading";
 
 interface UserType {
     id: string;
@@ -42,7 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // ログイン状態を管理
     const loginSession = async () => {
-        const supabase = createClient();
+        const supabase = await createClient();
 
         setLoading(true);
         try {
@@ -94,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.log(userInfo)
 
         if (userInfo) {
-            setLoginUser(userInfo);
+            setLoginUser(() => userInfo);
         } else {
             console.error("ユーザー情報が取得できませんでした");
             setLoginUser(null);
@@ -103,25 +102,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         loginSession();
-    },[])
-
-    // useEffect(() => {
-    //     loginSession();
-    
-    //     const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-    //       console.log("Auth state changed:", event, session);
-    //       if (session) {
-    //         await loginSession();
-    //       } else {
-    //         setLoginUser(null);
-    //       }
-    //     });
-    
-    //     return () => {
-    //       listener?.subscription.unsubscribe();
-    //     };
-    //   }, []);
-    
+    },[])    
     
     return (
         <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession }}>
