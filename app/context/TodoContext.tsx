@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/client';
 import { AuthContext } from './AuthContext';
 
 interface TodoProps {
@@ -35,11 +35,31 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // データベースから情報を取得
     const fetchAllTodos = async () => {
         try {
             setLoading(true);
-            const res = await fetch('/api/todo', { cache: 'no-store' });
+
+            const supabase = createClient();
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session?.access_token) {
+                console.error("アクセストークンが取得できませんでした");
+                return;
+            }
+
+            const res = await fetch('/api/todo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`,
+                },
+                cache: 'no-store',
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
             const data = await res.json();
             setTodos(() => data.alltodos);
         } catch (error) {
@@ -49,13 +69,25 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+
     // 今日のタスクのチェックマーク
     const checkTodo = async (todo: TodoProps) => {
         try {
+            const supabase = createClient();
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session?.access_token) {
+                console.error("アクセストークンが取得できませんでした");
+                return;
+            }
+
             const res = await fetch(`/api/todo/${todo.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                 },
+
             });
 
             if (!res.ok)
@@ -73,10 +105,20 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     // 今日のタスクの削除ボタン
     const deleteTodo = async (todo: TodoProps) => {
         try {
+            const supabase = createClient();
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session?.access_token) {
+                console.error("アクセストークンが取得できませんでした");
+                return;
+            }
+
             const res = await fetch(`/api/todo/${todo.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                 },
             });
 
             if (!res.ok)
@@ -94,10 +136,20 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     // checkedDateが空のときに実行
     const deletePractice = async (todo: TodoProps) => {
         try {
+            const supabase = createClient();
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session?.access_token) {
+                console.error("アクセストークンが取得できませんでした");
+                return;
+            }
+
             const res = await fetch(`/api/todo/${todo.id}`, {
                 method: 'DELETE',
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                 },
             });
 
             if (!res.ok)
