@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/client";
 import { User, UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
 
 interface UserType {
     id: string;
@@ -27,7 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
     // usersテーブルからユーザーを取って来るAPI
-    const fetchOneUser = async (userId: string) => {
+    const fetchOneUser = useCallback(async (userId: string) => {
         try {
             const res = await fetch(`/api/user/${userId}`, { cache: 'no-store' });
             const data = await res.json();
@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             console.error('ユーザーテーブルからの取得に失敗しました:', error);
             return null;
         }
-    };
+    }, [])
 
     // ログイン状態を管理
     const loginSession = async () => {

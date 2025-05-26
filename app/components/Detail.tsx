@@ -46,7 +46,7 @@ interface TodoItemProps {
 }
 
 const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
-
+    
     // 編集フォームの管理
     const [editOpen, setEditOpen] = useState<boolean>(false);
     const handleEditOpen = () => {

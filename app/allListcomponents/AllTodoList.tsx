@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import {
     Box,
-    Card,
     Fab,
     FormControl,
     InputLabel,
@@ -52,11 +51,7 @@ const AllTodoList = () => {
         );
     }
 
-    const { todos, fetchAllTodos, loading } = todoContext;
-
-    useEffect(() => {
-        fetchAllTodos();
-    }, []);
+    const { todos, loading } = todoContext;
 
     const [search, setSearch] = useState<string>(''); // 検索機能
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

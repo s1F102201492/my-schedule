@@ -24,6 +24,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { TodoContext } from '../context/TodoContext';
 import { taglist } from './tags';
+import { AuthContext } from '../context/AuthContext';
 
 interface oneTodo {
     id: number;
@@ -55,7 +56,8 @@ const editPractice = async (
     enddate: string,
     interval: number | string[],
     purpose: string,
-    tag: string
+    tag: string,
+    userId: string
 ) => {
     const res = await fetch(`/api/todo/${id}`, {
         method: 'PUT',
@@ -69,7 +71,8 @@ const editPractice = async (
             enddate,
             interval,
             purpose,
-            tag
+            tag,
+            userId
         }),
         headers: {
             'Content-type': 'application/json',
@@ -91,6 +94,16 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
     }
 
     const { fetchAllTodos } = todoContext;
+
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error(
+            'AuthContext is undefined. Make sure to use TodoProvider.',
+        );
+    }
+
+    const { loginUser, loginSession } = authContext;
 
     // フォームのクローズ
     const handleEditClose = () => {
@@ -257,7 +270,8 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
             ed?.format('YYYY/MM/DD'),
             setint(ndays),
             purp,
-            tag
+            tag,
+            loginUser!.id
         );
 
         await fetchAllTodos();

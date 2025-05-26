@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
+import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback } from 'react';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
 import { createClient } from '@/utils/supabase/client';
 import { AuthContext } from './AuthContext';
@@ -35,7 +35,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchAllTodos = async () => {
+    const fetchAllTodos = useCallback(async () => {
         try {
             setLoading(true);
 
@@ -67,7 +67,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         } finally {
             setLoading(false);
         }
-    };
+    }, [])
 
 
     // 今日のタスクのチェックマーク
