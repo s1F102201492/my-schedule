@@ -37,7 +37,7 @@ const page = () => {
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.name} さん！ようこそ！
+                    {loginUser.username} さん！ようこそ！
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />

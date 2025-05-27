@@ -34,6 +34,7 @@ model users {
   id String @id @db.Uuid
   username String
   email String @unique
+  avatar_url String
   todos todos[]
 
 }

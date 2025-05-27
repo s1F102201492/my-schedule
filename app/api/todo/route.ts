@@ -7,18 +7,11 @@ const prisma = new PrismaClient(); // インスタンス化
 // 全タスクの取得API
 export const GET = async (request: Request) => {
  try {
-  console.log("リクエストヘッダーのCookie:", request.headers.get('cookie'));
-
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-  if ( sessionData ) {
-    console.log("sessionData: ", sessionData)
-  } else {
-    console.log("sessionError: ", sessionError)
-  }
+
   if (error || !data?.user) {
-    console.log("ユーザー取得失敗12345: ", error)
+    console.log("ユーザー取得失敗もしくはログインできていません: ", error)
     return NextResponse.json(
       { error: "認証されていません" },
       { status: 401 }
