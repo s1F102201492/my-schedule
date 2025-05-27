@@ -11,7 +11,7 @@ export const GET = async (request: Request) => {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data?.user) {
-    console.log("ユーザー取得失敗: ", error)
+    console.log("ユーザー取得失敗もしくはログインできていません: ", error)
     return NextResponse.json(
       { error: "認証されていません" },
       { status: 401 }

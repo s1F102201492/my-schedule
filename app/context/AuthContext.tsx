@@ -9,6 +9,7 @@ interface UserType {
     id: string;
     username: string;
     email: string;
+    avatar_url: string;
 }
 
 interface AuthContextType {
@@ -24,7 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
     const [loading, setLoading] = useState(true);
-    const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
     // usersテーブルからユーザーを取って来るAPI
     const fetchOneUser = useCallback(async (userId: string) => {
@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.log(userInfo)
 
         if (userInfo) {
-            setLoginUser(() => userInfo);
+            setLoginUser(userInfo);
         } else {
             console.error("ユーザー情報が取得できませんでした");
             setLoginUser(null);

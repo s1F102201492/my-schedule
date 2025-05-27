@@ -17,6 +17,7 @@ import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
 import { Button, IconButton } from '@mui/material';
 import Sidebar from './Sidebar';
 import { AuthContext } from '../context/AuthContext';
+import Image from 'next/image';
 
 const Header = () => {
     const pathname = usePathname();
@@ -35,7 +36,7 @@ const Header = () => {
     }
 
     const { loginUser } = authContext;
-
+    console.log("画像", loginUser?.avatar_url)
     return (
         <Box>
             <AppBar
@@ -119,15 +120,15 @@ const Header = () => {
                     </BottomNavigation>
                     { loginUser ?
                         (<IconButton onClick={userDrawer} sx={{ p: 0 }}>
-                            <Avatar src="img/initialicon.png"
-                            sx={{ width: 30, height: 30}}/>
+                                <Avatar alt={loginUser.username || 'User'} src={loginUser.avatar_url}
+                                sx={{ width: 30, height: 30 }} />
                         </IconButton>) 
                         : <Button color='inherit'
                         component={Link} href="/userauth">ログイン</Button>}
                     
                 </Toolbar>
             </AppBar>
-            {drawer && <Sidebar drawer={drawer} setDrawer={setDrawer} />}
+            {drawer && <Sidebar drawer={drawer} setDrawer={setDrawer} loginUser={loginUser!} />}
         </Box>
     );
 };

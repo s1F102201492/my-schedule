@@ -61,7 +61,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             }
 
             const data = await res.json();
-            setTodos(() => data.alltodos);
+            setTodos(data.alltodos);
         } catch (error) {
             console.error('データの取得に失敗しました:', error);
         } finally {
