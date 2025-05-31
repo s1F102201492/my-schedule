@@ -101,7 +101,8 @@ const AllTodoList = () => {
         new Date(dateA).getTime() - new Date(dateB).getTime();
     const compareProgress = (a: TodoProps, b: TodoProps) =>
         CheckRate(a) - CheckRate(b);
-
+    
+    // ソート用の関数をオブジェクトで管理
     const sortFunctions: Record<string, (a: TodoProps, b: TodoProps) => number> = {
         startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
         startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),
