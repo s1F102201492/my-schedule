@@ -20,7 +20,6 @@ export const GET = async (request: Request) => {
     const alltodos = await prisma.todos.findMany({
       where: {userId: data.user.id}
     });
-    console.log("todos: ",alltodos)
     return NextResponse.json({ message: 'success', alltodos }, { status: 200 });
   }
  } catch (err) {
