@@ -62,7 +62,7 @@ const ViewStreak: React.FC<PropsType> = ({ alltodos }) => {
         } else if (!current_day) {
           break;
         } else if (current_day.isSame(prev_day.add(1, 'd'))) {
-            cntStreak += 1;
+          cntStreak += 1;
         } else {
           break;
         }
