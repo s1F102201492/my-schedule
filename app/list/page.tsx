@@ -29,7 +29,6 @@ const page = () => {
     }
 
     const { loginUser } = authContext;
-    console.log(loginUser)
 
     return (
         <div>

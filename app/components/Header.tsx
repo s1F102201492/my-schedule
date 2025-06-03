@@ -36,7 +36,7 @@ const Header = () => {
     }
 
     const { loginUser } = authContext;
-    console.log("画像", loginUser?.avatar_url)
+    
     return (
         <Box>
             <AppBar

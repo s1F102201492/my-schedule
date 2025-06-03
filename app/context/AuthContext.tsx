@@ -31,7 +31,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const res = await fetch(`/api/user/${userId}`, { cache: 'no-store' });
             const data = await res.json();
-            console.log(data)
             return data.user;
         } catch (error) {
             console.error('ユーザーテーブルからの取得に失敗しました:', error);
@@ -47,7 +46,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
             const session = sessionData?.session;
-            console.log("Session:", session);
     
             if (!session) {
                 console.log("No active session found.:", sessionError);
@@ -82,7 +80,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const getLoginUser = async (data: { user: User; }) => {
 
         const userId = data!.user.id; // auth.users の ID
-        console.log(userId);
 
         if (!userId) {
             console.log("userIdの取得に失敗しました")

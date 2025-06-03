@@ -1,4 +1,12 @@
 import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import 'dayjs/locale/ja'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 const CreateCheckedDates = (sd: Dayjs, ed: Dayjs, interval: number | string[], selectedDays:string[] ) => {
     let objdate: Record<string, boolean> = {};
