@@ -36,6 +36,17 @@ model users {
   email String @unique
   avatar_url String
   todos todos[]
+  achivements achivements?
+
+}
+
+model achivements {
+  id String @id @default(uuid())
+  achive_day Int @default(0)
+  achive_taskCount Int @default(0)
+  achive_multi Int @default(0)
+  userId String @db.Uuid @unique
+  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
 }
 
