@@ -41,11 +41,10 @@ model users {
 }
 
 model achivements {
-  id String @id @default(uuid())
   achive_day Int @default(0)
   achive_taskCount Int @default(0)
   achive_multi Int @default(0)
-  userId String @db.Uuid @unique
+  userId String @db.Uuid @unique @id
   user users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
 }
