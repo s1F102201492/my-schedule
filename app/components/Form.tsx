@@ -28,7 +28,6 @@ import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
 import { taglist } from './tags';
 import { AuthContext } from '../context/AuthContext';
-import { UUID } from 'crypto';
 
 dayjs.locale('ja');
 

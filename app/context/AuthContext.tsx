@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { User, UserResponse } from "@supabase/supabase-js";
+import type { Session } from '@supabase/supabase-js'
 import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
 
@@ -16,6 +17,7 @@ interface AuthContextType {
     loginUser: UserType | null;
     setLoginUser: React.Dispatch<React.SetStateAction<UserType| null>>;
     loginSession: () => Promise<void>;
+    session: Session | null;
 }
 
 export const AuthContext = createContext<AuthContextType| null>(null);
@@ -25,6 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
     const [loading, setLoading] = useState(true);
+    const [session, setSession] = useState<Session | null>(null);
 
     // usersテーブルからユーザーを取って来るAPI
     const fetchOneUser = useCallback(async (userId: string) => {
@@ -45,13 +48,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setLoading(true);
         try {
             const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-            const session = sessionData?.session;
+            const getSession = sessionData?.session;
     
-            if (!session) {
+            if (!getSession) {
                 console.log("No active session found.:", sessionError);
                 setLoginUser(null);
                 return;
             }
+            setSession(getSession);
     
             const { data: userData, error: userError } = await supabase.auth.getUser();
     
@@ -80,6 +84,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const getLoginUser = async (data: { user: User; }) => {
 
         const userId = data!.user.id; // auth.users の ID
+        console.log(userId)
 
         if (!userId) {
             console.log("userIdの取得に失敗しました")
@@ -102,7 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     },[])    
     
     return (
-        <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession }}>
+        <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession, session }}>
             {children}
         </AuthContext.Provider>
     );

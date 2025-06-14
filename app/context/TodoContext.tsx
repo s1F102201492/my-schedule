@@ -42,6 +42,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             const supabase = createClient();
             const { data: { session }, error } = await supabase.auth.getSession();
 
+            console.log(session)
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
                 return;

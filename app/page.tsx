@@ -7,7 +7,7 @@ import Header from './components/Header';
 import TodoList from './listcomponents/TodoList';
 import FadeLoading from './components/parts/FadeLoading';
 import { AuthContext } from './context/AuthContext';
-import ViewStreak from './components/calculate/ViewStreak';
+import CalcStreak from './components/calculate/CalcStreak';
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -38,7 +38,7 @@ export default function Home() {
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！<ViewStreak alltodos={todos}/>
+                    {loginUser.username} さん！ようこそ！
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />
