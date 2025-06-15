@@ -3,11 +3,19 @@
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/ja';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import React, { useContext, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TodoContext } from '../context/TodoContext';
 import GetStickyCellStyle from './theme/GetStickyCellStyle';
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 interface CalendarViewProps {
     title: string;

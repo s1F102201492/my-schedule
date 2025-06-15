@@ -24,12 +24,17 @@ import {
 import { DateComponents } from '../components/DateComponents';
 import { TodoContext } from '../context/TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import { useRouter } from 'next/navigation';
 import CreateCheckedDates from './calculate/CreateCheckedDates';
 import { taglist } from './tags';
 import { AuthContext } from '../context/AuthContext';
 
-dayjs.locale('ja');
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 const addTodo = async (
     title: string,
