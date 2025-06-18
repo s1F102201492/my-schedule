@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useContext } from 'react';
-import Header from '../components/Header';
-import AllTodoList from '../allListcomponents/AllTodoList';
-import { Typography } from '@mui/material';
-import { AuthContext } from '../context/AuthContext';
-import { TodoContext } from '../context/TodoContext';
-import FadeLoading from '../components/parts/FadeLoading';
-import NullUser from '../components/NullUser';
+import Header from '../../components/Header';
+import Calendar from '../../components/Calendar';
+import { Box, Typography } from '@mui/material';
+import { TodoContext } from '../../context/TodoContext';
+import FadeLoading from '../../components/parts/FadeLoading';
+import { AuthContext } from '../../context/AuthContext';
+import NullUser from '../../components/NullUser';
 
 const page = () => {
     const todoContext = useContext(TodoContext);
@@ -41,7 +41,9 @@ const page = () => {
                 {loading ? (
                     <FadeLoading loading={loading} />
                 ) : (
-                    <AllTodoList />
+                    <Box sx={{ mt: 4, width: '100%' }} >
+                        <Calendar />
+                    </Box>
                 )}
                 </>
             ) : (

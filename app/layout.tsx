@@ -33,13 +33,9 @@ export default function RootLayout({
         <html lang='ja'>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <AuthProvider>
-                    <TodoProvider>
-                        <AppRouterCacheProvider>
-                            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-                        </AppRouterCacheProvider>
-                    </TodoProvider>
-                </AuthProvider>
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );

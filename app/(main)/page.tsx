@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useContext } from 'react';
-import Header from '../components/Header';
-import Calendar from '../components/Calendar';
-import { Box, Typography } from '@mui/material';
+import { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
+import { Typography } from '@mui/material';
+import Header from '../components/Header';
+import TodoList from '../listcomponents/TodoList';
 import FadeLoading from '../components/parts/FadeLoading';
 import { AuthContext } from '../context/AuthContext';
-import NullUser from '../components/NullUser';
+import CalcStreak from '../components/calculate/CalcStreak';
 
-const page = () => {
+export default function Home() {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -18,7 +18,7 @@ const page = () => {
         );
     }
 
-    const { loading } = todoContext;
+    const { todos, loading } = todoContext;
 
     const authContext = useContext(AuthContext);
 
@@ -29,28 +29,28 @@ const page = () => {
     }
 
     const { loginUser } = authContext;
+    console.log(loginUser);
 
     return (
         <div>
             <Header />
+
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.name} さん！ようこそ！
+                    {loginUser.username} さん！ようこそ！
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />
                 ) : (
-                    <Box sx={{ mt: 4, width: '100%' }} >
-                        <Calendar />
-                    </Box>
+                    <TodoList locate="/" />
+
                 )}
                 </>
             ) : (
-                <NullUser />
+                <FadeLoading loading={true} />
             )}
         </div>
-    );
-};
 
-export default page;
+    );
+}

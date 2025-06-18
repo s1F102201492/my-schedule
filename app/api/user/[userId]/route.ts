@@ -19,6 +19,7 @@ export const GET = async () => {
 
     const userId = authData!.user.id; // auth.users の ID
     const user = await prisma.users.findUnique({ where: {id: userId} });
+
     return NextResponse.json({ message: 'success', user }, { status: 200 });
  } catch (err) {
     console.log(err)
