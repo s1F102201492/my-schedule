@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 // 実績データの取得API
 export const GET = async (req: Request, res: NextResponse) => {
  try {
-  const uid: string = req.url.split('/achivements/')[1];
-  const achivement = await prisma.achivements.findFirst({ where: { userId: uid } });
+  const uid: string = req.url.split('/achievements/')[1];
+  const achievement = await prisma.achievements.findFirst({ where: { userId: uid } });
 
-  return NextResponse.json({ message: 'success', achivement }, { status: 200 });
+  return NextResponse.json({ message: 'success', achievement: achievement }, { status: 200 });
  } catch (err) {
   return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
  }
@@ -18,17 +18,17 @@ export const GET = async (req: Request, res: NextResponse) => {
 // 実績データの編集API
 export const PUT = async (req: Request, res: NextResponse) => {
  try {
-  const uid: string = req.url.split('/ahivements/')[1];
+  const uid: string = req.url.split('/ahievements/')[1];
 
   const jsondata = await req.json();
-  const { achive_day, achive_taskCount, achive_multi, userId } = jsondata;
+  const { achieve_day, achieve_taskCount, achieve_multi, userId } = jsondata;
   
-  const achiveEdit = await prisma.achivements.update({
-    data: { achive_day, achive_taskCount, achive_multi, userId },
+  const achieveEdit = await prisma.achievements.update({
+    data: { achieve_day, achieve_taskCount, achieve_multi, userId },
     where: { userId: uid }
   })
 
-  return NextResponse.json({ message: 'success', achiveEdit }, { status: 200 });
+  return NextResponse.json({ message: 'success', achieveEdit: achieveEdit }, { status: 200 });
  } catch (err) {
     if (err instanceof Error){
         console.log("Error: ", err.stack)

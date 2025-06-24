@@ -29,7 +29,7 @@ interface PropsType {
     todos: TodoProps[];
 }
 
-export const CalcAchiveDay = (todos: TodoProps[]) => {
+export const CalcAchieveDay = (todos: TodoProps[]) => {
     // タスク完了をした日付を格納
     const map_Date = new Map();
 
@@ -45,6 +45,7 @@ export const CalcAchiveDay = (todos: TodoProps[]) => {
                     return map_Date.set(date, true);
                 }
                 
+                // trueで格納されているものがある場合は格納しない
             } else if (todo.checkedDates[date] == false && map_Date.has(date)) {
                 return ;
 

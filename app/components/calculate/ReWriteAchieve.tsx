@@ -17,11 +17,11 @@ interface PropsType {
     alltodos: todoProps[];
 }
 
-const rewrite_Achive = async (achive_d: number, achive_t: number, achive_m: number, userId: string) => {
-  const res = await fetch(`/api/achivements/${userId}`, {
+const rewrite_Achieve = async (achieve_d: number, achieve_t: number, achieve_m: number, userId: string) => {
+  const res = await fetch(`/api/achievements/${userId}`, {
     method: 'PUT',
         body: JSON.stringify({
-            achive_d, achive_t, achive_m
+            achieve_d, achieve_t, achieve_m
         }),
         headers: {
             'Content-type': 'application/json',
@@ -31,7 +31,7 @@ const rewrite_Achive = async (achive_d: number, achive_t: number, achive_m: numb
   return res.json();
 }
 
-const ReWriteAchive = ({ alltodos }: PropsType) => {
+const ReWriteAchieve = ({ alltodos }: PropsType) => {
   
 
   // 今までにチェックした数をカウント
@@ -44,4 +44,4 @@ const ReWriteAchive = ({ alltodos }: PropsType) => {
 
 }
 
-export default ReWriteAchive
+export default ReWriteAchieve

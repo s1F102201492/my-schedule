@@ -7,8 +7,8 @@ import Header from '../components/Header';
 import TodoList from '../listcomponents/TodoList';
 import FadeLoading from '../components/parts/FadeLoading';
 import { AuthContext } from '../context/AuthContext';
-import ReWriteAchive from '../components/calculate/ReWriteAchive';
-import { CalcAchiveDay } from '../components/calculate/CalcAchiveDay';
+import ReWriteAchieve from '../components/calculate/ReWriteAchieve';
+import { CalcAchieveDay } from '../components/calculate/CalcAchieveDay';
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -32,7 +32,7 @@ export default function Home() {
     const { loginUser } = authContext;
     console.log(loginUser);
 
-    const test = CalcAchiveDay(todos)
+    const test = CalcAchieveDay(todos)
     return (
         <div>
             <Header />
