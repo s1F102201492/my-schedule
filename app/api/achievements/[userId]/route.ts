@@ -5,14 +5,14 @@ const prisma = new PrismaClient();
 
 // 実績データの取得API
 export const GET = async (req: Request, res: NextResponse) => {
- try {
-  const uid: string = req.url.split('/achievements/')[1];
-  const achievement = await prisma.achievements.findFirst({ where: { userId: uid } });
+  try {
+    const uid: string = req.url.split('/achievements/')[1];
+    const achievement = await prisma.achievements.findFirst({ where: { userId: uid } });
 
-  return NextResponse.json({ message: 'success', achievement: achievement }, { status: 200 });
- } catch (err) {
-  return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
- }
+    return NextResponse.json({ message: 'success', achievement: achievement }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ message: 'Error', error: err }, { status: 500 });
+  }
 };
 
 // 実績データの編集API

@@ -25,10 +25,6 @@ interface TodoProps {
     tag: string;
 }
 
-interface PropsType {
-    todos: TodoProps[];
-}
-
 export const CalcAchieveDay = (todos: TodoProps[]) => {
     // タスク完了をした日付を格納
     const map_Date = new Map();
