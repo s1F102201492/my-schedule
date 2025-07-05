@@ -13,13 +13,13 @@ export default function AuthLayout({
 }>) {
     return (
         <AuthProvider>
-            <TodoProvider>
-                <AchieveProvider>
+            <AchieveProvider>
+                <TodoProvider>
                     <AppRouterCacheProvider>
                         <ThemeProvider theme={theme}>{children}</ThemeProvider>
                     </AppRouterCacheProvider>
-                </AchieveProvider>
-            </TodoProvider>
+                </TodoProvider>
+            </AchieveProvider>
         </AuthProvider>
            
     );

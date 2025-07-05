@@ -16,15 +16,17 @@ export const GET = async (req: Request, res: NextResponse) => {
 };
 
 // 実績データの編集API
-export const PUT = async (req: Request, res: NextResponse) => {
+export const PATCH = async (req: Request, res: NextResponse) => {
  try {
-  const uid: string = req.url.split('/ahievements/')[1];
+  const uid: string = req.url.split('/achievements/')[1];
 
   const jsondata = await req.json();
-  const { achieve_day, achieve_taskCount, achieve_multi, userId } = jsondata;
-  
+  console.log(jsondata)
+  const { achieve_day, achieve_taskCount, achieve_multi } = jsondata;
+  console.log("abi:", achieve_day)
+
   const achieveEdit = await prisma.achievements.update({
-    data: { achieve_day, achieve_taskCount, achieve_multi, userId },
+    data: { achieve_day, achieve_taskCount, achieve_multi },
     where: { userId: uid }
   })
 

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback, useMemo } from 'react';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
 import { createClient } from '@/utils/supabase/client';
 import { AuthContext } from './AuthContext';
+import { AchieveContext } from './AchieveContext';
 
 interface TodoProps {
     id: number;
@@ -34,6 +35,16 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const achieveContext = useContext(AchieveContext);
+
+    if (!achieveContext) {
+        throw new Error(
+            'AchieveContext is undefined. Make sure to use AchieveProvider.',
+        );
+    }
+
+    const { RewriteAchieve } = achieveContext;
 
     const fetchAllTodos = useCallback(async () => {
         try {
@@ -96,6 +107,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                     `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
                 );
             console.log('チェック更新成功');
+
         } catch (err) {
             if (err instanceof Error){
                 console.log("Error: ", err.stack)
@@ -134,7 +146,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
-    // checkedDateが空のときに実行
+    // 習慣自体を削除(checkedDateが空のときに実行)
     const deletePractice = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
@@ -169,6 +181,14 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         fetchAllTodos();
     }, []);
 
+    const todo_Memo = useMemo(() => todos.map(todo => todo.checkedDates), [todos]) // 下のuseEffectが無限ループしないための変数
+
+    useEffect(() => {
+        const func = async () => await RewriteAchieve(todos);
+        func();
+
+    }, [todo_Memo])
+
     const toggleChecked = async (id: number, date: string) => {
         //チェックボタンを機能させる関数
         setTodos((prevTodos) => {
@@ -192,6 +212,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 return todo;
             });
         });
+
     };
 
     //今日のタスクを削除する関数

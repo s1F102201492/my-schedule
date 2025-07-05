@@ -5,18 +5,19 @@ import { createClient } from '@/utils/supabase/client';
 import { CalcAchieveDay } from '../components/calculate/CalcAchieveDay';
 import { CalcAchieveCount } from '../components/calculate/CalcAchieveCount';
 import { CalcMultiCount } from '../components/calculate/CalcMultiCount';
+import { AuthContext } from './AuthContext';
 
 interface AchieveProps {
-    achieve_d: number;
-    achieve_t: number;
-    achieve_m: number;
-    userId: string;
+    achieve_day: Record<string, boolean>;
+    achieve_taskCount: Record<string, boolean>;
+    achieve_multi: Record<string, boolean>;
 }
 
 interface AchieveContextType {
     achievement: AchieveProps;
     setAchievement: React.Dispatch<React.SetStateAction<AchieveProps>>;
     loading: boolean;
+    RewriteAchieve: (alltodos: TodoProps[]) => Promise<void>;
 }
 
 interface TodoProps {
@@ -38,13 +39,11 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
     children
 }) => {
     const [achievement, setAchievement] = useState<AchieveProps>({
-        achieve_d: 0,
-        achieve_t: 0,
-        achieve_m: 0,
-        userId: '',
-    });
+        achieve_day: {},
+        achieve_taskCount: {},
+        achieve_multi: {},
+      });
     const [loading, setLoading] = useState(true);
-    const [userIdState, setUserIdState] = useState<string>("")
 
     // 実績テーブルから情報を取得する関数
     const fetchAchievement = useCallback(async () => {
@@ -59,10 +58,7 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
                 return;
             }
 
-            const userId = session.user.id;
-            setUserIdState(userId)
-
-            const res = await fetch(`/api/achievements/${userId}`, {
+            const res = await fetch(`/api/achievements/${session.user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,42 +81,65 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
     }, [])
 
     // achieve_dを書き換えるAPI
-    const put_achieve_d = async (userId: string, day: number, taskCount: number, multiCount: number) => {
+    const patch_Achieve = async (achieve: AchieveProps) => {
         try {
-            if (!userId) {
+            const supabase = createClient();
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session?.user.id) {
                 console.error("userIdが存在しません")
                 return ;
             }
     
-            const res = await fetch(`/api/achievements/${userId}`, {
-                method: 'PUT',
-                body: JSON.stringify({}),
+            const res = await fetch(`/api/achievements/${session.user.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(achieve),
                 headers: { 'Content-Type': 'application/json'},
     
             });
+
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
         } catch {
             console.error("Achievementテーブルの書き換えに失敗しました")
         }
         
-    }
-
-    // achieve_tを書き換えるAPI
-    const put_achieve_t = async (userId: string, day: number, taskCount: number, multiCount: number) => {
-        
-    }
-
-    // achieve_mを書き換えるAPI
-    const put_achieve_m = async (userId: string, day: number, taskCount: number, multiCount: number) => {
         
     }
 
     // 実績テーブルの情報を書き換える関数
     const RewriteAchieve = async (alltodos: TodoProps[]) => {
-        const calcDay = CalcAchieveDay(alltodos);
-        const calcCount = CalcAchieveCount(alltodos);
-        const calcMulti = CalcMultiCount(alltodos);
+        const calcDay = CalcAchieveDay(alltodos); // タスクのデータから連続でタスクを達成した日数を計算
+        const calcCount = CalcAchieveCount(alltodos); // タスクのデータから達成したタスクの数を計算
+        const calcMulti = CalcMultiCount(alltodos); // タスクのデータから一日で達成した最大タスク数を計算
 
+        // 下のfor文で参照
+        const list = {achieve_day: calcDay, achieve_taskCount: calcCount, achieve_multi: calcMulti}
 
+        // 実績テーブルより更新後のほうが多い場合更新
+        const achievement_copy = structuredClone(achievement);
+        console.log("prev: ",achievement_copy)
+
+        for (const element in achievement_copy) {
+            for (const key in achievement_copy[element as keyof AchieveProps]) {
+                if (Number(key.split("achieve")[1]) < list[element as keyof AchieveProps] &&
+                    achievement_copy[element as keyof AchieveProps][key] == false) {
+                        achievement_copy[element as keyof AchieveProps][key] = true;
+                } else if (Number(key.split("achieve")[1]) < list[element as keyof AchieveProps] &&
+                    achievement_copy[element as keyof AchieveProps][key] == true) {
+                        continue;
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        console.log(achievement_copy)
+        await patch_Achieve(achievement_copy)
+
+        setAchievement(achievement_copy) 
     }
 
     useEffect(() => {
@@ -132,7 +151,8 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
             value={{
                 achievement,
                 setAchievement,
-                loading
+                loading,
+                RewriteAchieve
             }}>
             {children}
         </AchieveContext.Provider>

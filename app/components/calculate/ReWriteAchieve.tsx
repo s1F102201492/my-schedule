@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { CalcAchieveDay } from "./CalcAchieveDay";
+import { CalcAchieveCount } from "./CalcAchieveCount";
+import { CalcMultiCount } from "./CalcMultiCount";
 
 interface todoProps {
     id: number;
@@ -32,15 +35,17 @@ const rewrite_Achieve = async (achieve_d: number, achieve_t: number, achieve_m: 
 }
 
 const ReWriteAchieve = ({ alltodos }: PropsType) => {
-  
+  // ストリーク機能
+  const calc_d = CalcAchieveDay(alltodos);
 
   // 今までにチェックした数をカウント
-  const [task_Counter, setTask_Counter] = useState<number>(0);
+  const calc_t = CalcAchieveCount(alltodos);
 
   // 一日の最大タスクチェック数をカウント
-  const [multi_Task, setMulti_Task] = useState<number>(0);
+  const calc_m = CalcMultiCount(alltodos);
 
-  let calc_Variable = new Set<string>([]);
+  
+  
 
 }
 

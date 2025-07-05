@@ -4,8 +4,6 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import 'dayjs/locale/ja'
-import { useState } from 'react'
-import { count } from 'console'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -35,20 +33,29 @@ export const CalcAchieveDay = (todos: TodoProps[]) => {
     // タスクを達成していた日付をMapオブジェクトに格納
     for (const todo of todos) {
         Object.keys(todo.checkedDates).map((date) => {
-            if (todo.checkedDates[date] == true && map_Date.has(date)) {
-                // 日付がもうある　かつ　チェック済みのタスク
-                if (map_Date.get(date) == false) {
-                    return map_Date.set(date, true);
+            // 現在より前の日付のみ対象
+            if (dayjs().isAfter(dayjs(date), 'day')) {
+                if (todo.checkedDates[date] == true && map_Date.has(date)) {
+                    // 日付がもうある　かつ　チェック済みのタスク
+                    if (map_Date.get(date) == false) {
+                        return map_Date.set(date, true);
+                    }
+                    
+                    // trueで格納されているものがある場合は格納しない
+                } else if (todo.checkedDates[date] == false && map_Date.has(date)) {
+                    return ;
+
+                } else {
+                    // 日付がない場合は重複の可能性はないので格納
+                    return map_Date.set(date, todo.checkedDates[date]);
                 }
-                
-                // trueで格納されているものがある場合は格納しない
-            } else if (todo.checkedDates[date] == false && map_Date.has(date)) {
+
+            } else { // 現在よりあとの日付は入れない
                 return ;
 
-            } else {
-                // 日付がない場合は重複の可能性はないので格納
-                return map_Date.set(date, todo.checkedDates[date]);
             }
+
+                
 
         })
     }
@@ -65,11 +72,7 @@ export const CalcAchieveDay = (todos: TodoProps[]) => {
     dateArray_Desc.forEach(date => {
         map_Date_Desc.set(date, map_Date.get(date))
     });
-
-    console.log(map_Date_Desc.keys())
-    console.log(map_Date_Desc.values())
-    console.log(map_Date_Desc.get("2025/06/19"))
-
+    console.log(map_Date_Desc)
 
     // 今日から遡って日付が途切れた場合カウント終了
     for (const val of map_Date_Desc.values()) {
@@ -80,5 +83,6 @@ export const CalcAchieveDay = (todos: TodoProps[]) => {
         }
     }
 
+    console.log("cntStreak: ", cntStreak)
   return cntStreak;
 }

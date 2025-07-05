@@ -7,9 +7,6 @@ import Header from '../components/Header';
 import TodoList from '../listcomponents/TodoList';
 import FadeLoading from '../components/parts/FadeLoading';
 import { AuthContext } from '../context/AuthContext';
-import ReWriteAchieve from '../components/calculate/ReWriteAchieve';
-import { CalcAchieveDay } from '../components/calculate/CalcAchieveDay';
-import { CalcMultiCount } from '../components/calculate/CalcMultiCount';
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -33,7 +30,6 @@ export default function Home() {
     const { loginUser } = authContext;
     console.log(loginUser);
 
-    const test = CalcMultiCount(todos)
     return (
         <div>
             <Header />
@@ -41,7 +37,7 @@ export default function Home() {
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！{test}
+                    {loginUser.username} さん！ようこそ！
 
                 </Typography>
                 {loading ? (
