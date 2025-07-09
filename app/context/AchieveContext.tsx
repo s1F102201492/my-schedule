@@ -39,10 +39,33 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
     children
 }) => {
     const [achievement, setAchievement] = useState<AchieveProps>({
-        achieve_day: {},
-        achieve_taskCount: {},
-        achieve_multi: {},
-      });
+        achieve_day: {
+            'achieve2': false,
+            'achieve3': false,
+            'achieve5': false,
+            'achieve10': false,
+            'achieve20': false,
+            'achieve30': false
+        },
+        achieve_taskCount: {
+            'achieve5': false,
+            'achieve10': false,
+            'achieve20': false,
+            'achieve30': false,
+            'achieve50': false,
+            'achieve100': false,
+            'achieve500': false,
+            'achieve1000': false
+        },
+        achieve_multi: {
+            'achieve2': false,
+            'achieve3': false,
+            'achieve4': false,
+            'achieve5': false,
+            'achieve10': false,
+            'achieve15': false
+        },
+    });
     const [loading, setLoading] = useState(true);
 
     // 実績テーブルから情報を取得する関数
@@ -114,6 +137,7 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
         const calcDay = CalcAchieveDay(alltodos); // タスクのデータから連続でタスクを達成した日数を計算
         const calcCount = CalcAchieveCount(alltodos); // タスクのデータから達成したタスクの数を計算
         const calcMulti = CalcMultiCount(alltodos); // タスクのデータから一日で達成した最大タスク数を計算
+        console.log("calcday: ", calcDay, "calcCount: ", calcCount, "calcMulti: ", calcMulti)
 
         // 下のfor文で参照
         const list = {achieve_day: calcDay, achieve_taskCount: calcCount, achieve_multi: calcMulti}
@@ -124,10 +148,10 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
 
         for (const element in achievement_copy) {
             for (const key in achievement_copy[element as keyof AchieveProps]) {
-                if (Number(key.split("achieve")[1]) < list[element as keyof AchieveProps] &&
+                if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
                     achievement_copy[element as keyof AchieveProps][key] == false) {
                         achievement_copy[element as keyof AchieveProps][key] = true;
-                } else if (Number(key.split("achieve")[1]) < list[element as keyof AchieveProps] &&
+                } else if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
                     achievement_copy[element as keyof AchieveProps][key] == true) {
                         continue;
                 } else {
