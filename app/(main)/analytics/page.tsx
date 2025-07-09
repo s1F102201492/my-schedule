@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useContext, useState } from 'react';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import AIrecommend from '../components/analytics/AIrecommend';
-import Model from '../components/analytics/Model';
-import { TodoContext } from '../context/TodoContext';
-import { AuthContext } from '../context/AuthContext';
-import FadeLoading from '../components/parts/FadeLoading';
-import NullUser from '../components/NullUser';
+import AIrecommend from '../../components/analytics/AIrecommend';
+import Model from '../../components/analytics/Model';
+import { TodoContext } from '../../context/TodoContext';
+import { AuthContext } from '../../context/AuthContext';
+import FadeLoading from '../../components/parts/FadeLoading';
+import NullUser from '../../components/NullUser';
 
 const page = () => {
     const todoContext = useContext(TodoContext);
@@ -52,7 +52,7 @@ const page = () => {
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.name} さん！ようこそ！
+                    {loginUser.username} さん！ようこそ！
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />

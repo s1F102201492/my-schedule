@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from "@mui/material";
-import GoogleIcon from "../components/theme/GoogleIcon"
+import GoogleIcon from "../../components/theme/GoogleIcon"
 import { createClient } from '@/utils/supabase/client';
 
 const LoginWithGoogle = () => {

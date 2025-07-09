@@ -28,17 +28,14 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     return (
         <html lang='ja'>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <AuthProvider>
-                    <TodoProvider>
-                        <AppRouterCacheProvider>
-                            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-                        </AppRouterCacheProvider>
-                    </TodoProvider>
-                </AuthProvider>
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );

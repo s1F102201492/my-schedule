@@ -21,10 +21,18 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { DateComponents } from './DateComponents';
 import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/ja';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import { useRouter } from 'next/navigation';
 import { TodoContext } from '../context/TodoContext';
 import { taglist } from './tags';
 import { AuthContext } from '../context/AuthContext';
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 interface oneTodo {
     id: number;

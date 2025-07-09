@@ -1,15 +1,15 @@
 'use client';
 
-import { useContext } from 'react';
-import { TodoContext } from './context/TodoContext';
-import { Typography } from '@mui/material';
-import Header from './components/Header';
-import TodoList from './listcomponents/TodoList';
-import FadeLoading from './components/parts/FadeLoading';
-import { AuthContext } from './context/AuthContext';
-import ViewStreak from './components/calculate/ViewStreak';
+import React, { useContext } from 'react';
+import Header from '../../components/Header';
+import Calendar from '../../components/Calendar';
+import { Box, Typography } from '@mui/material';
+import { TodoContext } from '../../context/TodoContext';
+import FadeLoading from '../../components/parts/FadeLoading';
+import { AuthContext } from '../../context/AuthContext';
+import NullUser from '../../components/NullUser';
 
-export default function Home() {
+const page = () => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -18,7 +18,7 @@ export default function Home() {
         );
     }
 
-    const { todos, loading } = todoContext;
+    const { loading } = todoContext;
 
     const authContext = useContext(AuthContext);
 
@@ -29,28 +29,28 @@ export default function Home() {
     }
 
     const { loginUser } = authContext;
-    console.log(loginUser);
 
     return (
         <div>
             <Header />
-
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！<ViewStreak alltodos={todos}/>
+                    {loginUser.username} さん！ようこそ！
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />
                 ) : (
-                    <TodoList locate="/" />
-
+                    <Box sx={{ mt: 4, width: '100%' }} >
+                        <Calendar />
+                    </Box>
                 )}
                 </>
             ) : (
-                <FadeLoading loading={true} />
+                <NullUser />
             )}
         </div>
-
     );
-}
+};
+
+export default page;

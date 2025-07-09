@@ -2,9 +2,14 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ja';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import React from 'react';
 
-dayjs.locale('ja'); // カレンダーの曜日のフォーマット
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 interface DateComponentsProps {
     label: string;

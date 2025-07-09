@@ -3,6 +3,7 @@
 import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import UserCard from './UserCard';
+import ViewAchievements from './ViewAchievements';
 
 interface SidebarProps {
     drawer: boolean;
@@ -24,6 +25,7 @@ export default function Sidebar({ drawer, setDrawer, loginUser }: SidebarProps) 
             anchor="right"
             onClose={() => setDrawer(false)}>
             <UserCard loginUser={loginUser!} />
+            <ViewAchievements />
         </Drawer>
     );
 }

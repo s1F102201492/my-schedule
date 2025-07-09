@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useContext } from 'react';
-import Header from '../components/Header';
-import AllTodoList from '../allListcomponents/AllTodoList';
-import { Typography } from '@mui/material';
-import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
+import { Typography } from '@mui/material';
+import Header from '../components/Header';
+import TodoList from '../listcomponents/TodoList';
 import FadeLoading from '../components/parts/FadeLoading';
-import NullUser from '../components/NullUser';
+import { AuthContext } from '../context/AuthContext';
 
-const page = () => {
+export default function Home() {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -18,7 +17,7 @@ const page = () => {
         );
     }
 
-    const { loading } = todoContext;
+    const { todos, loading } = todoContext;
 
     const authContext = useContext(AuthContext);
 
@@ -29,26 +28,29 @@ const page = () => {
     }
 
     const { loginUser } = authContext;
+    console.log(loginUser);
 
     return (
         <div>
             <Header />
+
             {loginUser ? (
                 <>
                 <Typography variant="h4" sx={{ m: 4 }}>
                     {loginUser.username} さん！ようこそ！
+
                 </Typography>
                 {loading ? (
                     <FadeLoading loading={loading} />
                 ) : (
-                    <AllTodoList />
+                    <TodoList locate="/" />
+
                 )}
                 </>
             ) : (
-                <NullUser />
+                <FadeLoading loading={true} />
             )}
         </div>
-    );
-};
 
-export default page;
+    );
+}
