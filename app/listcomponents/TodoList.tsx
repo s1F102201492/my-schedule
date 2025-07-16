@@ -3,7 +3,7 @@ import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
-import Form from '../components/Form';
+import SelfAddForm from '../components/SelfAddForm';
 import { TodoContext } from '../context/TodoContext';
 import RewardDialog from '../components/RewardDialog';
 
@@ -155,7 +155,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
 
             {reward && <RewardDialog open={reward} setOpen={setReward} />}
 
-            {open && <Form open={open} setOpen={setOpen} locate={locate}/>}
+            {open && <SelfAddForm open={open} setOpen={setOpen} locate={locate}/>}
         </div>
     );
 };

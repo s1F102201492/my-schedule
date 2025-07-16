@@ -21,7 +21,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { DateComponents } from '../components/DateComponents';
+import { DateComponents } from './DateComponents';
 import { TodoContext } from '../context/TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc'
@@ -76,7 +76,7 @@ interface FormProps {
   locate: string;
 }
 
-const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
+const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -379,4 +379,4 @@ const Form:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     );
 };
 
-export default Form;
+export default SelfAddForm;

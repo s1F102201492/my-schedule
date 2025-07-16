@@ -8,7 +8,7 @@ dayjs.extend(timezone)
 dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
-const CreateCheckedDates = (sd: Dayjs, ed: Dayjs, interval: number | string[], selectedDays:string[] ) => {
+const CreateCheckedDates = (sd: Dayjs, ed: Dayjs, interval: number | string[], selectedDays:string[] | null ) => {
     let objdate: Record<string, boolean> = {};
     if (typeof interval === 'number') {
         // 日ごとの場合
@@ -20,17 +20,19 @@ const CreateCheckedDates = (sd: Dayjs, ed: Dayjs, interval: number | string[], s
             date = dayjs(date).add(interval, 'd');
         }
         return objdate;
-    } else {
+    } else if (Array.isArray(interval)) {
         // 曜日の場合
         let date = sd;
         while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
             const day = dayjs(date).format('ddd');
-            if (selectedDays.includes(day)) {
+            if (selectedDays!.includes(day)) {
                 const slashdate = dayjs(date).format('YYYY/MM/DD');
                 objdate[slashdate] = false;
             }
             date = dayjs(date).add(1, 'd');
         }
+        return objdate;
+    } else {
         return objdate;
     }
 }

@@ -20,7 +20,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
-import Form from '../components/Form';
+import SelfAddForm from '../components/SelfAddForm';
 import AddIcon from '@mui/icons-material/Add';
 import FadeLoading from '../components/parts/FadeLoading';
 
@@ -207,7 +207,7 @@ const AllTodoList = () => {
                     </Fab>
                 </Tooltip>
             </Box>
-            <Form
+            <SelfAddForm
                 open={open}
                 setOpen={setOpen}
                 locate={"/list"}
