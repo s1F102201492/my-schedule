@@ -1,17 +1,18 @@
 'use client';
 
-import { Box, Button, Chip, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Chip, IconButton, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
-import PulseLoading from '../parts/PulseLoading';
+import PulseLoading from './parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { taglist } from './tags';
 
 interface modelPageProps {
     setRecommendPage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
+const GPTRecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
     const [text, setText] = useState<string>('');
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -35,6 +36,20 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
         setImg('');
     }
 
+    // タグの選択
+    const tags = taglist
+    const [tag, setTag] = useState<string>("");
+    const handleTagSelect = (e: SelectChangeEvent) => { // 選択
+        setTag(e.target.value as string)
+    }
+
+    const levelList = ['低い', 'まあまあ', '高い'];
+    const [level, setLevel] = useState<string>('低い');
+    const handleLevel = (e: SelectChangeEvent) => {
+        setLevel(e.target.value);
+    }
+
+
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
     const [response, setResponse] = useState<string>(''); // AIからの回答
     const [finalres, setFinalres] = useState<string[]>([]); // 習慣リスト
@@ -57,7 +72,7 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ type: "recommend", prompt: text, img }),
+                body: JSON.stringify({ type: "recommend", prompt: text, img, tag, level }),
             });
     
             const data = await res.json();
@@ -69,6 +84,7 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
                 return;
             }
     
+            console.log(data)
             setResponse(data.result);
             setFinalres(data.result.split(/\s?-\s?/).filter((res: string) => res !== ''));
         } catch (error) {
@@ -132,6 +148,28 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
                         </label>
                         
                     </Box>
+                    <Box>
+                        <Select
+                            value={tag}
+                            label="タグ"
+                            onChange={handleTagSelect}
+                            >
+                            {taglist.map(elem => 
+                                <MenuItem value={elem} key={elem}>{elem}</MenuItem>
+                                )}
+                        </Select>
+                    </Box>
+                    <Box>
+                        <Select
+                            value={level}
+                            label="難易度"
+                            onChange={handleTagSelect}
+                        >
+                            {levelList.map(elem => 
+                                <MenuItem value={elem} key={elem}>{elem}</MenuItem>
+                                )}
+                        </Select>
+                    </Box>
                 </Box>
                 <Button variant='contained' onClick={handleSubmit} sx={{ mt: 4, height: 40, width: 180 }}>
                     おすすめの習慣を見る
@@ -144,4 +182,4 @@ const AIrecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
     );
 };
 
-export default AIrecommend;
+export default GPTRecommend;

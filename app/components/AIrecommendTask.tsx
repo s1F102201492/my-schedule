@@ -7,6 +7,36 @@ import CreateCheckedDates from './calculate/CreateCheckedDates';
 import { AuthContext } from '../context/AuthContext';
 import { TodoContext } from '../context/TodoContext';
 
+interface GPTOutputProps {
+    title: string,
+    description: string,
+    startdate: string,
+    enddate: string,
+    interval: number | string[],
+    tag: string
+}
+
+// 入力されたもの（目標、タグ、難易度など）をGPTがタスクとして返す
+const GPTOutput = async (
+    purpose: string,
+    img: string | null,
+    tag: string,
+    level: string
+) => {
+    const res = await fetch(`api/chatgpt`, {
+        method: 'POST',
+        body: JSON.stringify({
+            purpose, img, tag, level
+        }),
+        headers: {
+            'Content-type': 'application/json',
+        }
+    })
+
+    return res.json();
+} 
+
+// タスクをデータベースに追加する関数
 const addTodo = async (
     title: string,
     description: string,
@@ -67,13 +97,13 @@ const AIrecommendTask = () => {
 
     const router = useRouter();
 
-  // タイトルに書き込まれたか判定
+  // タイトル
   const [title, setTitle] = useState<string>('');
   const handletitle = (e: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(e.target.value);
   };
 
-  // 詳細テキストに書き込まれたか判定
+  // 詳細テキスト
   const [desc, setdesc] = useState<string>('');
   const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
       setdesc(e.target.value);
@@ -141,7 +171,7 @@ const AIrecommendTask = () => {
         null
     ); // 日付: falseの辞書を作成
 
-    let contdays: number = 0; // continuedays 登録したてなので最初は0
+    const contdays: number = 0; // continuedays 登録したてなので最初は0
 
     await addTodo(
         title,

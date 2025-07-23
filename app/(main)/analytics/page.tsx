@@ -3,7 +3,7 @@
 import React, { useContext, useState } from 'react';
 import Header from '../../components/Header';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import AIrecommend from '../../components/analytics/AIrecommend';
+import AIrecommend from '../../components/GPTRecommend';
 import Model from '../../components/analytics/Model';
 import { TodoContext } from '../../context/TodoContext';
 import { AuthContext } from '../../context/AuthContext';
