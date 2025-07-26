@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import EventIcon from '@mui/icons-material/Event';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import Link from 'next/link';
@@ -63,6 +64,22 @@ const Header = () => {
                                 '&.Mui-selected': {
                                     color:
                                         pathname === '/'
+                                            ? 'primary.light'
+                                            : 'inherit',
+                                },
+                                whiteSpace: 'nowrap',
+                            }}
+                        />
+                        <BottomNavigationAction
+                            label='タスク追加'
+                            value='/addTask'
+                            icon={<AddBoxOutlinedIcon />}
+                            component={Link}
+                            href='/addTask'
+                            sx={{
+                                '&.Mui-selected': {
+                                    color:
+                                        pathname === '/addTask'
                                             ? 'primary.light'
                                             : 'inherit',
                                 },

@@ -21,15 +21,15 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { DateComponents } from './DateComponents';
-import { TodoContext } from '../context/TodoContext';
+import { DateComponents } from '../DateComponents';
+import { TodoContext } from '../../context/TodoContext';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import { useRouter } from 'next/navigation';
-import CreateCheckedDates from './calculate/CreateCheckedDates';
-import { taglist } from './tags';
-import { AuthContext } from '../context/AuthContext';
+import CreateCheckedDates from '../calculate/CreateCheckedDates';
+import { taglist } from '../tags';
+import { AuthContext } from '../../context/AuthContext';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

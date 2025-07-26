@@ -3,7 +3,7 @@ import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
-import SelfAddForm from '../components/SelfAddForm';
+import SelfAddForm from '../components/addTask/SelfAddForm';
 import { TodoContext } from '../context/TodoContext';
 import RewardDialog from '../components/RewardDialog';
 

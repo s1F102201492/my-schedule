@@ -20,7 +20,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
-import SelfAddForm from '../components/SelfAddForm';
+import SelfAddForm from '../components/addTask/SelfAddForm';
 import AddIcon from '@mui/icons-material/Add';
 import FadeLoading from '../components/parts/FadeLoading';
 

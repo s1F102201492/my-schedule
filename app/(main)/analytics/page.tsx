@@ -3,7 +3,7 @@
 import React, { useContext, useState } from 'react';
 import Header from '../../components/Header';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import AIrecommend from '../../components/GPTRecommend';
+import AIrecommend from '../../components/addTask/GPTRecommend';
 import Model from '../../components/analytics/Model';
 import { TodoContext } from '../../context/TodoContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -25,23 +25,15 @@ const page = () => {
 
     if (!authContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            'AuthContext is undefined. Make sure to use AuthProvider.',
         );
     }
 
     const { loginUser } = authContext;
 
-    // おすすめの習慣のページの開閉を管理
-    const [recommendPage, setRecommendPage] = useState<boolean>(false); 
-    const handleRecomPage = () => {
-        setRecommendPage(true);
-        setModelPage(false);
-    }
-
     // 理想の自分ページの開閉を管理
     const [modelPage, setModelPage] = useState<boolean>(false);
     const handleModelPage = () => {
-        setRecommendPage(false);
         setModelPage(true);
     }
 
@@ -58,9 +50,8 @@ const page = () => {
                     <FadeLoading loading={loading} />
                 ) : (
                     <>
-                    {recommendPage ?
-                        (<AIrecommend setRecommendPage={setRecommendPage}/>) :
-                        (modelPage ? <Model setModelPage={setModelPage}/> :
+                    {modelPage ?
+                        (<Model setModelPage={setModelPage}/>):
                         <Box sx={{ display:"flex", justifyContent:"space-evenly"}}>
                             <Card onClick={handleModelPage}
                             sx={{ maxWidth: 280, maxHeight: '100%',
@@ -81,28 +72,8 @@ const page = () => {
                                     </Typography>
                                 </CardContent>
                             </Card>
-                            <Card onClick={handleRecomPage} 
-                            sx={{ maxWidth: 280, maxHeight: '100%',
-                                cursor: 'pointer', mt: 6, mx: 2  }}>
-                                <CardMedia
-                                component="img"
-                                image='img/checklist.png'
-                                sx={{ width: 350, height: 250, objectFit: "fill" }}
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        おすすめの習慣を見る
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace:"pre-line" }}>
-                                    {`理想の自分に近づきたいけど
-                                    何をすればいいか分からない...
-                                    そんなときは一緒に考えてみましょう！`}
-            
-                                    </Typography>
-                                </CardContent>
-                            </Card>
                         </Box>
-                        )}
+                        }
                     </>
                 )}
                 </>

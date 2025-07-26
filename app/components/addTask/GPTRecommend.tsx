@@ -3,16 +3,11 @@
 import { Box, Button, Chip, IconButton, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
-import PulseLoading from './parts/PulseLoading';
+import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { taglist } from './tags';
+import { taglist } from '../tags';
 
-interface modelPageProps {
-    setRecommendPage: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const GPTRecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
+const GPTRecommend = () => {
     const [text, setText] = useState<string>('');
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -106,12 +101,6 @@ const GPTRecommend:React.FC<modelPageProps> = ({setRecommendPage}) => {
 
     return (
         <div>
-            <Tooltip title="戻る">
-                <IconButton onClick={() => setRecommendPage(false)}
-                    sx={{ ml: 2, mt: 2}}>
-                    <ArrowBackIcon />
-                </IconButton>
-            </Tooltip>
             <Box sx={{ ml: 4, mt:2 }}>
                 <Typography variant='h5'>おすすめの習慣を提案</Typography>
                     

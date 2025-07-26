@@ -1,11 +1,11 @@
 import { Box, SelectChangeEvent, Step, StepLabel, Stepper } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
-import { taglist } from './tags';
+import { taglist } from '../tags';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
-import CreateCheckedDates from './calculate/CreateCheckedDates';
-import { AuthContext } from '../context/AuthContext';
-import { TodoContext } from '../context/TodoContext';
+import CreateCheckedDates from '../calculate/CreateCheckedDates';
+import { AuthContext } from '../../context/AuthContext';
+import { TodoContext } from '../../context/TodoContext';
 
 interface GPTOutputProps {
     title: string,
