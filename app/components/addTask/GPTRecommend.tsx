@@ -6,6 +6,16 @@ import ImageIcon from '@mui/icons-material/Image';
 import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { taglist } from '../tags';
+import RecomTaskList from '../parts/RecomTaskList';
+
+interface TaskProps {
+        title: string, 
+        description: string,
+        startdate: string,
+        enddate: string,
+        interval: number,
+        tag: string
+}
 
 const GPTRecommend = () => {
     const [text, setText] = useState<string>('');
@@ -46,8 +56,8 @@ const GPTRecommend = () => {
 
 
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<string>(''); // AIからの回答
-    const [finalres, setFinalres] = useState<string[]>([]); // 習慣リスト
+    const [response, setResponse] = useState<TaskProps[]>([]); // AIからの回答 
+    console.log(response.length)
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -57,9 +67,13 @@ const GPTRecommend = () => {
             return;
         }
         
+        if (tag === '') {
+            alert('タグを選択してください。');
+            return;
+        }
+        
         setIsGenerating(true);
-        setResponse('');
-        setFinalres([]);
+        setResponse([]);
     
         try {
             const res = await fetch('/api/chatgpt', {
@@ -79,9 +93,12 @@ const GPTRecommend = () => {
                 return;
             }
     
-            console.log(data)
-            setResponse(data.result);
-            setFinalres(data.result.split(/\s?-\s?/).filter((res: string) => res !== ''));
+            console.log(data.result)
+            // stringを配列に変換
+            const arrayResult = JSON.parse(data.result);
+            console.log(arrayResult);
+
+            setResponse(arrayResult);
         } catch (error) {
             console.error('エラー:', error);
             alert('エラーが発生しました。');
@@ -89,19 +106,10 @@ const GPTRecommend = () => {
             setIsGenerating(false);
         }
     };
-    
-
-    // `response`の更新後に`finalres`を更新
-    useEffect(() => {
-        if (response) {
-            const splitres = response.split(/\s?-\s?/).filter((res) => res !== '');
-            setFinalres(splitres);
-        }
-    }, [response]);
 
     return (
         <div>
-            <Box sx={{ ml: 4, mt:2 }}>
+            <Box sx={{ mx: 4, mt:2 }}>
                 <Typography variant='h5'>おすすめの習慣を提案</Typography>
                     
                 <Box sx={{ mt: 3 }}>
@@ -142,8 +150,9 @@ const GPTRecommend = () => {
                             value={tag}
                             label="タグ"
                             onChange={handleTagSelect}
+                            required
                             >
-                            {taglist.map(elem => 
+                            {tags.map(elem => 
                                 <MenuItem value={elem} key={elem}>{elem}</MenuItem>
                                 )}
                         </Select>
@@ -152,7 +161,8 @@ const GPTRecommend = () => {
                         <Select
                             value={level}
                             label="難易度"
-                            onChange={handleTagSelect}
+                            onChange={handleLevel}
+                            required
                         >
                             {levelList.map(elem => 
                                 <MenuItem value={elem} key={elem}>{elem}</MenuItem>
@@ -163,8 +173,8 @@ const GPTRecommend = () => {
                 <Button variant='contained' onClick={handleSubmit} sx={{ mt: 4, height: 40, width: 180 }}>
                     おすすめの習慣を見る
                 </Button>
-                <Box sx={{ mt: 2 }}>
-                    {isGenerating ? <PulseLoading loading={isGenerating} /> : finalres.map((res, index) => <Chip key={index} label={res} />)}
+                <Box sx={{ mt: 4 }}>
+                    {(!isGenerating && response.length > 0) ? <RecomTaskList taskList={response}/> : <PulseLoading loading={isGenerating} />}
                 </Box>
             </Box>
         </div>

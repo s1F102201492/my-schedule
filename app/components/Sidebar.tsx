@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Drawer from '@mui/material/Drawer';
-import UserCard from './UserCard';
+import UserCard from '../components/parts/UserCard';
 
 interface SidebarProps {
     drawer: boolean;
