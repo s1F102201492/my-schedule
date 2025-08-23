@@ -204,7 +204,7 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
             selectedDays
         ); // 日付: falseの辞書を作成
 
-        let contdays: number = 0; // continuedays 登録したてなので最初は0
+        const contdays: number = 0; // continuedays 登録したてなので最初は0
 
         await addTodo(
             title,

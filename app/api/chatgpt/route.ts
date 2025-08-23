@@ -63,7 +63,7 @@ export async function POST(req: Request) {
             enddate（終了日）,
             interval（間隔（例えば3日ごとの場合は3）を数値のみで返す）,
             tag（タグ（これは${tag}をそのまま返す））}
-            指定されたものは絶対に守ってください。`;
+            以上の条件、指定したことは絶対に守ってください。`;
 
         const response = await fetch(`${gptApiEndPoint}`, {
             method: 'POST',

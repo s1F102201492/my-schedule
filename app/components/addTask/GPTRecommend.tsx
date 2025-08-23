@@ -7,6 +7,7 @@ import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { taglist } from '../tags';
 import RecomTaskList from '../parts/RecomTaskList';
+import FullScreenLoading from '../parts/fullScreenLoading';
 
 interface TaskProps {
         title: string, 
@@ -71,7 +72,7 @@ const GPTRecommend = () => {
             alert('タグを選択してください。');
             return;
         }
-        
+
         setIsGenerating(true);
         setResponse([]);
     
@@ -170,13 +171,19 @@ const GPTRecommend = () => {
                         </Select>
                     </Box>
                 </Box>
-                <Button variant='contained' onClick={handleSubmit} sx={{ mt: 4, height: 40, width: 180 }}>
+                <Button variant='contained' onClick={handleSubmit}
+                sx={{ mt: 4, height: 40, width: 180 }} disabled={isGenerating}>
                     おすすめの習慣を見る
                 </Button>
                 <Box sx={{ mt: 4 }}>
-                    {(!isGenerating && response.length > 0) ? <RecomTaskList taskList={response}/> : <PulseLoading loading={isGenerating} />}
+                    {(!isGenerating && response.length > 0)
+                    ? <RecomTaskList taskList={response} purpose={text} /> 
+                    : <PulseLoading loading={isGenerating} />}
                 </Box>
             </Box>
+
+            <FullScreenLoading open={isGenerating} />
+            
         </div>
     );
 };
