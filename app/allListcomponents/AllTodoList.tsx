@@ -20,7 +20,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
-import Form from '../components/Form';
+import SelfAddForm from '../components/addTask/SelfAddForm';
 import AddIcon from '@mui/icons-material/Add';
 import FadeLoading from '../components/parts/FadeLoading';
 
@@ -197,21 +197,7 @@ const AllTodoList = () => {
                     />
                 ))}
                 </Grid>}
-                
-                <Tooltip title='新しい習慣を追加'>
-                    <Fab color="primary"
-                    aria-label="add"
-                    sx={{ position: "fixed", bottom: 32, right: 32 }}
-                    onClick={handleClickOpen} >
-                        <AddIcon />
-                    </Fab>
-                </Tooltip>
             </Box>
-            <Form
-                open={open}
-                setOpen={setOpen}
-                locate={"/list"}
-            />
         </div>
     );
 };

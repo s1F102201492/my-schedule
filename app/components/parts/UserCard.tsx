@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { Avatar, Box, Button, Card, CardContent, Divider, Typography } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/navigation';

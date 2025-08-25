@@ -1,8 +1,20 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/ja';
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('ja')
+dayjs.tz.setDefault('Asia/Tokyo')
 
 export async function POST(req: Request) {
-    const { type, prompt, img, tag } = await req.json();
+    const today = dayjs();
+    const formattedToday = today.format('YYYY/MM/DD')
+
+    const { type, prompt, img, tag, level } = await req.json();
 
     const prisma = new PrismaClient(); // インスタンス化
  
@@ -38,8 +50,20 @@ export async function POST(req: Request) {
 
     if (type === "recommend") { // AIrecommnedページに返答
         // プロンプト設定
-        SystemPrompt = `あなたはおすすめの習慣を提案してください。アプリの利用者は自分が憧れている姿やなりたいもの、目標をテキストで書き、画像があれば画像をアップロードします。なのであなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。 
-        また、利用者の登録しているタスクとできるだけ被らないようにしてください。利用者のタスクはjson形式です。習慣名だけを挙げてください。番号や点や記号などは書かずに箇条書き(最初はハイフン)で書いてください。憧れている姿、なりたいもの、目標: ${prompt}, 画像: ${img}, 利用者のタスク: ${alltodos}`;
+        SystemPrompt = `アプリの利用者が自分の目標、(あれば)目標の画像、タスクのタグ（カテゴリ）、タスクの難易度を入力するので、あなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。
+        難易度に関しては、そのタスクを毎日やるのか、それとも3日ごとにやるのかといった、あるタスクに対して行う頻度という意味での難易度になります。
+        開始日は明日からにして、終了日はタスクの難易度${level}が'低い'ならば開始日から14日後、'まあまあ'ならば開始日から30日後、'高い'ならば開始日から60日後に設定してください。今日の日付: ${formattedToday}
+        また、利用者の登録しているタスクとできるだけ被らないようにしてください。利用者のタスクはjson形式です。目標: ${prompt}, 画像: ${img}, タスクのタグ${tag}, タスクの難易度${level} 利用者のタスク: ${alltodos}
+        返す値はタスク１つ１つはオブジェクト形式でそれを配列の中に入れて配列として返してください。
+        それ以外のものは返す値に含めないでください。最初にjsonと書くのもやめてください。改行は入れないでください。
+        オブジェクトの型{
+            title（タスク名）, 
+            description（タスクの内容）,
+            startdate（開始日）,
+            enddate（終了日）,
+            interval（間隔（例えば3日ごとの場合は3）を数値のみで返す）,
+            tag（タグ（これは${tag}をそのまま返す））}
+            以上の条件、指定したことは絶対に守ってください。`;
 
         const response = await fetch(`${gptApiEndPoint}`, {
             method: 'POST',
