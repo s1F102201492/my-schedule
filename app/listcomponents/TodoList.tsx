@@ -119,20 +119,6 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                         todo={todo}
                     />
                 ))}
-                <ListItem>
-                    <Box sx={{ display: "flex", justifyContent: "center",
-                        width: '100%', mt: 1 }}>
-                        <Button variant='outlined' fullWidth
-                        sx={{ border: "3px dashed #dcdcdc", color: "#a9a9a9",
-                            height: 45, '&:hover': {
-                            color: '#c0c0c0',
-                            backgroundColor: '#f5f5f5',
-                            }}}
-                        onClick={handleClickOpen}>
-                            新しい習慣を追加
-                        </Button>
-                    </Box>
-                </ListItem>
             </List>
             <br />
 
@@ -154,8 +140,6 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
             </List>
 
             {reward && <RewardDialog open={reward} setOpen={setReward} />}
-
-            {open && <SelfAddForm open={open} setOpen={setOpen} locate={locate}/>}
         </div>
     );
 };

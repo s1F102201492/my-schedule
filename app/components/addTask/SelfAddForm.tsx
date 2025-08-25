@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation';
 import CreateCheckedDates from '../calculate/CreateCheckedDates';
 import { taglist } from '../tags';
 import { AuthContext } from '../../context/AuthContext';
+import FullScreenLoading from '../parts/fullScreenLoading';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -70,13 +71,12 @@ const addTodo = async (
     return res.json();
 };
 
-interface FormProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  locate: string;
+interface PageSwitchProps {
+    boolRecomPage: boolean,
+    handleBoolRecomPage: () => void
 }
 
-const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
+const SelfAddForm:React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolRecomPage }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -99,13 +99,6 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
 
     const { loginUser } = authContext;
 
-    // フォームのクローズ
-    const handleClose = () => {
-      //閉じたらすべてリセット
-      setOpen(false);
-      formReset();
-    };
-
     const formReset = () => {
         setTitle('');
         setSd(dayjs());
@@ -116,6 +109,9 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
         setpurp('');
         setTag("");
     };
+
+    // タスクの追加中はローディングを表示
+    const [loading, setLoading] = useState(false);
 
     // タイトルに書き込まれたか判定
     const [title, setTitle] = useState<string>('');
@@ -188,60 +184,75 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す(interval)
-        const setint = (ndays: boolean) => {
-            if (ndays) {
-                return number;
-            } else {
-                return selectedDays;
-            }
-        };
+        try {
+            setLoading(true);
 
-        const checkdates: Record<string, boolean> = CreateCheckedDates(
-            sd,
-            ed,
-            setint(ndays),
-            selectedDays
-        ); // 日付: falseの辞書を作成
+            // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す(interval)
+            const setint = (ndays: boolean) => {
+                if (ndays) {
+                    return number;
+                } else {
+                    return selectedDays;
+                }
+            };
 
-        const contdays: number = 0; // continuedays 登録したてなので最初は0
+            const checkdates: Record<string, boolean> = CreateCheckedDates(
+                sd,
+                ed,
+                setint(ndays),
+                selectedDays
+            ); // 日付: falseの辞書を作成
 
-        await addTodo(
-            title,
-            desc,
-            contdays,
-            checkdates,
-            sd?.format('YYYY/MM/DD'),
-            ed?.format('YYYY/MM/DD'),
-            setint(ndays),
-            purp,
-            tag,
-            loginUser!.id
-        );
+            const contdays: number = 0; // continuedays 登録したてなので最初は0
 
-        await fetchAllTodos();
-        router.push(locate);
-        router.refresh();
-        setOpen(false);
-        formReset();
+            await addTodo(
+                title,
+                desc,
+                contdays,
+                checkdates,
+                sd?.format('YYYY/MM/DD'),
+                ed?.format('YYYY/MM/DD'),
+                setint(ndays),
+                purp,
+                tag,
+                loginUser!.id
+            );
+
+            await fetchAllTodos();
+            router.push('/list');
+            router.refresh();
+
+            setTimeout(() => {
+                formReset();
+            }, 1000)
+            
+        } catch {
+            alert("タスクの追加に失敗しました。もう一度お試しください。")
+ 
+        } finally {
+            setLoading(false)
+        }
+        
+        
     };
 
     return (
       <div>
-        <Dialog
-            fullWidth
-            open={open}
-            onClose={handleClose}>
+        <Box sx={{ mx: 4, mt: 4, mb: 16 }}>
             <form onSubmit={handleSubmit}>
-                <DialogTitle
-                    sx={{ m: 1 }}
-                    variant='h4'>
-                    タスクや習慣を追加する
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText variant='h6'>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Typography
+                        sx={{ m: 1 }}
+                        variant='h6'>
+                        タスクや習慣を追加する
+                    </Typography>
+                    <Button onClick={() => handleBoolRecomPage()}>自分でタスクを追加する</Button>
+                </Box>
+
+                <Box>
+                    <Typography variant='h6'>
                         タイトル
-                    </DialogContentText>
+                    </Typography>
                     <TextField
                         required
                         margin='dense'
@@ -250,7 +261,7 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                         value={title}
                         onChange={handletitle}
                     />
-                    <DialogContentText variant='h6'>具体的にやることや現状の記録</DialogContentText>
+                    <Typography variant='h6'>具体的にやることや現状の記録</Typography>
                     <TextField
                         multiline
                         rows={3}
@@ -261,11 +272,11 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                         onChange={handledesc}
                     />
                     <Box sx={{ flexDirection: 'row' }}>
-                        <DialogContentText
+                        <Typography
                             sx={{ mt: 3 }}
                             variant='h6'>
                             開始日
-                        </DialogContentText>
+                        </Typography>
                         <DateComponents
                             label='開始日'
                             date={sd}
@@ -288,11 +299,11 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                             maxDate={dayjs(new Date('2299/12/31'))}
                         />
                     </Box>
-                    <DialogContentText
+                    <Typography
                         sx={{ mt: 3 }}
                         variant='h6'>
                         繰り返し日
-                    </DialogContentText>
+                    </Typography>
                     {ndays ? 'N日ごと' : '曜日'}
                     <Switch
                         checked={ndays}
@@ -308,9 +319,9 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                                 onChange={handleNumber}>
                                 {numberofdays.map((num) => (
                                     <MenuItem
-                                      key={num}
-                                      value={num}>
-                                      {num}
+                                        key={num}
+                                        value={num}>
+                                        {num}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -337,7 +348,7 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                             </FormGroup>
                         )}
                     </Box>
-                    <DialogContentText variant='h6'>目的</DialogContentText>
+                    <Typography variant='h6'>目的</Typography>
                     <TextField
                         multiline
                         rows={3}
@@ -363,19 +374,23 @@ const SelfAddForm:React.FC<FormProps> = ({ open, setOpen, locate }) => {
                             )}
                         </Select>
                     </FormControl>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>閉じる</Button>
+                </Box>
+                <Box>
                     <Button
                         type='submit'
                         value='submit'
                         variant='contained'>
                         追加
                     </Button>
-                </DialogActions>
+                </Box>
             </form>
-        </Dialog>
+            </Box>
+
+            {/* タスクの追加中はローディングを表示 */}
+            {loading && <FullScreenLoading open={loading} />}
       </div>
+
+      
     );
 };
 

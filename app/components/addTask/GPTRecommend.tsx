@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Chip, IconButton, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Chip, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
 import PulseLoading from '../parts/PulseLoading';
@@ -18,7 +18,12 @@ interface TaskProps {
         tag: string
 }
 
-const GPTRecommend = () => {
+interface PageSwitchProps {
+    boolRecomPage: boolean,
+    handleBoolRecomPage: () => void
+}
+
+const GPTRecommend: React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolRecomPage }) => {
     const [text, setText] = useState<string>('');
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -111,8 +116,10 @@ const GPTRecommend = () => {
     return (
         <div>
             <Box sx={{ mx: 4, mt:2 }}>
-                <Typography variant='h5'>おすすめの習慣を提案</Typography>
-                    
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Typography variant='h5'>おすすめの習慣を提案</Typography>
+                    <Button onClick={() => handleBoolRecomPage()}>自分でタスクを追加する</Button>
+                </Box>    
                 <Box sx={{ mt: 3 }}>
                     <Typography variant='subtitle1'>
                         あなたが憧れている姿やなりたいものについて教えてください！
@@ -148,6 +155,7 @@ const GPTRecommend = () => {
                     </Box>
                     <Box>
                         <Select
+                            id='tag'
                             value={tag}
                             label="タグ"
                             onChange={handleTagSelect}

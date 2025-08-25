@@ -197,21 +197,7 @@ const AllTodoList = () => {
                     />
                 ))}
                 </Grid>}
-                
-                <Tooltip title='新しい習慣を追加'>
-                    <Fab color="primary"
-                    aria-label="add"
-                    sx={{ position: "fixed", bottom: 32, right: 32 }}
-                    onClick={handleClickOpen} >
-                        <AddIcon />
-                    </Fab>
-                </Tooltip>
             </Box>
-            <SelfAddForm
-                open={open}
-                setOpen={setOpen}
-                locate={"/list"}
-            />
         </div>
     );
 };

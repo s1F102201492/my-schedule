@@ -1,13 +1,25 @@
+'use client'
+
 import Header from '@/app/components/Header'
 import GPTRecommend from '@/app/components/addTask/GPTRecommend'
-import React from 'react'
+import SelfAddForm from '@/app/components/addTask/SelfAddForm';
+import React, { useState } from 'react'
 
 const page = () => {
+
+  const [boolRecomPage, setBoolRecomPage] = useState(true);
+  const handleBoolRecomPage = () => {
+    setBoolRecomPage(!boolRecomPage)
+  }
+
   return (
     <div>
         <Header />
 
-        <GPTRecommend />
+        {boolRecomPage 
+        ? <GPTRecommend boolRecomPage={boolRecomPage} handleBoolRecomPage={handleBoolRecomPage}/> 
+        : <SelfAddForm boolRecomPage={boolRecomPage} handleBoolRecomPage={handleBoolRecomPage}/>}
+        
     </div>
   )
 }
