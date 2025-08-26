@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import React, { useContext, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import HomeIcon from '@mui/icons-material/Home';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import EventIcon from '@mui/icons-material/Event';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
-import { Button, IconButton } from '@mui/material';
-import Sidebar from './Sidebar';
-import { AuthContext } from '../context/AuthContext';
+import React, { useContext, useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import HomeIcon from "@mui/icons-material/Home";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import EventIcon from "@mui/icons-material/Event";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
+import { Button, IconButton } from "@mui/material";
+import Sidebar from "./Sidebar";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
     const pathname = usePathname();
@@ -25,23 +25,23 @@ const Header = () => {
     const [drawer, setDrawer] = useState<boolean>(false);
     const userDrawer = () => {
         setDrawer(true);
-    }
+    };
 
     const authContext = useContext(AuthContext);
 
     if (!authContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
     const { loginUser } = authContext;
-    
+
     return (
         <Box>
             <AppBar
                 position='static'
-                sx={{ backgroundColor: 'primary' }}>
+                sx={{ backgroundColor: "primary" }}>
                 <Toolbar>
                     <Typography
                         variant='h6'
@@ -52,7 +52,7 @@ const Header = () => {
                     <BottomNavigation
                         showLabels
                         value={pathname}
-                        sx={{ flexGrow: 1, backgroundColor: 'inherit' }}>
+                        sx={{ flexGrow: 1, backgroundColor: "inherit" }}>
                         <BottomNavigationAction
                             label='Home'
                             value='/'
@@ -60,13 +60,13 @@ const Header = () => {
                             component={Link}
                             href='/'
                             sx={{
-                                '&.Mui-selected': {
+                                "&.Mui-selected": {
                                     color:
-                                        pathname === '/'
-                                            ? 'primary.light'
-                                            : 'inherit',
+                                        pathname === "/"
+                                            ? "primary.light"
+                                            : "inherit",
                                 },
-                                whiteSpace: 'nowrap',
+                                whiteSpace: "nowrap",
                             }}
                         />
                         <BottomNavigationAction
@@ -76,13 +76,13 @@ const Header = () => {
                             component={Link}
                             href='/addTask'
                             sx={{
-                                '&.Mui-selected': {
+                                "&.Mui-selected": {
                                     color:
-                                        pathname === '/addTask'
-                                            ? 'primary.light'
-                                            : 'inherit',
+                                        pathname === "/addTask"
+                                            ? "primary.light"
+                                            : "inherit",
                                 },
-                                whiteSpace: 'nowrap',
+                                whiteSpace: "nowrap",
                             }}
                         />
                         <BottomNavigationAction
@@ -92,13 +92,13 @@ const Header = () => {
                             component={Link}
                             href='/calendar'
                             sx={{
-                                '&.Mui-selected': {
+                                "&.Mui-selected": {
                                     color:
-                                        pathname === '/calendar'
-                                            ? 'primary.light'
-                                            : 'inherit',
+                                        pathname === "/calendar"
+                                            ? "primary.light"
+                                            : "inherit",
                                 },
-                                whiteSpace: 'nowrap',
+                                whiteSpace: "nowrap",
                             }}
                         />
                         <BottomNavigationAction
@@ -108,13 +108,13 @@ const Header = () => {
                             component={Link}
                             href='/list'
                             sx={{
-                                '&.Mui-selected': {
+                                "&.Mui-selected": {
                                     color:
-                                        pathname === '/list'
-                                            ? 'primary.light'
-                                            : 'inherit',
+                                        pathname === "/list"
+                                            ? "primary.light"
+                                            : "inherit",
                                 },
-                                whiteSpace: 'nowrap',
+                                whiteSpace: "nowrap",
                             }}
                         />
                         <BottomNavigationAction
@@ -124,27 +124,43 @@ const Header = () => {
                             component={Link}
                             href='/analytics'
                             sx={{
-                                '&.Mui-selected': {
+                                "&.Mui-selected": {
                                     color:
-                                        pathname === '/analytics'
-                                            ? 'primary.light'
-                                            : 'inherit',
+                                        pathname === "/analytics"
+                                            ? "primary.light"
+                                            : "inherit",
                                 },
-                                whiteSpace: 'nowrap',
+                                whiteSpace: "nowrap",
                             }}
                         />
                     </BottomNavigation>
-                    { loginUser ?
-                        (<IconButton onClick={userDrawer} sx={{ p: 0 }}>
-                                <Avatar alt={loginUser.username || 'User'} src={loginUser.avatar_url}
-                                sx={{ width: 30, height: 30 }} />
-                        </IconButton>) 
-                        : <Button color='inherit'
-                        component={Link} href="/userauth">ログイン</Button>}
-                    
+                    {loginUser ? (
+                        <IconButton
+                            onClick={userDrawer}
+                            sx={{ p: 0 }}>
+                            <Avatar
+                                alt={loginUser.username || "User"}
+                                src={loginUser.avatar_url}
+                                sx={{ width: 30, height: 30 }}
+                            />
+                        </IconButton>
+                    ) : (
+                        <Button
+                            color='inherit'
+                            component={Link}
+                            href='/userauth'>
+                            ログイン
+                        </Button>
+                    )}
                 </Toolbar>
             </AppBar>
-            {drawer && <Sidebar drawer={drawer} setDrawer={setDrawer} loginUser={loginUser!} />}
+            {drawer && (
+                <Sidebar
+                    drawer={drawer}
+                    setDrawer={setDrawer}
+                    loginUser={loginUser!}
+                />
+            )}
         </Box>
     );
 };

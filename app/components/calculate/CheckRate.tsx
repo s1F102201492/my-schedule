@@ -1,6 +1,6 @@
 // 達成率を計算する関数
 
-'use client';
+"use client";
 
 interface TodoProps {
     id: number;
@@ -21,5 +21,7 @@ export const CheckRate = (todo: TodoProps): number => {
 
     if (Object.keys(todo.checkedDates).length > 0) {
         return Math.round((checkcount / totalcount) * 1000) / 10;
-    } else { return 0; }
+    } else {
+        return 0;
+    }
 };

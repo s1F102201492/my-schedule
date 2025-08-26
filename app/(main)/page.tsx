@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useContext } from 'react';
-import { TodoContext } from '../context/TodoContext';
-import { Typography } from '@mui/material';
-import Header from '../components/Header';
-import TodoList from '../listcomponents/TodoList';
-import FadeLoading from '../components/parts/FadeLoading';
-import { AuthContext } from '../context/AuthContext';
+import { useContext } from "react";
+import { TodoContext } from "../context/TodoContext";
+import { Typography } from "@mui/material";
+import Header from "../components/Header";
+import TodoList from "../listcomponents/TodoList";
+import FadeLoading from "../components/parts/FadeLoading";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -23,7 +23,7 @@ export default function Home() {
 
     if (!authContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -36,6 +36,5 @@ export default function Home() {
 
             <TodoList />
         </div>
-
     );
 }

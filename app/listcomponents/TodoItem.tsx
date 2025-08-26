@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import {
     Button,
     Checkbox,
@@ -10,10 +10,10 @@ import {
     ListItem,
     ListItemText,
     Tooltip,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { TodoContext } from '../context/TodoContext';
-import { CountContinueDays } from '../components/calculate/CountContinueDays';
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { TodoContext } from "../context/TodoContext";
+import { CountContinueDays } from "../components/calculate/CountContinueDays";
 
 interface TodoProps {
     id: number;
@@ -36,15 +36,15 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
     const { toggleChecked, toggleDelete } = todoContext;
     const todayslash = new Date()
         .toISOString()
-        .split('T')[0]
-        .replace(/-/g, '/');
+        .split("T")[0]
+        .replace(/-/g, "/");
 
     const todayDayscnt = CountContinueDays(todo.checkedDates);
 
@@ -55,8 +55,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     // 削除の警告フォームオープン
     const [warning, setWarning] = useState<boolean>(false);
     const handleWarning = () => {
-        setWarning(!warning)
-    }
+        setWarning(!warning);
+    };
 
     const handleDelete = async () => {
         await toggleDelete(todo.id, todayslash);
@@ -79,17 +79,20 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                     </IconButton>
                 </Tooltip>
             </ListItem>
-            <Dialog open={warning} onClose={handleWarning} fullWidth>
+            <Dialog
+                open={warning}
+                onClose={handleWarning}
+                fullWidth>
                 <DialogTitle>今日のタスクを削除しますか？</DialogTitle>
                 <DialogContent sx={{ whiteSpace: "pre-wrap" }}>
                     {`タスク名：${todo.title}\n`}
                     ※タスクを行う日が1日もない場合は習慣自体が削除されます。
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleWarning}>
-                        戻る
-                    </Button>
-                    <Button variant='contained' color='error'
+                    <Button onClick={handleWarning}>戻る</Button>
+                    <Button
+                        variant='contained'
+                        color='error'
                         onClick={handleDelete}>
                         削除
                     </Button>

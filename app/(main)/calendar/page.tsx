@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { useContext } from 'react';
-import Header from '../../components/Header';
-import Calendar from '../../components/Calendar';
-import { Box, Typography } from '@mui/material';
-import { TodoContext } from '../../context/TodoContext';
-import FadeLoading from '../../components/parts/FadeLoading';
-import { AuthContext } from '../../context/AuthContext';
-import NullUser from '../../components/NullUser';
+import React, { useContext } from "react";
+import Header from "../../components/Header";
+import Calendar from "../../components/Calendar";
+import { Box, Typography } from "@mui/material";
+import { TodoContext } from "../../context/TodoContext";
+import FadeLoading from "../../components/parts/FadeLoading";
+import { AuthContext } from "../../context/AuthContext";
+import NullUser from "../../components/NullUser";
 
 const Page = () => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -24,7 +24,7 @@ const Page = () => {
 
     if (!authContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -35,16 +35,18 @@ const Page = () => {
             <Header />
             {loginUser ? (
                 <>
-                <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！
-                </Typography>
-                {loading ? (
-                    <FadeLoading loading={loading} />
-                ) : (
-                    <Box sx={{ mt: 4, width: '100%' }} >
-                        <Calendar />
-                    </Box>
-                )}
+                    <Typography
+                        variant='h4'
+                        sx={{ m: 4 }}>
+                        {loginUser.username} さん！ようこそ！
+                    </Typography>
+                    {loading ? (
+                        <FadeLoading loading={loading} />
+                    ) : (
+                        <Box sx={{ mt: 4, width: "100%" }}>
+                            <Calendar />
+                        </Box>
+                    )}
                 </>
             ) : (
                 <NullUser />

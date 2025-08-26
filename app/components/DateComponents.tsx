@@ -1,15 +1,15 @@
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
-import 'dayjs/locale/ja';
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-import React from 'react';
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import React from "react";
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.locale('ja')
-dayjs.tz.setDefault('Asia/Tokyo')
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("ja");
+dayjs.tz.setDefault("Asia/Tokyo");
 
 interface DateComponentsProps {
     label: string;
@@ -30,7 +30,7 @@ export const DateComponents: React.FC<DateComponentsProps> = ({
         <div style={{ marginTop: 10 }}>
             <LocalizationProvider
                 dateAdapter={AdapterDayjs}
-                dateFormats={{ year: 'YYYY年' }} // カレンダー内の年一覧のフォーマット
+                dateFormats={{ year: "YYYY年" }} // カレンダー内の年一覧のフォーマット
             >
                 <DatePicker
                     label={label}
@@ -43,7 +43,7 @@ export const DateComponents: React.FC<DateComponentsProps> = ({
                     format='YYYY/MM/DD' // テキストエリア内のフォーマット
                     slotProps={{
                         textField: { required: true },
-                        calendarHeader: { format: 'YYYY年MM月' },
+                        calendarHeader: { format: "YYYY年MM月" },
                     }} // カレンダーヘッダーのフォーマット
                 />
             </LocalizationProvider>

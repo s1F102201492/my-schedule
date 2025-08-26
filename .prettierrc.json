@@ -4,7 +4,7 @@
     "bracketSpacing": true,
     "semi": true,
     "experimentalTernaries": false,
-    "singleQuote": true,
+    "singleQuote": false,
     "jsxSingleQuote": true,
     "quoteProps": "as-needed",
     "trailingComma": "all",
@@ -20,9 +20,9 @@
     "tabWidth": 4,
     "overrides": [
         {
-            "files": "*.ts",
+            "files": ["*.ts", "*.tsx"],
             "options": {
-                "tabWidth": 1
+                "tabWidth": 4
             }
         }
     ]

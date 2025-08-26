@@ -1,7 +1,7 @@
-import { Checkbox, ListItem, ListItemText } from '@mui/material';
-import React, { useContext } from 'react';
-import { TodoContext } from '../context/TodoContext';
-import { CountContinueDays } from '../components/calculate/CountContinueDays';
+import { Checkbox, ListItem, ListItemText } from "@mui/material";
+import React, { useContext } from "react";
+import { TodoContext } from "../context/TodoContext";
+import { CountContinueDays } from "../components/calculate/CountContinueDays";
 
 interface TodoProps {
     id: number;
@@ -24,15 +24,15 @@ const TodoChecked: React.FC<TodoItemProps> = ({ todo }) => {
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
     const { toggleChecked } = todoContext;
     const todayslash = new Date()
         .toISOString()
-        .split('T')[0]
-        .replace(/-/g, '/');
+        .split("T")[0]
+        .replace(/-/g, "/");
 
     const todayDayscnt = CountContinueDays(todo.checkedDates);
 

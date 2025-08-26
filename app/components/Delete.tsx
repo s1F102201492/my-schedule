@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
     Button,
@@ -7,11 +7,11 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-} from '@mui/material';
-import React, { useContext, useState } from 'react';
-import { TodoContext } from '../context/TodoContext';
-import { useRouter } from 'next/navigation';
-import FullScreenLoading from './parts/fullScreenLoading';
+} from "@mui/material";
+import React, { useContext, useState } from "react";
+import { TodoContext } from "../context/TodoContext";
+import { useRouter } from "next/navigation";
+import FullScreenLoading from "./parts/fullScreenLoading";
 
 interface oneTodo {
     onetodo: TodoProps;
@@ -33,10 +33,10 @@ interface TodoProps {
 
 const deletePractice = async (todo: TodoProps) => {
     const res = await fetch(`/api/todo/${todo.id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         body: JSON.stringify(todo),
         headers: {
-            'Content-type': 'application/json',
+            "Content-type": "application/json",
         },
     });
 
@@ -50,7 +50,7 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -81,14 +81,13 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
 
             await fetchAllTodos();
             setDeleteOpen(false);
-            router.push('/list');
+            router.push("/list");
             router.refresh();
         } catch {
-            alert("削除に失敗しました。もう一度お試しください。")
+            alert("削除に失敗しました。もう一度お試しください。");
         } finally {
             setLoading(false);
         }
-            
     };
 
     return (

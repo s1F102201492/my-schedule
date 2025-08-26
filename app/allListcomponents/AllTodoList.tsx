@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useContext, useState } from 'react';
-import { TodoContext } from '../context/TodoContext';
-import AllTodoItem from './AllTodoItem';
+import React, { useContext, useState } from "react";
+import { TodoContext } from "../context/TodoContext";
+import AllTodoItem from "./AllTodoItem";
 import {
     Box,
     FormControl,
@@ -13,11 +13,11 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
-import { CheckRate } from '../components/calculate/CheckRate';
-import FadeLoading from '../components/parts/FadeLoading';
+} from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
+import { CheckRate } from "../components/calculate/CheckRate";
+import FadeLoading from "../components/parts/FadeLoading";
 
 interface TodoProps {
     id: number;
@@ -33,23 +33,22 @@ interface TodoProps {
 }
 
 const AllTodoList = () => {
-
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
     const { todos, loading } = todoContext;
 
-    const [search, setSearch] = useState<string>(''); // 検索機能
+    const [search, setSearch] = useState<string>(""); // 検索機能
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
     };
 
-    const [active, setActive] = useState<string>('all');
+    const [active, setActive] = useState<string>("all");
     const handleActive = (
         e: React.MouseEvent<HTMLElement>,
         newActive: string,
@@ -57,28 +56,27 @@ const AllTodoList = () => {
         setActive(newActive);
     };
 
-    const [sort, setSort] = useState<string>('startDateAsc');
+    const [sort, setSort] = useState<string>("startDateAsc");
     const selectSort = (e: SelectChangeEvent) => {
         setSort(e.target.value);
     };
 
     //文字検索
     const searchtodos = todos.filter((todo) =>
-        todo.title.match(new RegExp('.*' + search + '.*')),
-    ); 
+        todo.title.match(new RegExp(".*" + search + ".*")),
+    );
 
     //フィルター
     const filtertodos = searchtodos.filter((todo) => {
-        
         const todayslash = ChangeSlashDay(new Date());
 
-        if (active === 'active') {
+        if (active === "active") {
             //アクティブの場合
             return (
                 todayslash >= ChangeSlashDay(new Date(todo.startdate)) &&
                 todayslash <= ChangeSlashDay(new Date(todo.enddate))
             );
-        } else if (active === 'archived') {
+        } else if (active === "archived") {
             return (
                 todayslash < ChangeSlashDay(new Date(todo.startdate)) ||
                 todayslash > ChangeSlashDay(new Date(todo.enddate))
@@ -92,9 +90,12 @@ const AllTodoList = () => {
         new Date(dateA).getTime() - new Date(dateB).getTime();
     const compareProgress = (a: TodoProps, b: TodoProps) =>
         CheckRate(a) - CheckRate(b);
-    
+
     // ソート用の関数をオブジェクトで管理
-    const sortFunctions: Record<string, (a: TodoProps, b: TodoProps) => number> = {
+    const sortFunctions: Record<
+        string,
+        (a: TodoProps, b: TodoProps) => number
+    > = {
         startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
         startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),
         endDateAsc: (a, b) => compareDates(a.enddate, b.enddate),
@@ -119,9 +120,9 @@ const AllTodoList = () => {
                     />
                     <Box
                         sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                         }}>
                         <ToggleButtonGroup
                             exclusive
@@ -177,17 +178,20 @@ const AllTodoList = () => {
                         </FormControl>
                     </Box>
                 </Box>
-                { loading ? <FadeLoading loading={loading} /> :
-                <Grid
-                container
-                spacing={3}>
-                {finaltodos.map((todo) => (
-                    <AllTodoItem
-                        key={todo.id}
-                        todo={todo}
-                    />
-                ))}
-                </Grid>}
+                {loading ? (
+                    <FadeLoading loading={loading} />
+                ) : (
+                    <Grid
+                        container
+                        spacing={3}>
+                        {finaltodos.map((todo) => (
+                            <AllTodoItem
+                                key={todo.id}
+                                todo={todo}
+                            />
+                        ))}
+                    </Grid>
+                )}
             </Box>
         </div>
     );

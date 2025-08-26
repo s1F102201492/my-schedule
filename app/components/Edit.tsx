@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
     Box,
@@ -17,23 +17,23 @@ import {
     SelectChangeEvent,
     Switch,
     TextField,
-} from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { DateComponents } from './DateComponents';
-import dayjs, { Dayjs } from 'dayjs';
-import 'dayjs/locale/ja';
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-import { useRouter } from 'next/navigation';
-import { TodoContext } from '../context/TodoContext';
-import { taglist } from './tags';
-import { AuthContext } from '../context/AuthContext';
-import FullScreenLoading from './parts/fullScreenLoading';
+} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { DateComponents } from "./DateComponents";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { useRouter } from "next/navigation";
+import { TodoContext } from "../context/TodoContext";
+import { taglist } from "./tags";
+import { AuthContext } from "../context/AuthContext";
+import FullScreenLoading from "./parts/fullScreenLoading";
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.locale('ja')
-dayjs.tz.setDefault('Asia/Tokyo')
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("ja");
+dayjs.tz.setDefault("Asia/Tokyo");
 
 interface oneTodo {
     id: number;
@@ -66,10 +66,10 @@ const editPractice = async (
     interval: number | string[],
     purpose: string,
     tag: string,
-    userId: string
+    userId: string,
 ) => {
     const res = await fetch(`/api/todo/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({
             id,
             title,
@@ -81,10 +81,10 @@ const editPractice = async (
             interval,
             purpose,
             tag,
-            userId
+            userId,
         }),
         headers: {
-            'Content-type': 'application/json',
+            "Content-type": "application/json",
         },
     });
 
@@ -98,7 +98,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -108,7 +108,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
 
     if (!authContext) {
         throw new Error(
-            'AuthContext is undefined. Make sure to use TodoProvider.',
+            "AuthContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -153,7 +153,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
 
     // intervalの型を判定
     const intervaltype = () => {
-        if (typeof todo.interval === 'number') {
+        if (typeof todo.interval === "number") {
             return true;
         } else {
             return false;
@@ -213,14 +213,15 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
     const [purp, setpurp] = useState<string>(todo.purpose);
     const handlepurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
         setpurp(e.target.value);
-    }
+    };
 
     // タグの選択
-    const tags = taglist
+    const tags = taglist;
     const [tag, setTag] = useState<string>(todo.tag);
-    const handleTagSelect = (e: SelectChangeEvent) => { // 選択
-        setTag(e.target.value as string)
-    }
+    const handleTagSelect = (e: SelectChangeEvent) => {
+        // 選択
+        setTag(e.target.value as string);
+    };
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -243,25 +244,25 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                 interval: number | string[],
             ) => {
                 const objdate: Record<string, boolean> = {};
-                if (typeof interval === 'number') {
+                if (typeof interval === "number") {
                     // 日ごとの場合
                     let date = sd;
-                    while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                        const slashdate = dayjs(date).format('YYYY/MM/DD');
+                    while (dayjs(date).isBefore(dayjs(ed).add(1, "d"))) {
+                        const slashdate = dayjs(date).format("YYYY/MM/DD");
                         objdate[slashdate] = false;
-                        date = dayjs(date).add(interval, 'd');
+                        date = dayjs(date).add(interval, "d");
                     }
                     return objdate;
                 } else {
                     // 曜日の場合
                     let date = sd;
-                    while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                        const day = dayjs(date).format('ddd');
+                    while (dayjs(date).isBefore(dayjs(ed).add(1, "d"))) {
+                        const day = dayjs(date).format("ddd");
                         if (selectedDays.includes(day)) {
-                            const slashdate = dayjs(date).format('YYYY/MM/DD');
+                            const slashdate = dayjs(date).format("YYYY/MM/DD");
                             objdate[slashdate] = false;
                         }
-                        date = dayjs(date).add(1, 'd');
+                        date = dayjs(date).add(1, "d");
                     }
                     return objdate;
                 }
@@ -280,25 +281,24 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                 desc,
                 contdays,
                 checkdates,
-                sd?.format('YYYY/MM/DD'),
-                ed?.format('YYYY/MM/DD'),
+                sd?.format("YYYY/MM/DD"),
+                ed?.format("YYYY/MM/DD"),
                 setint(ndays),
                 purp,
                 tag,
-                loginUser!.id
+                loginUser!.id,
             );
 
             await fetchAllTodos();
             setEditOpen(false);
-            router.push('/list');
+            router.push("/list");
             router.refresh();
             formReset();
         } catch {
-            alert("編集ができませんでした。もう一度お試しください。")
+            alert("編集ができませんでした。もう一度お試しください。");
         } finally {
             setLoading(false);
         }
-            
     };
 
     return (
@@ -335,7 +335,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             value={desc}
                             onChange={handledesc}
                         />
-                        <Box sx={{ flexDirection: 'row' }}>
+                        <Box sx={{ flexDirection: "row" }}>
                             <DialogContentText
                                 sx={{ mt: 3 }}
                                 variant='h6'>
@@ -345,11 +345,11 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                                 label='開始日'
                                 date={sd}
                                 setDate={setSd}
-                                minDate={dayjs(new Date('2000/01/01'))}
-                                maxDate={dayjs(new Date('2299/12/31'))}
+                                minDate={dayjs(new Date("2000/01/01"))}
+                                maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
-                        <Box sx={{ flexDirection: 'row' }}>
+                        <Box sx={{ flexDirection: "row" }}>
                             <DialogContentText
                                 sx={{ mt: 3 }}
                                 variant='h6'>
@@ -360,7 +360,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                                 date={ed}
                                 setDate={setEd}
                                 minDate={sd}
-                                maxDate={dayjs(new Date('2299/12/31'))}
+                                maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
                         <DialogContentText
@@ -368,7 +368,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             variant='h6'>
                             繰り返し日
                         </DialogContentText>
-                        {ndays ? 'N日ごと' : '曜日'}
+                        {ndays ? "N日ごと" : "曜日"}
                         <Switch
                             checked={ndays}
                             onChange={handleNdays}
@@ -392,26 +392,26 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             ) : (
                                 <FormGroup row>
                                     {[
-                                        '月',
-                                        '火',
-                                        '水',
-                                        '木',
-                                        '金',
-                                        '土',
-                                        '日',
+                                        "月",
+                                        "火",
+                                        "水",
+                                        "木",
+                                        "金",
+                                        "土",
+                                        "日",
                                     ].map((day) => (
                                         <Chip
                                             key={day}
                                             label={day}
                                             variant={
                                                 selectedDays.includes(day)
-                                                    ? 'filled'
-                                                    : 'outlined'
+                                                    ? "filled"
+                                                    : "outlined"
                                             }
                                             color={
                                                 selectedDays.includes(day)
-                                                    ? 'primary'
-                                                    : 'default'
+                                                    ? "primary"
+                                                    : "default"
                                             }
                                             onClick={() => handleChip(day)}
                                         />
@@ -429,24 +429,29 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             value={purp}
                             onChange={handlepurpose}
                         />
-                        <FormControl fullWidth sx={{my: 4}}>
-                        <InputLabel id="tag-select">タグを選択</InputLabel>
-                        <Select
-                            labelId="tag-select"
-                            id="tag-select"
-                            value={tag}
-                            label="タグを選択"
-                            onChange={handleTagSelect}
-                            MenuProps={{PaperProps: {height: 300}}}
-                            >
-                                {tags.map((tag) => 
-                                    <MenuItem key={tag} value={tag} sx={{ height: 40 }}>{tag}</MenuItem>
-                                    
-                                )}
+                        <FormControl
+                            fullWidth
+                            sx={{ my: 4 }}>
+                            <InputLabel id='tag-select'>タグを選択</InputLabel>
+                            <Select
+                                labelId='tag-select'
+                                id='tag-select'
+                                value={tag}
+                                label='タグを選択'
+                                onChange={handleTagSelect}
+                                MenuProps={{ PaperProps: { height: 300 } }}>
+                                {tags.map((tag) => (
+                                    <MenuItem
+                                        key={tag}
+                                        value={tag}
+                                        sx={{ height: 40 }}>
+                                        {tag}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
-                        </DialogContent>
-                        <DialogActions>
+                    </DialogContent>
+                    <DialogActions>
                         <Button onClick={handleEditClose}>閉じる</Button>
                         <Button
                             type='submit'
