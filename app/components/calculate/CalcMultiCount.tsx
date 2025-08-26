@@ -13,7 +13,7 @@ interface TodoProps {
 }
 
 export const CalcMultiCount = (alltodos: TodoProps[]) => {
-    let resultObj: Record<string, number> = {};
+    const resultObj: Record<string, number> = {};
     
     const completedDays = alltodos.map((todo) => {
       return (Object.keys(todo.checkedDates).filter((date) => {

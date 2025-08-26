@@ -9,7 +9,7 @@ dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
 const CreateCheckedDates = (sd: Dayjs, ed: Dayjs, interval: number | string[], selectedDays:string[] | null ) => {
-    let objdate: Record<string, boolean> = {};
+    const objdate: Record<string, boolean> = {};
     if (typeof interval === 'number') {
         // 日ごとの場合
         let date = sd;

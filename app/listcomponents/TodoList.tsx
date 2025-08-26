@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoChecked from './TodoChecked';
-import { Box, Button, List, ListItem, Typography } from '@mui/material';
+import { List, Typography } from '@mui/material';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
-import SelfAddForm from '../components/addTask/SelfAddForm';
 import { TodoContext } from '../context/TodoContext';
 import RewardDialog from '../components/RewardDialog';
 
@@ -20,11 +19,7 @@ interface TodoProps {
     tag: string;
 }
 
-interface TodoListProps {
-    locate: string;
-}
-
-const TodoList: React.FC<TodoListProps> = ({ locate }) => {
+const TodoList = () => {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
@@ -39,10 +34,6 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
     }
 
     const { todos } = todoContext;
-
-    // フォームのオープン
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
 
     const todayDay: string = new Date().toLocaleDateString('ja-JP', {
         weekday: 'short',

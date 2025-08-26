@@ -1,11 +1,10 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { CalcAchieveDay } from '../components/calculate/CalcAchieveDay';
 import { CalcAchieveCount } from '../components/calculate/CalcAchieveCount';
 import { CalcMultiCount } from '../components/calculate/CalcMultiCount';
-import { AuthContext } from './AuthContext';
 
 interface AchieveProps {
     achieve_day: Record<string, boolean>;
@@ -74,7 +73,7 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(true);
 
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -96,8 +95,8 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
 
             const data = await res.json();
             setAchievement(data.achievement);
-        } catch (error) {
-            console.error('実績データの取得に失敗しました:', error);
+        } catch {
+            alert('実績の取得ができませんでした。');
         } finally {
             setLoading(false);
         }
@@ -107,7 +106,7 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
     const patch_Achieve = async (achieve: AchieveProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             if (!session?.user.id) {
                 console.error("userIdが存在しません")
@@ -126,7 +125,7 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
             }
 
         } catch {
-            console.error("Achievementテーブルの書き換えに失敗しました")
+            alert("実績の更新ができませんでした。")
         }
         
         
@@ -134,36 +133,42 @@ export const AchieveProvider: React.FC<{ children: ReactNode }> = ({
 
     // 実績テーブルの情報を書き換える関数
     const RewriteAchieve = async (alltodos: TodoProps[]) => {
-        const calcDay = CalcAchieveDay(alltodos); // タスクのデータから連続でタスクを達成した日数を計算
-        const calcCount = CalcAchieveCount(alltodos); // タスクのデータから達成したタスクの数を計算
-        const calcMulti = CalcMultiCount(alltodos); // タスクのデータから一日で達成した最大タスク数を計算
-        console.log("calcday: ", calcDay, "calcCount: ", calcCount, "calcMulti: ", calcMulti)
+        try {
+            const calcDay = CalcAchieveDay(alltodos); // タスクのデータから連続でタスクを達成した日数を計算
+            const calcCount = CalcAchieveCount(alltodos); // タスクのデータから達成したタスクの数を計算
+            const calcMulti = CalcMultiCount(alltodos); // タスクのデータから一日で達成した最大タスク数を計算
+            console.log("calcday: ", calcDay, "calcCount: ", calcCount, "calcMulti: ", calcMulti)
 
-        // 下のfor文で参照
-        const list = {achieve_day: calcDay, achieve_taskCount: calcCount, achieve_multi: calcMulti}
+            // 下のfor文で参照
+            const list = {achieve_day: calcDay, achieve_taskCount: calcCount, achieve_multi: calcMulti}
 
-        // 実績テーブルより更新後のほうが多い場合更新
-        const achievement_copy = structuredClone(achievement);
-        console.log("prev: ",achievement_copy)
+            // 実績テーブルより更新後のほうが多い場合更新
+            const achievement_copy = structuredClone(achievement);
+            console.log("prev: ",achievement_copy)
 
-        for (const element in achievement_copy) {
-            for (const key in achievement_copy[element as keyof AchieveProps]) {
-                if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
-                    achievement_copy[element as keyof AchieveProps][key] == false) {
-                        achievement_copy[element as keyof AchieveProps][key] = true;
-                } else if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
-                    achievement_copy[element as keyof AchieveProps][key] == true) {
-                        continue;
-                } else {
-                    break;
+            for (const element in achievement_copy) {
+                for (const key in achievement_copy[element as keyof AchieveProps]) {
+                    if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
+                        achievement_copy[element as keyof AchieveProps][key] == false) {
+                            achievement_copy[element as keyof AchieveProps][key] = true;
+                    } else if (Number(key.split("achieve")[1]) <= list[element as keyof AchieveProps] &&
+                        achievement_copy[element as keyof AchieveProps][key] == true) {
+                            continue;
+                    } else {
+                        break;
+                    }
                 }
             }
-        }
-        
-        console.log(achievement_copy)
-        await patch_Achieve(achievement_copy)
+            
+            console.log(achievement_copy)
+            await patch_Achieve(achievement_copy)
 
-        setAchievement(achievement_copy) 
+            setAchievement(achievement_copy) 
+
+            } catch {
+                alert("実績の更新ができませんでした。")
+            }
+        
     }
 
     useEffect(() => {

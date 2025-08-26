@@ -3,8 +3,8 @@
 import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback, useMemo } from 'react';
 import { CountContinueDays } from '../components/calculate/CountContinueDays';
 import { createClient } from '@/utils/supabase/client';
-import { AuthContext } from './AuthContext';
 import { AchieveContext } from './AchieveContext';
+import FullScreenLoading from '../components/parts/fullScreenLoading';
 
 interface TodoProps {
     id: number;
@@ -22,9 +22,9 @@ interface TodoProps {
 interface TodoContextType {
     todos: TodoProps[];
     setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-    toggleChecked: (id: number, date: string) => void;
+    toggleChecked: (id: number, date: string) => Promise<void>;
     fetchAllTodos: () => Promise<void>;
-    toggleDelete: (id: number, date: string) => void;
+    toggleDelete: (id: number, date: string) => Promise<void>;
     loading: boolean;
 }
 
@@ -51,7 +51,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(true);
 
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             console.log(session)
             if (!session?.access_token) {
@@ -86,7 +86,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const checkTodo = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -119,7 +119,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const deleteTodo = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -150,7 +150,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const deletePractice = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session } } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -273,6 +273,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 loading
             }}>
             {children}
+
+            {loading && <FullScreenLoading open={loading} />}
         </TodoContext.Provider>
     );
 };

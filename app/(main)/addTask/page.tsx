@@ -5,7 +5,7 @@ import GPTRecommend from '@/app/components/addTask/GPTRecommend'
 import SelfAddForm from '@/app/components/addTask/SelfAddForm';
 import React, { useState } from 'react'
 
-const page = () => {
+const Page = () => {
 
   const [boolRecomPage, setBoolRecomPage] = useState(true);
   const handleBoolRecomPage = () => {
@@ -24,4 +24,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

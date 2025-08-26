@@ -5,14 +5,8 @@ import {
     Box,
     Button,
     Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
     FormControl,
     FormGroup,
-    IconButton,
     InputLabel,
     MenuItem,
     Select,
@@ -76,7 +70,7 @@ interface PageSwitchProps {
     handleBoolRecomPage: () => void
 }
 
-const SelfAddForm:React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolRecomPage }) => {
+const SelfAddForm:React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -286,11 +280,11 @@ const SelfAddForm:React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolRecomP
                         />
                     </Box>
                     <Box sx={{ flexDirection: 'row' }}>
-                        <DialogContentText
+                        <Typography
                             sx={{ mt: 3 }}
                             variant='h6'>
                             終了日
-                        </DialogContentText>
+                        </Typography>
                         <DateComponents
                             label='終了日'
                             date={ed}

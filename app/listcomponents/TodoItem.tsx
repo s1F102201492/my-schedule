@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Button,
     Checkbox,
@@ -29,17 +29,6 @@ interface TodoProps {
 
 interface TodoItemProps {
     todo: TodoProps;
-}
-
-const deletePractice = async (todo: TodoProps) => {
-    const res = await fetch(`/api/todo/${todo.id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-type': 'application/json',
-        },
-    });
-
-    return res.json();
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {

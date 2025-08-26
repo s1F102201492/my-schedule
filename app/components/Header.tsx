@@ -18,7 +18,6 @@ import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
 import { Button, IconButton } from '@mui/material';
 import Sidebar from './Sidebar';
 import { AuthContext } from '../context/AuthContext';
-import Image from 'next/image';
 
 const Header = () => {
     const pathname = usePathname();

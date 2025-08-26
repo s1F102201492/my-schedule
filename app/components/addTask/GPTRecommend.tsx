@@ -1,13 +1,14 @@
 'use client';
 
-import { Box, Button, Chip, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import { Box, Button, IconButton, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
 import PulseLoading from '../parts/PulseLoading';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { taglist } from '../tags';
 import RecomTaskList from '../parts/RecomTaskList';
 import FullScreenLoading from '../parts/fullScreenLoading';
+import Image from 'next/image';
 
 interface TaskProps {
         title: string, 
@@ -23,7 +24,7 @@ interface PageSwitchProps {
     handleBoolRecomPage: () => void
 }
 
-const GPTRecommend: React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolRecomPage }) => {
+const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
     const [text, setText] = useState<string>('');
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -149,7 +150,7 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ boolRecomPage, handleBoolReco
                                     <DeleteIcon />
                                 </IconButton>
                             </Tooltip>
-                            {img && <img src={img} width="200" height="100"/>}
+                            {img && <Image alt="delete" src={img} width={200} height={100} />}
                         </label>
                         
                     </Box>

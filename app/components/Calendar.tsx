@@ -36,6 +36,8 @@ const Calendar = () => {
 
     const { todos } = todoContext;
 
+    const [todaytodolist, setTodaytodolist] = useState<CalendarViewProps[]>([]);
+
     const todolist: CalendarViewProps[] = todos.flatMap((todo) =>
         Object.keys(todo.checkedDates).map((dateKey) => ({
             title: todo.title,
@@ -45,8 +47,6 @@ const Calendar = () => {
             tag: todo.tag
         })),
     );
-
-    const [todaytodolist, setTodaytodolist] = useState<CalendarViewProps[]>([]);
 
     const [current, setCurrent] = useState<Dayjs>(dayjs()) // その月のカレンダーを表示
     const [select, setSelect] = useState<boolean>(false) // その日付をクリックするとその日の予定が出てくる
@@ -167,7 +167,7 @@ const Calendar = () => {
                         ))}
 
                     {/* 日付のセル */}
-                    {daysInMonth.map((date, index) => {
+                    {daysInMonth.map((date) => {
                         const dayHasEvents: boolean = hasEvents(date) // その日タスクがあればtrue
                         const isSelected = selectedDate && dayjs(date).isSame(selectedDate, 'day')
                         const isTodayDate = () => {

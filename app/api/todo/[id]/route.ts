@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // タスク詳細用API
-export const GET = async (req: Request, res: NextResponse) => {
+export const GET = async (req: Request) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
   const tododetail = await prisma.todos.findFirst({ where: { id } });
@@ -16,7 +16,7 @@ export const GET = async (req: Request, res: NextResponse) => {
 };
 
 // タスク編集API
-export const PUT = async (req: Request, res: NextResponse) => {
+export const PUT = async (req: Request) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
 
@@ -62,7 +62,7 @@ export const PUT = async (req: Request, res: NextResponse) => {
 };
 
 // タスク削除用API
-export const DELETE = async (req: Request, res: NextResponse) => {
+export const DELETE = async (req: Request) => {
  try {
   const id: number = parseInt(req.url.split('/todo/')[1]);
 

@@ -9,7 +9,7 @@ import { TodoContext } from '../../context/TodoContext';
 import FadeLoading from '../../components/parts/FadeLoading';
 import NullUser from '../../components/NullUser';
 
-const page = () => {
+const Page = () => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -51,4 +51,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

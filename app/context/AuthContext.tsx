@@ -1,10 +1,11 @@
 'use client';
 
 import { createClient } from "@/utils/supabase/client";
-import { User, UserResponse } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import type { Session } from '@supabase/supabase-js'
 import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
+import FullScreenLoading from "../components/parts/fullScreenLoading";
 
 interface UserType {
     id: string;
@@ -23,7 +24,6 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType| null>(null);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const router = useRouter();
 
     const [loginUser, setLoginUser] = useState<UserType| null>(null);
     const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // ログイン状態を管理
     const loginSession = async () => {
-        const supabase = await createClient();
+        const supabase = createClient();
 
         setLoading(true);
         try {
@@ -97,7 +97,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (userInfo) {
             setLoginUser(userInfo);
         } else {
-            console.error("ユーザー情報が取得できませんでした");
+            alert("ユーザー情報が取得できませんでした。もう一度読み込んでください。")
             setLoginUser(null);
         }
     }
@@ -109,6 +109,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return (
         <AuthContext.Provider value={{ loginUser, setLoginUser, loginSession, session }}>
             {children}
+
+            {loading && <FullScreenLoading open={loading} />}
         </AuthContext.Provider>
     );
 };

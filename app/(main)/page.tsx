@@ -17,7 +17,7 @@ export default function Home() {
         );
     }
 
-    const { todos, loading } = todoContext;
+    const { loading } = todoContext;
 
     const authContext = useContext(AuthContext);
 
@@ -34,22 +34,7 @@ export default function Home() {
         <div>
             <Header />
 
-            {loginUser ? (
-                <>
-                <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！
-
-                </Typography>
-                {loading ? (
-                    <FadeLoading loading={loading} />
-                ) : (
-                    <TodoList locate="/" />
-
-                )}
-                </>
-            ) : (
-                <FadeLoading loading={true} />
-            )}
+            <TodoList />
         </div>
 
     );

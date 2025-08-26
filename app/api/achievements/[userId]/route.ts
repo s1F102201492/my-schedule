@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // 実績データの取得API
-export const GET = async (req: Request, res: NextResponse) => {
+export const GET = async (req: Request) => {
   try {
     const uid: string = req.url.split('/achievements/')[1];
     const achievement = await prisma.achievements.findFirst({ where: { userId: uid } });
@@ -16,7 +16,7 @@ export const GET = async (req: Request, res: NextResponse) => {
 };
 
 // 実績データの編集API
-export const PATCH = async (req: Request, res: NextResponse) => {
+export const PATCH = async (req: Request) => {
  try {
   const uid: string = req.url.split('/achievements/')[1];
 

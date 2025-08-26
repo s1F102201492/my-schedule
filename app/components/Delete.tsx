@@ -11,6 +11,7 @@ import {
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { useRouter } from 'next/navigation';
+import FullScreenLoading from './parts/fullScreenLoading';
 
 interface oneTodo {
     onetodo: TodoProps;
@@ -55,6 +56,8 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
 
     const { todos, setTodos, fetchAllTodos } = todoContext;
 
+    const [loading, setLoading] = useState(false);
+
     // フォームのクローズ
     const handleDeleteClose = () => {
         //閉じたらすべてリセット
@@ -64,19 +67,28 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setTodos((prevTodos) => {
-            return prevTodos.filter((todo) => todo.id !== onetodo.id);
-        });
+        try {
+            setLoading(true);
 
-        const targetTodo = todos.find((todo) => todo.id === onetodo.id);
-        if (!targetTodo) return;
+            setTodos((prevTodos) => {
+                return prevTodos.filter((todo) => todo.id !== onetodo.id);
+            });
 
-        await deletePractice(targetTodo);
+            const targetTodo = todos.find((todo) => todo.id === onetodo.id);
+            if (!targetTodo) return;
 
-        await fetchAllTodos();
-        setDeleteOpen(false);
-        router.push('/list');
-        router.refresh();
+            await deletePractice(targetTodo);
+
+            await fetchAllTodos();
+            setDeleteOpen(false);
+            router.push('/list');
+            router.refresh();
+        } catch {
+            alert("削除に失敗しました。もう一度お試しください。")
+        } finally {
+            setLoading(false);
+        }
+            
     };
 
     return (
@@ -108,6 +120,9 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
                     </DialogActions>
                 </form>
             </Dialog>
+
+            {/* タスクの追加中はローディングを表示 */}
+            {loading && <FullScreenLoading open={loading} />}
         </div>
     );
 };

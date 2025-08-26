@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Container, Typography } from "@mui/material";
 import GoogleIcon from "../../components/theme/GoogleIcon"
 import { createClient } from '@/utils/supabase/client';
 
@@ -7,7 +7,7 @@ const LoginWithGoogle = () => {
   const handleGoogleLogin = async () => {
     try {
       const supabase = createClient();
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           queryParams: {

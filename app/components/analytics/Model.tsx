@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Lottie from 'lottie-react';
@@ -20,12 +20,10 @@ const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
     // AIと情報をやり取りするための変数を管理
     const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
     const [response, setResponse] = useState<string>(""); // AIからの回答
-    const [isComplete, setIsComplete] = useState<boolean>(true); // AIが回答を生成している途中であることを示す値
 
     const handleAIModel = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        setIsComplete(false);
         setIsGenerating(true);
         setResponse('');
 
@@ -63,7 +61,7 @@ const Model:React.FC<modelPageProps> = ({ setModelPage }) => {
                 const jsonString = line.replace("data: ", "").trim();
                 if (jsonString === "[DONE]") {
                     // ストリーミングが完了した場合
-                    setIsComplete(true); // 完了フラグを立てる
+                    
                     setIsGenerating(false); // 応答生成完了
                     break;
                 }

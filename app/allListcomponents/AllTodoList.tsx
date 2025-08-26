@@ -5,7 +5,6 @@ import { TodoContext } from '../context/TodoContext';
 import AllTodoItem from './AllTodoItem';
 import {
     Box,
-    Fab,
     FormControl,
     InputLabel,
     MenuItem,
@@ -14,14 +13,10 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
-    Tooltip,
-    Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
 import { CheckRate } from '../components/calculate/CheckRate';
-import SelfAddForm from '../components/addTask/SelfAddForm';
-import AddIcon from '@mui/icons-material/Add';
 import FadeLoading from '../components/parts/FadeLoading';
 
 interface TodoProps {
@@ -38,10 +33,6 @@ interface TodoProps {
 }
 
 const AllTodoList = () => {
-
-    // 追加フォームの開閉
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
 
     const todoContext = useContext(TodoContext);
 

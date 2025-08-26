@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/server';
 const prisma = new PrismaClient(); // インスタンス化
 
 // 全タスクの取得API
-export const GET = async (request: Request) => {
+export const GET = async () => {
  try {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();

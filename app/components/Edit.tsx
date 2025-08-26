@@ -28,6 +28,7 @@ import { useRouter } from 'next/navigation';
 import { TodoContext } from '../context/TodoContext';
 import { taglist } from './tags';
 import { AuthContext } from '../context/AuthContext';
+import FullScreenLoading from './parts/fullScreenLoading';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -111,7 +112,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
         );
     }
 
-    const { loginUser, loginSession } = authContext;
+    const { loginUser } = authContext;
+
+    const [loading, setLoading] = useState(false);
 
     // フォームのクローズ
     const handleEditClose = () => {
@@ -222,71 +225,80 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
-        const setint = (ndays: boolean) => {
-            if (ndays) {
-                return number;
-            } else {
-                return selectedDays;
-            }
-        };
+        try {
+            setLoading(true);
 
-        const createCheckedDates = (
-            sd: Dayjs,
-            ed: Dayjs,
-            interval: number | string[],
-        ) => {
-            let objdate: Record<string, boolean> = {};
-            if (typeof interval === 'number') {
-                // 日ごとの場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const slashdate = dayjs(date).format('YYYY/MM/DD');
-                    objdate[slashdate] = false;
-                    date = dayjs(date).add(interval, 'd');
+            // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
+            const setint = (ndays: boolean) => {
+                if (ndays) {
+                    return number;
+                } else {
+                    return selectedDays;
                 }
-                return objdate;
-            } else {
-                // 曜日の場合
-                let date = sd;
-                while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
-                    const day = dayjs(date).format('ddd');
-                    if (selectedDays.includes(day)) {
+            };
+
+            const createCheckedDates = (
+                sd: Dayjs,
+                ed: Dayjs,
+                interval: number | string[],
+            ) => {
+                const objdate: Record<string, boolean> = {};
+                if (typeof interval === 'number') {
+                    // 日ごとの場合
+                    let date = sd;
+                    while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
                         const slashdate = dayjs(date).format('YYYY/MM/DD');
                         objdate[slashdate] = false;
+                        date = dayjs(date).add(interval, 'd');
                     }
-                    date = dayjs(date).add(1, 'd');
+                    return objdate;
+                } else {
+                    // 曜日の場合
+                    let date = sd;
+                    while (dayjs(date).isBefore(dayjs(ed).add(1, 'd'))) {
+                        const day = dayjs(date).format('ddd');
+                        if (selectedDays.includes(day)) {
+                            const slashdate = dayjs(date).format('YYYY/MM/DD');
+                            objdate[slashdate] = false;
+                        }
+                        date = dayjs(date).add(1, 'd');
+                    }
+                    return objdate;
                 }
-                return objdate;
-            }
-        };
+            };
 
-        const checkdates: Record<string, boolean> = createCheckedDates(
-            sd,
-            ed,
-            setint(ndays),
-        ); // 日付: falseの辞書を作成
-        const contdays = todo.continuedays; //編集なので達成日はそのまま
+            const checkdates: Record<string, boolean> = createCheckedDates(
+                sd,
+                ed,
+                setint(ndays),
+            ); // 日付: falseの辞書を作成
+            const contdays = todo.continuedays; //編集なので達成日はそのまま
 
-        await editPractice(
-            id,
-            title,
-            desc,
-            contdays,
-            checkdates,
-            sd?.format('YYYY/MM/DD'),
-            ed?.format('YYYY/MM/DD'),
-            setint(ndays),
-            purp,
-            tag,
-            loginUser!.id
-        );
+            await editPractice(
+                id,
+                title,
+                desc,
+                contdays,
+                checkdates,
+                sd?.format('YYYY/MM/DD'),
+                ed?.format('YYYY/MM/DD'),
+                setint(ndays),
+                purp,
+                tag,
+                loginUser!.id
+            );
 
-        await fetchAllTodos();
-        setEditOpen(false);
-        router.push('/list');
-        router.refresh();
-        formReset();
+            await fetchAllTodos();
+            setEditOpen(false);
+            router.push('/list');
+            router.refresh();
+            formReset();
+        } catch {
+            alert("編集ができませんでした。もう一度お試しください。")
+        } finally {
+            setLoading(false);
+        }
+            
     };
 
     return (
@@ -445,6 +457,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                     </DialogActions>
                 </form>
             </Dialog>
+
+            {/* タスクの追加中はローディングを表示 */}
+            {loading && <FullScreenLoading open={loading} />}
         </div>
     );
 };

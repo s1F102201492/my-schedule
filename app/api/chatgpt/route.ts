@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
