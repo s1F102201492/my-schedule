@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import TodoItem from './TodoItem';
-import TodoChecked from './TodoChecked';
-import { Box, Button, List, ListItem, Typography } from '@mui/material';
-import { ChangeSlashDay } from '../components/calculate/ChangeSlashDay';
-import SelfAddForm from '../components/addTask/SelfAddForm';
-import { TodoContext } from '../context/TodoContext';
-import RewardDialog from '../components/RewardDialog';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import TodoItem from "./TodoItem";
+import TodoChecked from "./TodoChecked";
+import { List, Typography } from "@mui/material";
+import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
+import { TodoContext } from "../context/TodoContext";
+import RewardDialog from "../components/RewardDialog";
 
 interface TodoProps {
     id: number;
@@ -20,11 +19,7 @@ interface TodoProps {
     tag: string;
 }
 
-interface TodoListProps {
-    locate: string;
-}
-
-const TodoList: React.FC<TodoListProps> = ({ locate }) => {
+const TodoList = () => {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
@@ -34,18 +29,14 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
     const { todos } = todoContext;
 
-    // フォームのオープン
-    const [open, setOpen] = useState<boolean>(false);
-    const handleClickOpen = () => setOpen(true);
-
-    const todayDay: string = new Date().toLocaleDateString('ja-JP', {
-        weekday: 'short',
+    const todayDay: string = new Date().toLocaleDateString("ja-JP", {
+        weekday: "short",
     }); //今日の曜日
 
     const todayslash: string = ChangeSlashDay(today); //今日の日付("yyyy/mm/dd"型)
@@ -60,7 +51,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
             if (Array.isArray(todo.interval)) {
                 // intervalが曜日の配列の場合
                 return todo.interval.includes(todayDay);
-            } else if (typeof todo.interval === 'number') {
+            } else if (typeof todo.interval === "number") {
                 // intervalが数字の日数の場合
                 const startDate = new Date(todo.startdate);
                 const diffInDays = Math.floor(
@@ -97,9 +88,6 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
         }
     }, [notchecktodos.length]);
 
-
-        
-
     return (
         <div>
             {/* 完了していないリスト */}
@@ -111,7 +99,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                 {`${year}年${month}月${day}日`}のやることリスト
             </Typography>
             <List
-                sx={{ width: '100%', maxWidth: 500 }}
+                sx={{ width: "100%", maxWidth: 500 }}
                 disablePadding>
                 {notchecktodos.map((todo: TodoProps) => (
                     <TodoItem
@@ -129,7 +117,7 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                 完了したリスト
             </Typography>
             <List
-                sx={{ width: '100%', maxWidth: 500 }}
+                sx={{ width: "100%", maxWidth: 500 }}
                 disablePadding>
                 {checkedtodos.map((todo: TodoProps) => (
                     <TodoChecked
@@ -139,7 +127,12 @@ const TodoList: React.FC<TodoListProps> = ({ locate }) => {
                 ))}
             </List>
 
-            {reward && <RewardDialog open={reward} setOpen={setReward} />}
+            {reward && (
+                <RewardDialog
+                    open={reward}
+                    setOpen={setReward}
+                />
+            )}
         </div>
     );
 };

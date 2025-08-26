@@ -3,7 +3,7 @@
 export const CountContinueDays = (
     checkedDates: Record<string, boolean>,
 ): number => {
-    let trueDays: string[] = [];
+    const trueDays: string[] = [];
     for (const key in checkedDates) {
         if (checkedDates[key] === true) {
             trueDays.push(key);

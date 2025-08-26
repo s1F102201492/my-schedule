@@ -3,14 +3,13 @@ import {
     Card,
     CardContent,
     CircularProgress,
-    Dialog,
     Divider,
     Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
-import Detail from '../components/Detail';
-import Grid from '@mui/material/Grid2';
-import { CheckRate } from '../components/calculate/CheckRate';
+} from "@mui/material";
+import React, { useState } from "react";
+import Detail from "../components/Detail";
+import Grid from "@mui/material/Grid2";
+import { CheckRate } from "../components/calculate/CheckRate";
 
 interface TodoProps {
     id: number;
@@ -31,7 +30,6 @@ interface TodoItemProps {
 }
 
 const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
-
     // 詳細ダイアログの開閉
     const [detailOpen, setDetailOpen] = useState<boolean>(false);
     const handleDetailOpen = () => setDetailOpen(true);
@@ -40,33 +38,33 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     };
 
     const checkrate = CheckRate(todo);
-    const slashstart = todo.startdate.replace(/-/g, '/');
-    const slashend = todo.enddate.replace(/-/g, '/');
+    const slashstart = todo.startdate.replace(/-/g, "/");
+    const slashend = todo.enddate.replace(/-/g, "/");
 
     return (
         <div>
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Box
                     onClick={handleDetailOpen}
-                    sx={{ cursor: 'pointer' }}>
-                    <Card sx={{ minWidth: 200, height: '100%' }}>
+                    sx={{ cursor: "pointer" }}>
+                    <Card sx={{ minWidth: 200, height: "100%" }}>
                         <CardContent
                             sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
                             }}>
                             <Box
                                 sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
+                                    display: "flex",
+                                    justifyContent: "center",
                                     mb: 2,
                                 }}>
                                 <Box
                                     sx={{
-                                        position: 'relative',
-                                        display: 'inline-flex',
+                                        position: "relative",
+                                        display: "inline-flex",
                                     }}>
                                     <CircularProgress
                                         variant='determinate'
@@ -79,10 +77,10 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                                             left: 0,
                                             bottom: 0,
                                             right: 0,
-                                            position: 'absolute',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
+                                            position: "absolute",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
                                         }}>
                                         <Typography
                                             variant='caption'
@@ -105,13 +103,13 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                                     variant='body2'
                                     color='text.secondary'
                                     gutterBottom>
-                                    開始日: {slashstart.replace(/T\S+/, '')}
+                                    開始日: {slashstart.replace(/T\S+/, "")}
                                 </Typography>
                                 <Typography
                                     variant='body2'
                                     color='text.secondary'
                                     gutterBottom>
-                                    終了日: {slashend.replace(/T\S+/, '')}
+                                    終了日: {slashend.replace(/T\S+/, "")}
                                 </Typography>
                                 <Typography
                                     variant='body2'

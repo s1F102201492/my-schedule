@@ -1,10 +1,18 @@
-'use client';
+"use client";
 
-import React, { createContext, useState, ReactNode, useEffect, useContext, useCallback, useMemo } from 'react';
-import { CountContinueDays } from '../components/calculate/CountContinueDays';
-import { createClient } from '@/utils/supabase/client';
-import { AuthContext } from './AuthContext';
-import { AchieveContext } from './AchieveContext';
+import React, {
+    createContext,
+    useState,
+    ReactNode,
+    useEffect,
+    useContext,
+    useCallback,
+    useMemo,
+} from "react";
+import { CountContinueDays } from "../components/calculate/CountContinueDays";
+import { createClient } from "@/utils/supabase/client";
+import { AchieveContext } from "./AchieveContext";
+import FullScreenLoading from "../components/parts/fullScreenLoading";
 
 interface TodoProps {
     id: number;
@@ -22,16 +30,18 @@ interface TodoProps {
 interface TodoContextType {
     todos: TodoProps[];
     setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-    toggleChecked: (id: number, date: string) => void;
+    toggleChecked: (id: number, date: string) => Promise<void>;
     fetchAllTodos: () => Promise<void>;
-    toggleDelete: (id: number, date: string) => void;
+    toggleDelete: (id: number, date: string) => Promise<void>;
     loading: boolean;
 }
 
-export const TodoContext = createContext<TodoContextType | undefined>(undefined);
+export const TodoContext = createContext<TodoContextType | undefined>(
+    undefined,
+);
 
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
-    children
+    children,
 }) => {
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
@@ -40,7 +50,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
 
     if (!achieveContext) {
         throw new Error(
-            'AchieveContext is undefined. Make sure to use AchieveProvider.',
+            "AchieveContext is undefined. Make sure to use AchieveProvider.",
         );
     }
 
@@ -51,21 +61,23 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(true);
 
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
 
-            console.log(session)
+            console.log(session);
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
                 return;
             }
 
-            const res = await fetch('/api/todo', {
-                method: 'GET',
+            const res = await fetch("/api/todo", {
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`,
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
                 },
-                cache: 'no-store',
+                cache: "no-store",
             });
 
             if (!res.ok) {
@@ -75,18 +87,19 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             const data = await res.json();
             setTodos(data.alltodos);
         } catch (error) {
-            console.error('データの取得に失敗しました:', error);
+            console.error("データの取得に失敗しました:", error);
         } finally {
             setLoading(false);
         }
-    }, [])
-
+    }, []);
 
     // 今日のタスクのチェックマーク
     const checkTodo = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -94,23 +107,22 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             }
 
             const res = await fetch(`/api/todo/${todo.id}`, {
-                method: 'PUT',
+                method: "PUT",
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`
-                 },
-
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
             });
 
             if (!res.ok)
                 throw new Error(
-                    `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
+                    `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-            console.log('チェック更新成功');
-
+            console.log("チェック更新成功");
         } catch (err) {
-            if (err instanceof Error){
-                console.log("Error: ", err.stack)
+            if (err instanceof Error) {
+                console.log("Error: ", err.stack);
             }
         }
     };
@@ -119,7 +131,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const deleteTodo = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -127,21 +141,22 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             }
 
             const res = await fetch(`/api/todo/${todo.id}`, {
-                method: 'PUT',
+                method: "PUT",
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`
-                 },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
             });
 
             if (!res.ok)
                 throw new Error(
-                    `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
+                    `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-            console.log('チェック更新成功');
+            console.log("チェック更新成功");
         } catch (err) {
-            if (err instanceof Error){
-                console.log("Error: ", err.stack)
+            if (err instanceof Error) {
+                console.log("Error: ", err.stack);
             }
         }
     };
@@ -150,7 +165,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const deletePractice = async (todo: TodoProps) => {
         try {
             const supabase = createClient();
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
 
             if (!session?.access_token) {
                 console.error("アクセストークンが取得できませんでした");
@@ -158,21 +175,22 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
             }
 
             const res = await fetch(`/api/todo/${todo.id}`, {
-                method: 'DELETE',
+                method: "DELETE",
                 body: JSON.stringify(todo),
-                headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`
-                 },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
             });
 
             if (!res.ok)
                 throw new Error(
-                    `APIエラー: ${(await res.json()).message || '不明なエラー'}`,
+                    `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-            console.log('チェック更新成功');
+            console.log("チェック更新成功");
         } catch (err) {
-            if (err instanceof Error){
-                console.log("Error: ", err.stack)
+            if (err instanceof Error) {
+                console.log("Error: ", err.stack);
             }
         }
     };
@@ -181,13 +199,15 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         fetchAllTodos();
     }, []);
 
-    const todo_Memo = useMemo(() => todos.map(todo => todo.checkedDates), [todos]) // 下のuseEffectが無限ループしないための変数
+    const todo_Memo = useMemo(
+        () => todos.map((todo) => todo.checkedDates),
+        [todos],
+    ); // 下のuseEffectが無限ループしないための変数
 
     useEffect(() => {
         const func = async () => await RewriteAchieve(todos);
         func();
-
-    }, [todo_Memo])
+    }, [todo_Memo]);
 
     const toggleChecked = async (id: number, date: string) => {
         //チェックボタンを機能させる関数
@@ -212,11 +232,10 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 return todo;
             });
         });
-
     };
 
     //今日のタスクを削除する関数
-    const deleteDate = async (id: number, date: string) => { 
+    const deleteDate = async (id: number, date: string) => {
         setTodos((prevTodos) => {
             return prevTodos.map((todo) => {
                 if (todo.id === id) {
@@ -232,7 +251,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 return todo;
             });
         });
-    }
+    };
 
     // checkedDatesの中の要素が一つもない場合に削除する関数
     const deleteZeroDate = async () => {
@@ -245,21 +264,21 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                     } else {
                         deletePractice(todo);
                     }
-                })
+                });
                 return newTodos;
             });
-        }, 1000)
-    }
+        }, 1000);
+    };
 
     // 上の二つの関数をまとめたもの
     const toggleDelete = async (id: number, date: string) => {
         await Promise.all([deleteDate(id, date), deleteZeroDate()])
-        .then(() => {
-            console.log('削除成功！') ;	
-        }) 
-        .catch(() => {
-            console.log('削除失敗');
-        }) ;
+            .then(() => {
+                console.log("削除成功！");
+            })
+            .catch(() => {
+                console.log("削除失敗");
+            });
     };
 
     return (
@@ -270,9 +289,11 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
                 toggleChecked,
                 fetchAllTodos,
                 toggleDelete,
-                loading
+                loading,
             }}>
             {children}
+
+            {loading && <FullScreenLoading open={loading} />}
         </TodoContext.Provider>
     );
 };

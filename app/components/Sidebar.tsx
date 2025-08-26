@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Drawer from '@mui/material/Drawer';
-import UserCard from '../components/parts/UserCard';
+import React from "react";
+import Drawer from "@mui/material/Drawer";
+import UserCard from "../components/parts/UserCard";
 
 interface SidebarProps {
     drawer: boolean;
@@ -17,11 +17,15 @@ interface UserCardProps {
     avatar_url: string;
 }
 
-export default function Sidebar({ drawer, setDrawer, loginUser }: SidebarProps) {
+export default function Sidebar({
+    drawer,
+    setDrawer,
+    loginUser,
+}: SidebarProps) {
     return (
         <Drawer
             open={drawer}
-            anchor="right"
+            anchor='right'
             onClose={() => setDrawer(false)}>
             <UserCard loginUser={loginUser!} />
         </Drawer>

@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { useContext } from 'react';
-import Header from '../../components/Header';
-import AllTodoList from '../../allListcomponents/AllTodoList';
-import { Typography } from '@mui/material';
-import { AuthContext } from '../../context/AuthContext';
-import { TodoContext } from '../../context/TodoContext';
-import FadeLoading from '../../components/parts/FadeLoading';
-import NullUser from '../../components/NullUser';
+import React, { useContext } from "react";
+import Header from "../../components/Header";
+import AllTodoList from "../../allListcomponents/AllTodoList";
+import { Typography } from "@mui/material";
+import { AuthContext } from "../../context/AuthContext";
+import { TodoContext } from "../../context/TodoContext";
+import FadeLoading from "../../components/parts/FadeLoading";
+import NullUser from "../../components/NullUser";
 
-const page = () => {
+const Page = () => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -24,7 +24,7 @@ const page = () => {
 
     if (!authContext) {
         throw new Error(
-            'TodoContext is undefined. Make sure to use TodoProvider.',
+            "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
 
@@ -35,14 +35,16 @@ const page = () => {
             <Header />
             {loginUser ? (
                 <>
-                <Typography variant="h4" sx={{ m: 4 }}>
-                    {loginUser.username} さん！ようこそ！
-                </Typography>
-                {loading ? (
-                    <FadeLoading loading={loading} />
-                ) : (
-                    <AllTodoList />
-                )}
+                    <Typography
+                        variant='h4'
+                        sx={{ m: 4 }}>
+                        {loginUser.username} さん！ようこそ！
+                    </Typography>
+                    {loading ? (
+                        <FadeLoading loading={loading} />
+                    ) : (
+                        <AllTodoList />
+                    )}
                 </>
             ) : (
                 <NullUser />
@@ -51,4 +53,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;
