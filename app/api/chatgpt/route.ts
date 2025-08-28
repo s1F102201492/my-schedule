@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { createClient } from "@/utils/supabase/server";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -22,7 +23,24 @@ export async function POST(req: Request) {
 
     try {
         // ユーザーのタスクを取得
-        alltodos = await prisma.todos.findMany();
+        const supabase = await createClient();
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            console.log(
+                "ユーザー取得失敗もしくはログインできていません: ",
+                error,
+            );
+            return NextResponse.json(
+                { error: "認証されていません" },
+                { status: 401 },
+            );
+        } else {
+            alltodos = await prisma.todos.findMany({
+                where: { userId: data.user.id },
+            });
+        }
+        
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
@@ -172,6 +190,56 @@ export async function POST(req: Request) {
         return new Response(readableStream, {
             headers: { "Content-Type": "text/event-stream" },
         });
+
+    } else if (type == "analytics") {
+        
+        SystemPrompt = `あなたはユーザーのタスク内容や達成状況などをタグごとに分析し、今までの分析とこれからどう取り組んでいくのがおすすめかを提示してください。
+        そのタグのタスクがない場合は、そのタグについては書かないでください。
+        タスクの内容: ${JSON.stringify(alltodos)}(タスクはjson形式)
+        今までの分析の分析とこれからの取り組みについてはそれぞれ100字程度で書いてください。
+        出力の型としては以下のようにしてください。型{"tag": タグ名, "past": 今までの分析, "next": これからどう取り組んでいくかの内容}[]
+        返す値はタスク1つ1つはJSON形式でそれを配列の中に入れて返してください。最初にjsonと書くのもやめてください。改行は入れないでください。
+        指定されたものは絶対に守ってください。`
+        
+        const response = await fetch(`${gptApiEndPoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${gptApiKey}`,
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini",
+                messages: [
+                    {
+                        role: "user",
+                        content: SystemPrompt
+                    },
+                ],
+                max_tokens: 1000,
+                stream: false,
+                temperature: 0.8,
+            }),
+        });
+
+        const data = await response.json();
+    
+        //API処理が正常にできない場合
+        if (!response.ok) {
+            console.error(
+                `APIリクエスト失敗: ${response.status} ${response.statusText}`,
+            );
+            const errorData = await response.json();
+            console.error("エラーメッセージ:", errorData);
+
+            return NextResponse.json(
+                { error: "APIリクエストが失敗しました。" },
+                { status: response.status },
+            );
+        }
+        
+        // JSONデータをそのまま返す
+        return NextResponse.json({ result: data.choices[0]?.message?.content });
+
     } else {
         console.log("エラーが発生しました。type: なし");
     }

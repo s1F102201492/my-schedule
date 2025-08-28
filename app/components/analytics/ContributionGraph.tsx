@@ -1,5 +1,5 @@
 import { CalendarMonth } from '@mui/icons-material'
-import { Box, Card, CardContent, Paper, Typography } from '@mui/material'
+import { Box, Card, CardContent, Typography } from '@mui/material'
 import React, { useContext } from 'react'
 import theme from '../theme/theme'
 import dayjs, { Dayjs } from "dayjs";
@@ -76,12 +76,10 @@ export const ContributionGraph = () => {
         }
             
     });
-    console.log(map_Date_Asc);
 
     // サンプルデータ
     const data = ChangeContributionData(todos)
 
-    console.log(data)
   return (
     <div>
         {/* カレンダー表示 */}
@@ -101,7 +99,7 @@ export const ContributionGraph = () => {
                         to={toDate.format("YYYY-MM-DD")}
                         emptyColor="#eeeeee"
                         colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
-                        margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                        margin={{ top: 40 }}
                         yearSpacing={40}
                         monthBorderColor="#ffffff"
                         dayBorderWidth={2}
@@ -120,6 +118,7 @@ export const ContributionGraph = () => {
                         ]}
                     />
             </Box>
+            
             </CardContent>
         </Card>
             

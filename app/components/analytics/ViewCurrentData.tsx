@@ -1,23 +1,55 @@
 import {
   Box,
+  Button,
   Card,
+  CardContent,
+  Chip,
+  CircularProgress,
   Container,
   IconButton,
+  Paper,
   Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import theme from "../theme/theme";
 import { ContributionGraph } from "./ContributionGraph";
+import FadeLoading from "../parts/FadeLoading";
+import { GPTAnalyticsModel } from "@/app/Models/models";
+import { Psychology, Refresh } from "@mui/icons-material";
+import { viewIcon } from "../tags";
 
 interface SwitchPageProps {
   switchCurrentPage: () => void;
 }
 
+const getGPTReview = async () => {
+  const res = await fetch("/api/chatgpt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "analytics"
+    })
+  });
+
+  if (!res.ok) {
+    console.error("APIエラー");
+    alert("APIリクエストに失敗しました。");
+    return;
+}
+
+  const data = await res.json();
+  
+  return data;
+}
+
 export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }) => {
+
+  const [GPTLoading, setGPTLoading] = useState<boolean>(false);
+  const [GPTReview, setGPTReview] = useState<GPTAnalyticsModel[]>([]);
 
   const mockStats = {
     totalTasks: 156,
@@ -31,29 +63,30 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
     },
   }
   
-  const mockTrendAnalysis = [
-    {
-      period: "過去7日間",
-      insight:
-        "平日の朝の時間帯（7-9時）に最も高い生産性を示しています。特に学習系タスクの完了率が95%と非常に高い水準です。",
-      recommendation: "この時間帯をより活用し、重要度の高いタスクを集中的に配置することをお勧めします。",
-      score: 92,
-    },
-    {
-      period: "過去30日間",
-      insight:
-        "週末の健康管理タスクの完了率が平日と比較して40%低下しています。一方で、キャリア関連のタスクは安定した進捗を維持。",
-      recommendation: "週末の健康管理ルーティンを見直し、より実行しやすい小さなタスクに分割することを提案します。",
-      score: 78,
-    },
-    {
-      period: "過去90日間",
-      insight:
-        "長期的な視点で見ると、月初めの目標設定が明確な月ほど全体的な達成率が高い傾向があります。特に2月は85%の高達成率。",
-      recommendation: "月初めの目標設定プロセスを標準化し、SMART目標の設定を継続することで更なる向上が期待できます。",
-      score: 85,
-    },
-  ]
+
+  const setFunc_GPTReview = async () => {
+    try {
+      setGPTLoading(true);
+      
+      const reviews = await getGPTReview();
+
+      const setData = JSON.parse(reviews.result);
+
+      setGPTReview(setData);
+
+    } catch (error) {
+      console.error(error)
+      alert("ChatGPTからの分析を取得できませんでした。もう一度読み込んでください。");
+
+    } finally {
+      setGPTLoading(false);
+
+    }
+  }
+
+  useEffect(() => {
+    setFunc_GPTReview();
+  }, [])
 
   return (
     <div>
@@ -117,6 +150,68 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
             </Grid>
 
             <ContributionGraph />
+
+            <Card elevation={2}>
+              <CardContent sx={{ p: 4 }}>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Psychology sx={{ mr: 2, color: theme.palette.primary.main, fontSize: 32 }} />
+                    <Box>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.dark }}>
+                        AI傾向分析
+                      </Typography>
+                      <Typography variant="body1" color="text.secondary">
+                        あなたの行動パターンから導き出された洞察
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Button
+                    onClick={() => setFunc_GPTReview()}
+                    variant="outlined"
+                    startIcon={<Refresh />}
+                  >
+                    再分析
+                  </Button>
+                </Box>
+
+                {GPTLoading 
+                ? <FadeLoading loading={GPTLoading} /> 
+                : <Grid container spacing={3}>
+                {GPTReview.map((analysis, index) => (
+                  <Grid size={{ xs: 12, md: 4 }} key={index}>
+                    <Paper
+                      sx={{
+                        p: 3,
+                        height: "100%",
+                        border: "2px solid #e0e0e0",
+                        borderRadius: 2,
+                      }}
+                    >
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", mb: 2 }}>
+                        <Box sx={{ mr: 2, color: theme.palette.primary.main }} >
+                          {viewIcon[analysis.tag]}
+                        </Box>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: theme.palette.primary.dark }}>
+                          {analysis.tag}
+                        </Typography>
+                        
+                      </Box>
+
+                      <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+                        <strong>洞察:</strong> {analysis.past}
+                      </Typography>
+
+                      <Typography variant="body2" sx={{ lineHeight: 1.6, color: "text.secondary" }}>
+                        <strong>推奨:</strong> {analysis.next}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>}
+                
+              </CardContent>
+            </Card>
+            
         </Stack>
       </Container>
     </div>
