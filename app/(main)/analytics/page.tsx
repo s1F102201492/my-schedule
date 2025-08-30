@@ -2,12 +2,11 @@
 
 import React, { useContext, useState } from "react";
 import Header from "../../components/Header";
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import Model from "../../components/analytics/Model";
 import { TodoContext } from "../../context/TodoContext";
 import { AuthContext } from "../../context/AuthContext";
-import FadeLoading from "../../components/parts/FadeLoading";
-import NullUser from "../../components/NullUser";
+import { ViewCurrentData } from "@/app/components/analytics/ViewCurrentData";
+import { AnalyticsCardPage } from "@/app/components/analytics/AnalyticsCardPage";
 
 const Page = () => {
     const todoContext = useContext(TodoContext);
@@ -32,50 +31,29 @@ const Page = () => {
 
     // 理想の自分ページの開閉を管理
     const [modelPage, setModelPage] = useState<boolean>(false);
-    const handleModelPage = () => {
-        setModelPage(true);
+    const switchModelPage = () => {
+        setModelPage(!modelPage);
     };
+
+    // 現在地の自分を知るページの開閉を管理
+    const [viewCurrentPage, setViewCurrentPage] = useState(false);
+    const switchCurrentPage = () => {
+        setViewCurrentPage(!viewCurrentPage)
+    }
 
     return (
         <div>
             <Header />
-            {modelPage ? (
-                <Model setModelPage={setModelPage} />
-            ) : (
-                <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-                    <Card
-                        onClick={handleModelPage}
-                        sx={{
-                            maxWidth: 280,
-                            maxHeight: "100%",
-                            cursor: "pointer",
-                            mt: 6,
-                            mx: 2,
-                        }}>
-                        <CardMedia
-                            component='img'
-                            image='img/business-3695073_640.jpg'
-                            sx={{ width: 350, height: 250, objectFit: "fill" }}
-                        />
-                        <CardContent>
-                            <Typography
-                                gutterBottom
-                                variant='h5'
-                                component='div'>
-                                理想の自分をイメージしてみる
-                            </Typography>
-                            <Typography
-                                variant='body2'
-                                sx={{
-                                    color: "text.secondary",
-                                    whiteSpace: "pre-line",
-                                }}>
-                                あなたが今頑張っている習慣を達成した理想のあなたをイメージしてみましょう！
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Box>
-            )}
+
+            { modelPage && !viewCurrentPage
+                ? <Model switchModelPage={switchModelPage} />
+                    : !modelPage && viewCurrentPage
+                        ? <ViewCurrentData switchCurrentPage={switchCurrentPage} />
+                    : <AnalyticsCardPage
+                switchModelPage={switchModelPage}
+                switchCurrentPage={switchCurrentPage}
+                />
+            }
         </div>
     );
 };

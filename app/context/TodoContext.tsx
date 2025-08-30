@@ -11,7 +11,6 @@ import React, {
 } from "react";
 import { CountContinueDays } from "../components/calculate/CountContinueDays";
 import { createClient } from "@/utils/supabase/client";
-import { AchieveContext } from "./AchieveContext";
 import FullScreenLoading from "../components/parts/fullScreenLoading";
 
 interface TodoProps {
@@ -45,16 +44,6 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
     const [todos, setTodos] = useState<TodoProps[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const achieveContext = useContext(AchieveContext);
-
-    if (!achieveContext) {
-        throw new Error(
-            "AchieveContext is undefined. Make sure to use AchieveProvider.",
-        );
-    }
-
-    const { RewriteAchieve } = achieveContext;
 
     const fetchAllTodos = useCallback(async () => {
         try {
@@ -198,16 +187,6 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     useEffect(() => {
         fetchAllTodos();
     }, []);
-
-    const todo_Memo = useMemo(
-        () => todos.map((todo) => todo.checkedDates),
-        [todos],
-    ); // 下のuseEffectが無限ループしないための変数
-
-    useEffect(() => {
-        const func = async () => await RewriteAchieve(todos);
-        func();
-    }, [todo_Memo]);
 
     const toggleChecked = async (id: number, date: string) => {
         //チェックボタンを機能させる関数
