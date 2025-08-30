@@ -36,16 +36,6 @@ model users {
   email String @unique
   avatar_url String
   todos todos[]
-  achievements achievements?
-
-}
-
-model achievements {
-  achieve_day Json
-  achieve_taskCount Json
-  achieve_multi Json
-  userId String @db.Uuid @unique @id
-  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
 }
 
