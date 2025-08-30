@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Container,
   IconButton,
+  LinearProgress,
   Paper,
   Stack,
   Tooltip,
@@ -19,8 +20,9 @@ import theme from "../theme/theme";
 import { ContributionGraph } from "./ContributionGraph";
 import FadeLoading from "../parts/FadeLoading";
 import { GPTAnalyticsModel } from "@/app/Models/models";
-import { Psychology, Refresh } from "@mui/icons-material";
+import { Assessment, Psychology, Refresh } from "@mui/icons-material";
 import { viewIcon } from "../tags";
+import ViewAchieveByTag from "./ViewAchieveByTag";
 
 interface SwitchPageProps {
   switchCurrentPage: () => void;
@@ -212,6 +214,8 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
               </CardContent>
             </Card>
             
+            <ViewAchieveByTag />
+
         </Stack>
       </Container>
     </div>
