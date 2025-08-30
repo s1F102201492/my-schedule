@@ -14,29 +14,63 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import theme from "../theme/theme";
 import { ContributionGraph } from "./ContributionGraph";
 import ViewAchieveByTag from "./ViewAchieveByTag";
 import ViewUserAchieve from "./ViewUserAchieve";
+import FullScreenLoading from "../parts/fullScreenLoading";
 
 interface SwitchPageProps {
   switchCurrentPage: () => void;
 }
 
+const getGPTsentence = async () => {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "praise"
+      })
+    });
+
+    if (!res.ok) {
+      console.error("APIエラー");
+      alert("APIリクエストに失敗しました。");
+      return;
+    }
+
+    const data = await res.json();
+    
+    return data;
+}
+
 export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }) => {
 
-  const mockStats = {
-    totalTasks: 156,
-    completedTasks: 134,
-    streakDays: 12,
-    categories: {
-      学習: 45,
-      健康: 38,
-      キャリア: 32,
-      人間関係: 19,
-    },
+  const [loading, setLoading] = useState(false);
+  const [GPTSentence, setGPTSentence] = useState(null);
+
+  const GPTfunc = async () => {
+    try {
+      setLoading(true);
+      
+      const sentence = await getGPTsentence();
+
+      setGPTSentence(sentence.result)
+
+    } catch {
+      alert("GPTからの出力を読み取れませんでした。もう一度読み込んでください。")
+    } finally {
+      setLoading(false)
+    }
+    
   }
+
+  useEffect(() => {
+
+    GPTfunc();
+
+  }, [])
 
   return (
     <div>
@@ -56,6 +90,24 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
       <Container maxWidth="xl" sx={{ py: 4 }}>
           <Stack spacing={4}>
             
+            <Card elevation={2}>
+                <CardContent sx={{ p: 4 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                    <Box>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.dark }}>
+                        あなたの現状
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box>
+                    <Typography>
+                      {GPTSentence}
+                    </Typography>
+                  </Box>
+                </CardContent>
+            </Card>
+
             <ViewUserAchieve />
 
             <ContributionGraph />
@@ -66,6 +118,8 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
 
         </Stack>
       </Container>
+
+      {loading && <FullScreenLoading open={loading} />}
     </div>
   )
 }

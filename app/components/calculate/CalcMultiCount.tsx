@@ -1,18 +1,7 @@
-// １日の最大タスク数をカウントする関数
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-}
+import { TodoModel } from "@/app/Models/models";
 
-export const CalcMultiCount = (alltodos: TodoProps[]) => {
+// １日の最大タスク数をカウントする関数
+export const CalcMultiCount = (alltodos: TodoModel[]) => {
     const resultObj: Record<string, number> = {};
 
     const completedDays = alltodos.map((todo) => {
@@ -33,11 +22,13 @@ export const CalcMultiCount = (alltodos: TodoProps[]) => {
     }
 
     // 一日の最大タスク数
-    const multiday_Max = Object.values(resultObj).reduce(
-        (a, b) => Math.max(a, b),
-        -Infinity,
-    );
+    let output: number = 0;
+    for (const date in resultObj) {
+        if (resultObj[date] > output) {
+            output = resultObj[date];
+        }
+    }
 
     // それぞれの配列の長さを出す
-    return multiday_Max;
+    return output;
 };

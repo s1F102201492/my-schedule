@@ -27,9 +27,8 @@ export const ContributionGraph = () => {
 
     const { todos } = todoContext;
 
-    const today = dayjs();
-    const fromDate = today.subtract(1, 'year').add(1, 'day')
-    const toDate = today
+    const fromDate = dayjs().subtract(1, 'year').startOf('year');
+    const toDate = dayjs();
 
     // タスク完了をした日付を格納
     const map_Date = new Map<string, boolean>();

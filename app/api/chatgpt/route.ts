@@ -240,6 +240,52 @@ export async function POST(req: Request) {
         // JSONデータをそのまま返す
         return NextResponse.json({ result: data.choices[0]?.message?.content });
 
+    } else if (type == "praise") {
+
+        SystemPrompt = `あなたはユーザーのタスク内容や達成状況などをタグごとに分析し、分析結果を書きつつユーザーを褒めるような文を書いてください
+        褒めるときはタスクの達成状況を基に褒めるようにしてください。
+        タスクの内容: ${JSON.stringify(alltodos)}(タスクはjson形式)
+        出力は250字以内で書いてください。`
+        
+        const response = await fetch(`${gptApiEndPoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${gptApiKey}`,
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini",
+                messages: [
+                    {
+                        role: "user",
+                        content: SystemPrompt
+                    },
+                ],
+                max_tokens: 1000,
+                stream: false,
+                temperature: 0.8,
+            }),
+        });
+
+        const data = await response.json();
+    
+        //API処理が正常にできない場合
+        if (!response.ok) {
+            console.error(
+                `APIリクエスト失敗: ${response.status} ${response.statusText}`,
+            );
+            const errorData = await response.json();
+            console.error("エラーメッセージ:", errorData);
+
+            return NextResponse.json(
+                { error: "APIリクエストが失敗しました。" },
+                { status: response.status },
+            );
+        }
+        
+        // JSONデータをそのまま返す
+        return NextResponse.json({ result: data.choices[0]?.message?.content });
+
     } else {
         console.log("エラーが発生しました。type: なし");
     }
