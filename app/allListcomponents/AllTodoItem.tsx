@@ -43,13 +43,17 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
     return (
         <div>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+            <Grid size={{ xs: 'auto' }}>
                 <Box
                     onClick={handleDetailOpen}
-                    sx={{ cursor: "pointer" }}>
-                    <Card sx={{ minWidth: 200, height: "100%" }}>
+                    sx={{ 
+                        cursor: "pointer",
+                        height: '100%',
+                     }}>
+                    <Card sx={{ width: 230, height: 350 }}>
                         <CardContent
                             sx={{
+                                flexGrow: 1,
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",
@@ -95,7 +99,14 @@ const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                                 <Typography
                                     variant='h6'
                                     component='div'
-                                    gutterBottom>
+                                    gutterBottom
+                                    sx={{
+                                        overflow: 'hidden',
+                                        display: '-webkit-box',
+                                        'WebkitBoxOrient': 'vertical',
+                                        'WebkitLineClamp': '1', 
+                                        }}>
+                                        
                                     {todo.title}
                                 </Typography>
                                 <Divider sx={{ my: 1 }} />

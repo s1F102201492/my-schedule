@@ -181,9 +181,7 @@ const AllTodoList = () => {
                 {loading ? (
                     <FadeLoading loading={loading} />
                 ) : (
-                    <Grid
-                        container
-                        spacing={3}>
+                    <Grid container spacing={2}>
                         {finaltodos.map((todo) => (
                             <AllTodoItem
                                 key={todo.id}
