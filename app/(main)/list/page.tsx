@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext } from "react";
-import Header from "../../components/Header";
 import AllTodoList from "../../allListcomponents/AllTodoList";
 import { Typography } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
@@ -32,7 +31,6 @@ const Page = () => {
 
     return (
         <div>
-            <Header />
             {loginUser ? (
                 <>
                     <Typography

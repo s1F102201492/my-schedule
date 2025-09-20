@@ -2,10 +2,7 @@
 
 import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
-import { Typography } from "@mui/material";
-import Header from "../components/Header";
 import TodoList from "../listcomponents/TodoList";
-import FadeLoading from "../components/parts/FadeLoading";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
@@ -32,7 +29,6 @@ export default function Home() {
 
     return (
         <div>
-            <Header />
 
             <TodoList />
         </div>

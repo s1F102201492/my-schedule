@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/app/components/Header";
 import GPTRecommend from "@/app/components/addTask/GPTRecommend";
 import SelfAddForm from "@/app/components/addTask/SelfAddForm";
 import React, { useState } from "react";
@@ -13,7 +12,6 @@ const Page = () => {
 
     return (
         <div>
-            <Header />
 
             {boolRecomPage ? (
                 <GPTRecommend
