@@ -23,7 +23,7 @@ interface UserCardProps {
 }
 
 interface PropsType {
-    loginUser: UserCardProps;
+    loginUser?: UserCardProps | undefined;
 }
 
 const UserCard: React.FC<PropsType> = ({ loginUser }) => {
@@ -46,7 +46,7 @@ const UserCard: React.FC<PropsType> = ({ loginUser }) => {
                 <CardContent sx={{ textAlign: "center", padding: 3 }}>
                     {/* ユーザーアイコン */}
                     <Box sx={{ mb: 2 }}>
-                        {loginUser.avatar_url ? (
+                        {loginUser?.avatar_url ? (
                             <Avatar
                                 src={loginUser.avatar_url}
                                 alt={loginUser.username || "User"}
@@ -63,51 +63,55 @@ const UserCard: React.FC<PropsType> = ({ loginUser }) => {
                         )}
                     </Box>
 
-                    {/* ユーザー名 */}
-                    <Typography
-                        variant='h6'
-                        component='h2'
-                        sx={{
-                            fontWeight: "bold",
-                            mb: 0.5,
-                            color: "text.primary",
-                        }}>
-                        {loginUser.username}
-                    </Typography>
-
-                    {/* メールアドレス */}
-                    <Typography
-                        variant='body2'
-                        color='text.secondary'
-                        sx={{
-                            mb: 2,
-                            wordBreak: "break-word",
-                        }}>
-                        {loginUser.email}
-                    </Typography>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    {/* アクションボタン */}
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 1,
-                        }}>
-                        <Button
-                            variant='contained'
-                            startIcon={<LogoutIcon />}
-                            onClick={handleGoogleLogout}
-                            fullWidth
-                            color='error'
+                    {loginUser ? (<>
+                        {/* ユーザー名 */}
+                        <Typography
+                            variant='h6'
+                            component='h2'
                             sx={{
-                                borderRadius: 2,
-                                textTransform: "none",
+                                fontWeight: "bold",
+                                mb: 0.5,
+                                color: "text.primary",
                             }}>
-                            ログアウト
-                        </Button>
-                    </Box>
+                            {loginUser?.username}
+                        </Typography>
+
+                        {/* メールアドレス */}
+                        <Typography
+                            variant='body2'
+                            color='text.secondary'
+                            sx={{
+                                mb: 2,
+                                wordBreak: "break-word",
+                            }}>
+                            {loginUser.email}
+                        </Typography>
+
+                        <Divider sx={{ my: 2 }} />
+
+                        {/* アクションボタン */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                            }}>
+                            <Button
+                                variant='contained'
+                                startIcon={<LogoutIcon />}
+                                onClick={handleGoogleLogout}
+                                fullWidth
+                                color='error'
+                                sx={{
+                                    borderRadius: 2,
+                                    textTransform: "none",
+                                }}>
+                                ログアウト
+                            </Button>
+                        </Box>
+                    </>
+                    ): "ログインされていません"}
+                        
                 </CardContent>
             </Card>
         </div>
