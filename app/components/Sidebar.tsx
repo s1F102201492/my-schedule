@@ -3,7 +3,7 @@
 import React from "react";
 import Drawer from "@mui/material/Drawer";
 import UserCard from "../components/parts/UserCard";
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import EventIcon from "@mui/icons-material/Event";
@@ -16,10 +16,10 @@ import { useRouter } from "next/navigation";
 interface SidebarProps {
     drawer: boolean;
     setDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-    loginUser?: UserCardProps;
+    loginUser?: UserType | null;
 }
 
-interface UserCardProps {
+interface UserType {
     id: string;
     username: string;
     email: string;
@@ -57,29 +57,32 @@ export default function Sidebar({
         onClose={() => setDrawer(false)}
         anchor="right">
             <UserCard loginUser={loginUser} />
-            <List>
-                {menuItems.map((item) => {
-                    const isPath = pathname === item.href;
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                <List>
+                    {menuItems.map((item) => {
+                        const isPath = pathname === item.href;
 
-                return (
-                    <ListItem key={item.text} disablePadding>
-                        <ListItemButton
-                        onClick={() => handlePageLink(item.href)}
-                        sx={{
-                            "&:hover": {
-                            backgroundColor: "action.hover",
-                            }
-                        }}
-                        disabled={isPath} // 現在のページのリンクは無効化
-                        >
-                        <ListItemIcon sx={{ color: "primary.main" }}>{item.icon}</ListItemIcon>
-                        <ListItemText
-                            primary={item.text}
-                        />
-                        </ListItemButton>
-                    </ListItem>
-                )})}
-            </List>
+                        return (
+                            <ListItem key={item.text} disablePadding>
+                                <ListItemButton
+                                onClick={() => handlePageLink(item.href)}
+                                sx={{
+                                    "&:hover": {
+                                    backgroundColor: "action.hover",
+                                    }
+                                }}
+                                disabled={isPath} // 現在のページのリンクは無効化
+                                >
+                                <ListItemIcon sx={{ color: "primary.main" }}>{item.icon}</ListItemIcon>
+                                <ListItemText
+                                    primary={item.text}
+                                />
+                                </ListItemButton>
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </Box>
         </Drawer>
     );
 }

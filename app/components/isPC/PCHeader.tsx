@@ -16,16 +16,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
 import { Button, IconButton } from "@mui/material";
-import Sidebar from "../Sidebar";
 import { AuthContext } from "../../context/AuthContext";
+import Sidebar from "../Sidebar";
 
 const PCHeader = () => {
     const pathname = usePathname();
 
-    const [drawer, setDrawer] = useState<boolean>(false);
-    const userDrawer = () => {
-        setDrawer(true);
-    };
+    const [isOpenSidebar, setIsOpenSidebar] = useState<boolean>(false);
+    const userIconClick = () => {
+        setIsOpenSidebar(!isOpenSidebar);
+    }
 
     const authContext = useContext(AuthContext);
 
@@ -64,6 +64,7 @@ const PCHeader = () => {
                             icon={<HomeIcon />}
                             component={Link}
                             href='/'
+                            disabled={pathname === "/"}
                             sx={{
                                 "&.Mui-selected": {
                                     color:
@@ -80,6 +81,7 @@ const PCHeader = () => {
                             icon={<AddBoxOutlinedIcon />}
                             component={Link}
                             href='/addTask'
+                            disabled={pathname === "/addTask"}
                             sx={{
                                 "&.Mui-selected": {
                                     color:
@@ -96,6 +98,7 @@ const PCHeader = () => {
                             icon={<EventIcon />}
                             component={Link}
                             href='/calendar'
+                            disabled={pathname === "/calendar"}
                             sx={{
                                 "&.Mui-selected": {
                                     color:
@@ -112,6 +115,7 @@ const PCHeader = () => {
                             icon={<FormatListNumberedIcon />}
                             component={Link}
                             href='/list'
+                            disabled={pathname === "/list"}
                             sx={{
                                 "&.Mui-selected": {
                                     color:
@@ -123,11 +127,12 @@ const PCHeader = () => {
                             }}
                         />
                         <BottomNavigationAction
-                            label='AI Analytics'
+                            label='Analytics'
                             value='/analytics'
                             icon={<EqualizerOutlinedIcon />}
                             component={Link}
                             href='/analytics'
+                            disabled={pathname === "/analytics"}
                             sx={{
                                 "&.Mui-selected": {
                                     color:
@@ -141,7 +146,7 @@ const PCHeader = () => {
                     </BottomNavigation>
                     {loginUser ? (
                         <IconButton
-                            onClick={userDrawer}
+                            onClick={userIconClick}
                             sx={{ p: 0 }}>
                             <Avatar
                                 alt={loginUser.username || "User"}
@@ -159,13 +164,7 @@ const PCHeader = () => {
                     )}
                 </Toolbar>
             </AppBar>
-            {drawer && (
-                <Sidebar
-                    drawer={drawer}
-                    setDrawer={setDrawer}
-                    loginUser={loginUser!}
-                />
-            )}
+            {isOpenSidebar && <Sidebar drawer={isOpenSidebar} setDrawer={setIsOpenSidebar} loginUser={loginUser}/>}
         </Box>
     );
 };

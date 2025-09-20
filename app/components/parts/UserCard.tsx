@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "@/utils/supabase/authGoogle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-interface UserCardProps {
+interface UserType {
     id: string;
     username: string;
     email: string;
@@ -23,7 +23,7 @@ interface UserCardProps {
 }
 
 interface PropsType {
-    loginUser?: UserCardProps | undefined;
+    loginUser?: UserType | null;
 }
 
 const UserCard: React.FC<PropsType> = ({ loginUser }) => {
