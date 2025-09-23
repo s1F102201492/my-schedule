@@ -9,7 +9,8 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import EventIcon from "@mui/icons-material/Event";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
-import Link from "next/link";
+import ArticleIcon from '@mui/icons-material/Article';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { usePathname } from 'next/navigation';
 import { useRouter } from "next/navigation";
 
@@ -34,12 +35,17 @@ export default function Sidebar({
     loginUser,
 }: SidebarProps) {
 
-    const menuItems = [
+    const mobileMenuItems = [
         { text: "Home", icon: <HomeIcon />, href: "/" },
         { text: "タスク追加", icon: <AddBoxOutlinedIcon />, href: "/addTask" },
         { text: "カレンダー", icon: <EventIcon />, href: "/calendar" },
         { text: "タスク一覧", icon: <FormatListNumberedIcon />, href: "/list" },
         { text: "AI Analytics", icon: <EqualizerOutlinedIcon />, href: "/analytics" },
+    ]
+
+    const PCMenuItems = [
+        { text: "お問い合わせ", icon: <ArticleIcon />, href: "https://docs.google.com/forms/d/e/1FAIpQLSfZqnEIjM4MZkNY5Nm8UszqVFhNqJrUmWBANIlu3WxAvRma6g/viewform?usp=dialog" },
+        { text: "使い方ガイド", icon: <HelpOutlineIcon />, href: "/" }
     ]
 
     const router = useRouter();
@@ -59,7 +65,7 @@ export default function Sidebar({
             <UserCard loginUser={loginUser} />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <List>
-                    {menuItems.map((item) => {
+                    {mobileMenuItems.map((item) => {
                         const isPath = pathname === item.href;
 
                         return (
@@ -81,6 +87,45 @@ export default function Sidebar({
                             </ListItem>
                         )
                     })}
+                </List>
+            </Box>
+
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <List>
+                    <ListItem key="contact">
+                        <ListItemButton
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSfZqnEIjM4MZkNY5Nm8UszqVFhNqJrUmWBANIlu3WxAvRma6g/viewform?usp=dialog"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                                "&:hover": {
+                                backgroundColor: "action.hover",
+                                }
+                            }}
+                            >
+                            <ListItemIcon sx={{ color: "primary.main" }}><ArticleIcon /></ListItemIcon>
+                            <ListItemText
+                                primary="お問い合わせ"
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key="guide">
+                        <ListItemButton
+                            href="/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                                "&:hover": {
+                                backgroundColor: "action.hover",
+                                }
+                            }}
+                            >
+                            <ListItemIcon sx={{ color: "primary.main" }}><HelpOutlineIcon /></ListItemIcon>
+                            <ListItemText
+                                primary="使い方ガイド"
+                            />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
             </Box>
         </Drawer>
