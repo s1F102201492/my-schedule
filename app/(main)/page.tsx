@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
 import TodoList from "../listcomponents/TodoList";
 import { AuthContext } from "../context/AuthContext";
+import { Box } from "@mui/material";
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -31,6 +32,7 @@ export default function Home() {
         <div>
 
             <TodoList />
+            <Box sx={{ m: 4 }}></Box>
         </div>
     );
 }

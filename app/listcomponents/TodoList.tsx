@@ -100,7 +100,11 @@ const TodoList = () => {
             {notchecktodos.length === 0 ?
                 <Typography
                     variant='caption'
-                    sx={{ ml: 16, mt: 8, opacity: 0.5, display: 'block' }}>
+                    sx={{ 
+                        ml: {xs: 4, sm: 16 },
+                        my: {xs: 4, sm: 8},
+                        opacity: 0.5,
+                        display: 'block' }}>
                     今日のタスクは終了しました！お疲れ様です！
                 </Typography>
                 :
@@ -125,7 +129,11 @@ const TodoList = () => {
             {checkedtodos.length === 0 ?
                 <Typography
                     variant='caption'
-                    sx={{ ml: 16, my: 8, opacity: 0.5, display: 'block' }}>
+                    sx={{ 
+                        ml: {xs: 4, sm: 16 },
+                        my: {xs: 4, sm: 8},
+                        opacity: 0.5,
+                        display: 'block' }}>
                     完了されたタスクはありません！
                 </Typography>
                 :
