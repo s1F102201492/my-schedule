@@ -47,7 +47,14 @@ const TodoChecked: React.FC<TodoItemProps> = ({ todo }) => {
                     checked={!!todo.checkedDates[todayslash]}
                     onChange={handleCheck}
                 />
-                <ListItemText primary={todo.title} />
+                <ListItemText
+                sx={{
+                    width: 120,
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    'WebkitBoxOrient': 'vertical',
+                    'WebkitLineClamp': '1', }}
+                primary={todo.title} />
                 {todayDayscnt}日目
             </ListItem>
         </div>

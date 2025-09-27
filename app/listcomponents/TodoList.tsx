@@ -93,39 +93,53 @@ const TodoList = () => {
             {/* 完了していないリスト */}
             <Typography
                 variant='h6'
-                fontFamily='Monospace'
                 component='div'
                 sx={{ m: 4 }}>
                 {`${year}年${month}月${day}日`}のやることリスト
             </Typography>
-            <List
-                sx={{ width: "100%", maxWidth: 500 }}
-                disablePadding>
-                {notchecktodos.map((todo: TodoProps) => (
-                    <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                    />
-                ))}
-            </List>
+            {notchecktodos.length === 0 ?
+                <Typography
+                    variant='caption'
+                    sx={{ ml: 16, mt: 8, opacity: 0.5, display: 'block' }}>
+                    今日のタスクは終了しました！お疲れ様です！
+                </Typography>
+                :
+                <List
+                    sx={{ width: "100%", maxWidth: 550 }}
+                    disablePadding>
+                    {notchecktodos.map((todo: TodoProps) => (
+                        <TodoItem
+                            key={todo.id}
+                            todo={todo}
+                        />
+                    ))}
+                </List>}
             <br />
 
             {/* 完了してしたリスト、うすくする */}
             <Typography
                 variant='h6'
-                m={4}>
+                sx={{ m: 4 }}>
                 完了したリスト
             </Typography>
-            <List
-                sx={{ width: "100%", maxWidth: 500 }}
-                disablePadding>
-                {checkedtodos.map((todo: TodoProps) => (
-                    <TodoChecked
-                        key={todo.id}
-                        todo={todo}
-                    />
-                ))}
-            </List>
+            {checkedtodos.length === 0 ?
+                <Typography
+                    variant='caption'
+                    sx={{ ml: 16, my: 8, opacity: 0.5, display: 'block' }}>
+                    完了されたタスクはありません！
+                </Typography>
+                :
+                <List
+                    sx={{ width: "100%", maxWidth: 510 }}
+                    disablePadding>
+                    {checkedtodos.map((todo: TodoProps) => (
+                        <TodoChecked
+                            key={todo.id}
+                            todo={todo}
+                        />
+                    ))}
+                </List>}
+            
 
             {reward && (
                 <RewardDialog
