@@ -33,11 +33,6 @@ const Page = () => {
         <div>
             {loginUser ? (
                 <>
-                    <Typography
-                        variant='h4'
-                        sx={{ m: 4 }}>
-                        {loginUser.username} さん！ようこそ！
-                    </Typography>
                     {loading ? (
                         <FadeLoading loading={loading} />
                     ) : (
