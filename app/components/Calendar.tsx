@@ -132,7 +132,6 @@ const Calendar = () => {
                     <Typography
                         variant='h5'
                         component='h2'
-                        fontWeight='bold'
                         sx={{ ml: 4 }}>
                         {dayjs(current).format("YYYY")}年
                         {dayjs(current).format("M")}月
@@ -229,6 +228,7 @@ const Calendar = () => {
                                     <Button
                                         fullWidth
                                         sx={{
+                                            minWidth: 0,
                                             height: 56,
                                             borderRadius: 0,
                                             justifyContent: "flex-start",
@@ -360,8 +360,15 @@ const Calendar = () => {
                                                 90,
                                                 0,
                                                 "left",
-                                            )}>
-                                            {todo.title}
+                                            )}
+                                            style={{ maxWidth: 160 }}>
+                                            <Typography sx={{
+                                                display: '-webkit-box',
+                                                overflow: 'hidden',
+                                                WebkitBoxOrient: 'vertical',
+                                                WebkitLineClamp: 1 }}>
+                                                {todo.title}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell
                                             sx={GetStickyCellStyle(
