@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     IconButton,
+    InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -13,6 +14,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import ImageIcon from "@mui/icons-material/Image";
+import AssignmentAddIcon from '@mui/icons-material/Assignment';
 import PulseLoading from "../parts/PulseLoading";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { taglist } from "../tags";
@@ -61,14 +63,14 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
     // タグの選択
     const tags = taglist;
     const [tag, setTag] = useState<string>("");
-    const handleTagSelect = (e: SelectChangeEvent) => {
+    const handleTagSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         // 選択
         setTag(e.target.value as string);
     };
 
     const levelList = ["低い", "まあまあ", "高い"];
-    const [level, setLevel] = useState<string>("低い");
-    const handleLevel = (e: SelectChangeEvent) => {
+    const [level, setLevel] = useState<string>("");
+    const handleLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLevel(e.target.value);
     };
 
@@ -85,6 +87,11 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
         }
 
         if (tag === "") {
+            alert("タグを選択してください。");
+            return;
+        }
+
+        if (level === "") {
             alert("タグを選択してください。");
             return;
         }
@@ -132,7 +139,7 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
 
     return (
         <div>
-            <Box sx={{ mx: 4, mt: 2 }}>
+            <Box sx={{ mx: 4, mt: 4, mb: 16 }}>
                 <Box
                     sx={{
                         display: "flex",
@@ -140,9 +147,23 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                         alignItems: "center",
                     }}>
                     <Typography variant='h5'>おすすめの習慣を提案</Typography>
-                    <Button onClick={() => handleBoolRecomPage()}>
-                        自分でタスクを追加する
-                    </Button>
+
+                    {/* PC用タイトル */}
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Button onClick={() => handleBoolRecomPage()}>
+                            自分でタスクを追加する
+                        </Button>
+                    </Box>
+
+                    {/* モバイル用タイトル */}
+                    <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                        <Tooltip title='自分でタスクを追加する'>
+                            <IconButton onClick={() => handleBoolRecomPage()}>
+                                <AssignmentAddIcon color="primary" />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    
                 </Box>
                 <Box sx={{ mt: 3 }}>
                     <Typography variant='subtitle1'>
@@ -194,12 +215,13 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             )}
                         </label>
                     </Box>
-                    <Box>
-                        <Select
-                            id='tag'
+                    <Box sx={{ mt: 3 }}>
+                        <TextField
+                            select
                             value={tag}
-                            label='タグ'
+                            label='タグを選択'
                             onChange={handleTagSelect}
+                            fullWidth
                             required>
                             {tags.map((elem) => (
                                 <MenuItem
@@ -208,13 +230,16 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                                     {elem}
                                 </MenuItem>
                             ))}
-                        </Select>
+                        </TextField>
                     </Box>
                     <Box>
-                        <Select
+                        <TextField
+                            select
+                            sx={{ mt: 2 }}
                             value={level}
-                            label='難易度'
+                            label='難易度を選択'
                             onChange={handleLevel}
+                            fullWidth
                             required>
                             {levelList.map((elem) => (
                                 <MenuItem
@@ -223,7 +248,7 @@ const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                                     {elem}
                                 </MenuItem>
                             ))}
-                        </Select>
+                        </TextField>
                     </Box>
                 </Box>
                 <Button
