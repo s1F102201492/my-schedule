@@ -32,7 +32,7 @@ const MobileHeader = () => {
     return (
         <Box>
             <AppBar
-                position='static'
+                position='fixed'
                 sx={{ backgroundColor: "primary" }}>
                 <Toolbar>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>

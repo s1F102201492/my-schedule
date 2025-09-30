@@ -27,7 +27,9 @@ export default function AuthLayout({
                             <MobileHeader />
                         </Box>
                         
-                        {children}
+                        <Box sx={{ mt: { xs: 10, sm: 3 } }}>
+                            {children}
+                        </Box>
                     </ThemeProvider>
                 </AppRouterCacheProvider>
             </TodoProvider>

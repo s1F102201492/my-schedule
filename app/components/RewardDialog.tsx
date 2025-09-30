@@ -25,8 +25,8 @@ const RewardDialog: React.FC<rewardProps> = ({ open, setOpen }) => {
                         sx={{
                             display: "flex",
                             justifyContent: "center", // 水平方向中央
-                            height: {xs: "80px", md: "200px"}, // 画面全体の高さ
-                            width: {xs: "280px", md: "520px"} // 画面全体の幅
+                            height: {xs: "80px", sm: "200px"}, // 画面全体の高さ
+                            width: {xs: "280px", sm: "520px"} // 画面全体の幅
                         }}>
                         <Lottie
                             animationData={medalAnimation}

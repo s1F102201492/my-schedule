@@ -122,12 +122,13 @@ const Calendar = () => {
 
     return (
         <div>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Box
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        mb: 3
                     }}>
                     <Typography
                         variant='h5'
