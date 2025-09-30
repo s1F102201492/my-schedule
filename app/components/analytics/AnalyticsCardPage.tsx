@@ -59,7 +59,7 @@ export const AnalyticsCardPage: React.FC<modelPageProps> = ({ switchModelPage, s
                     }}>
                     <CardMedia
                         component='img'
-                        image='img/business-3695073_640.jpg'
+                        image='img/data_img.jpg'
                         sx={{ width: 400, height: 250, objectFit: "fill" }}
                     />
                     <CardContent>
