@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
+    Box,
     Button,
     Checkbox,
     Dialog,
@@ -69,8 +70,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                     checked={!!todo.checkedDates[todayslash]}
                     onChange={handleCheck}
                 />
-                <ListItemText primary={todo.title} />
-                {todayDayscnt + 1}日目
+                <ListItemText
+                sx={{
+                    width: 120,
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    'WebkitBoxOrient': 'vertical',
+                    'WebkitLineClamp': '1', }}
+                primary={todo.title} />
+                <Box sx={{ml: 1}}>
+                    {todayDayscnt + 1}日目
+                </Box>
                 <Tooltip title='削除'>
                     <IconButton
                         aria-label='delete'

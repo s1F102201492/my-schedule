@@ -2,11 +2,9 @@
 
 import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
-import { Typography } from "@mui/material";
-import Header from "../components/Header";
 import TodoList from "../listcomponents/TodoList";
-import FadeLoading from "../components/parts/FadeLoading";
 import { AuthContext } from "../context/AuthContext";
+import { Box } from "@mui/material";
 
 export default function Home() {
     const todoContext = useContext(TodoContext);
@@ -32,9 +30,9 @@ export default function Home() {
 
     return (
         <div>
-            <Header />
 
             <TodoList />
+            <Box sx={{ m: 4 }}></Box>
         </div>
     );
 }

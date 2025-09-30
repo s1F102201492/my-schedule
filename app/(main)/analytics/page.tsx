@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import Header from "../../components/Header";
 import Model from "../../components/analytics/Model";
 import { TodoContext } from "../../context/TodoContext";
 import { AuthContext } from "../../context/AuthContext";
@@ -43,7 +42,6 @@ const Page = () => {
 
     return (
         <div>
-            <Header />
 
             { modelPage && !viewCurrentPage
                 ? <Model switchModelPage={switchModelPage} />

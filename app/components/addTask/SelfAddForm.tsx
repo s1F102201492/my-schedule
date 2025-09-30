@@ -7,14 +7,17 @@ import {
     Chip,
     FormControl,
     FormGroup,
+    IconButton,
     InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
     Switch,
     TextField,
+    Tooltip,
     Typography,
 } from "@mui/material";
+import AutoAwesomeSharpIcon from '@mui/icons-material/AutoAwesomeSharp';
 import { DateComponents } from "../DateComponents";
 import { TodoContext } from "../../context/TodoContext";
 import dayjs, { Dayjs } from "dayjs";
@@ -237,17 +240,28 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             justifyContent: "space-between",
                             alignItems: "center",
                         }}>
-                        <Typography
-                            sx={{ m: 1 }}
-                            variant='h6'>
+                        <Typography variant='h5'>
                             タスクや習慣を追加する
                         </Typography>
-                        <Button onClick={() => handleBoolRecomPage()}>
-                            自分でタスクを追加する
-                        </Button>
+
+                        {/* PC用タイトル */}
+                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Button onClick={() => handleBoolRecomPage()}>
+                                自分でタスクを追加する
+                            </Button>
+                        </Box>
+
+                        {/* モバイル用タイトル */}
+                        <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                            <Tooltip title='おすすめの習慣を提示してもらう'>
+                                <IconButton onClick={() => handleBoolRecomPage()}>
+                                    <AutoAwesomeSharpIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                     </Box>
 
-                    <Box>
+                    <Box sx={{ mt: 3 }}>
                         <Typography variant='h6'>タイトル</Typography>
                         <TextField
                             required
@@ -257,7 +271,7 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             value={title}
                             onChange={handletitle}
                         />
-                        <Typography variant='h6'>
+                        <Typography variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
                         </Typography>
                         <TextField
@@ -353,7 +367,7 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                                 </FormGroup>
                             )}
                         </Box>
-                        <Typography variant='h6'>目的</Typography>
+                        <Typography variant='h6' sx={{ mt: 3 }}>目的</Typography>
                         <TextField
                             multiline
                             rows={3}
