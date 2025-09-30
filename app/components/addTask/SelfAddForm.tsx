@@ -271,7 +271,7 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             value={title}
                             onChange={handletitle}
                         />
-                        <Typography variant='h6' sx={{ mt: 3}}>
+                        <Typography variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
                         </Typography>
                         <TextField

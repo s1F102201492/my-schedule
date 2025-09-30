@@ -227,21 +227,22 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                             {Object.entries(todo.checkedDates).map(
                                 (date, key) => (
                                     <Grid2
-                                        size={{ xs: 6, md: 4 }}
+                                        size={{ xs: 6, sm: 4 }}
                                         key={key}>
                                         <Card variant='outlined'>
                                             <CardContent>
                                                 <Box
                                                     sx={{
-                                                        display: "flex",
-                                                        justifyContent:
-                                                            "space-between",
-                                                        alignItems: "center",
+                                                            display: 'block'
+                                                        
                                                     }}>
-                                                    <Typography variant='body1'>
+                                                    <Typography
+                                                        variant='body1'
+                                                        sx={{ width: 90 }}>
                                                         {date[0]}
                                                     </Typography>
                                                     <Chip
+                                                        sx={{ mt: 1 }}
                                                         icon={
                                                             date[1] ? (
                                                                 <CheckIcon />
@@ -276,21 +277,12 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                         onClick={onClose}>
                         閉じる
                     </Button>
-                    <Box sx={{ m: 2 }}>
-                        <Button
-                            variant='contained'
-                            startIcon={<EditIcon />}
-                            sx={{ mr: 1 }}
-                            onClick={handleEditOpen}>
-                            編集
-                        </Button>
-                    </Box>
-                    <Edit
-                        id={todo.id}
-                        todo={todo}
-                        editOpen={editOpen}
-                        setEditOpen={setEditOpen}
-                    />
+                    <Button
+                        variant='contained'
+                        startIcon={<EditIcon />}
+                        onClick={handleEditOpen}>
+                        編集
+                    </Button>
                     <Button
                         variant='contained'
                         color='error'
@@ -298,12 +290,18 @@ const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
                         onClick={handleDeleteOpen}>
                         削除
                     </Button>
-                    <Delete
-                        onetodo={todo}
-                        deleteOpen={deleteOpen}
-                        setDeleteOpen={setDeleteOpen}
-                    />
                 </DialogActions>
+                <Edit
+                    id={todo.id}
+                    todo={todo}
+                    editOpen={editOpen}
+                    setEditOpen={setEditOpen}
+                />
+                <Delete
+                    onetodo={todo}
+                    deleteOpen={deleteOpen}
+                    setDeleteOpen={setDeleteOpen}
+                />
             </Dialog>
         </div>
     );

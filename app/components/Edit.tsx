@@ -310,7 +310,7 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                 <form onSubmit={handleSubmit}>
                     <DialogTitle
                         sx={{ m: 1 }}
-                        variant='h4'>
+                        variant='h5'>
                         タスクや習慣を追加する
                     </DialogTitle>
                     <DialogContent>
@@ -325,7 +325,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                             value={title}
                             onChange={handletitle}
                         />
-                        <DialogContentText variant='h6'>詳細</DialogContentText>
+                        <DialogContentText variant='h6' sx={{ mt: 3 }}>
+                            具体的にやることや現状の記録
+                        </DialogContentText>
                         <TextField
                             multiline
                             rows={3}
@@ -419,7 +421,9 @@ const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
                                 </FormGroup>
                             )}
                         </Box>
-                        <DialogContentText variant='h6'>目的</DialogContentText>
+                        <DialogContentText
+                            variant='h6'
+                            sx={{ mt: 3 }}>目的</DialogContentText>
                         <TextField
                             multiline
                             rows={3}
