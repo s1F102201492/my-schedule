@@ -109,49 +109,113 @@ const AllTodoList = () => {
     return (
         <div>
             <Box sx={{ flexGrow: 1, p: 3 }}>
-                <Box sx={{ mb: 3 }}>
+                <Box sx={{ mb: 4 }}>
                     <TextField
-                        fullWidth
-                        variant='outlined'
-                        label='タスクを検索'
-                        sx={{ mb: 2 }}
-                        value={search}
-                        onChange={handleSearch}
-                    />
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}>
-                        <ToggleButtonGroup
-                            exclusive
-                            aria-label='task filter'
-                            value={active}
-                            onChange={(e, newActive) =>
-                                handleActive(e, newActive)
-                            }>
-                            <ToggleButton
-                                value='all'
-                                aria-label='all tasks'>
-                                全て
-                            </ToggleButton>
-                            <ToggleButton
-                                value='active'
-                                aria-label='active tasks'>
-                                アクティブ
-                            </ToggleButton>
-                            <ToggleButton
-                                value='archived'
-                                aria-label='archived tasks'>
-                                アーカイブ済み
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                        <FormControl sx={{ minWidth: 120 }}>
+                            fullWidth
+                            variant='outlined'
+                            label='タスクを検索'
+                            sx={{ mb: 4 }}
+                            value={search}
+                            onChange={handleSearch}
+                        />
+
+                    {/* PC用 */}
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}>
+                            <ToggleButtonGroup
+                                exclusive
+                                aria-label='task filter'
+                                value={active}
+                                onChange={(e, newActive) =>
+                                    handleActive(e, newActive)
+                                }>
+                                <ToggleButton
+                                    value='all'
+                                    aria-label='all tasks'>
+                                    全て
+                                </ToggleButton>
+                                <ToggleButton
+                                    value='active'
+                                    aria-label='active tasks'>
+                                    アクティブ
+                                </ToggleButton>
+                                <ToggleButton
+                                    value='archived'
+                                    aria-label='archived tasks'>
+                                    アーカイブ済み
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                            <FormControl sx={{ minWidth: 120 }}>
+                                <InputLabel id='sort-select-label'>
+                                    並べ替え
+                                </InputLabel>
+                                <Select
+                                    labelId='sort-select-label'
+                                    label='並べ替え'
+                                    value={sort}
+                                    onChange={selectSort}>
+                                    <MenuItem value='startDateAsc'>
+                                        開始日が早い順
+                                    </MenuItem>
+                                    <MenuItem value='startDateDesc'>
+                                        開始日が遅い順
+                                    </MenuItem>
+                                    <MenuItem value='endDateAsc'>
+                                        終了日が早い順
+                                    </MenuItem>
+                                    <MenuItem value='endDateDesc'>
+                                        終了日が遅い順
+                                    </MenuItem>
+                                    <MenuItem value='progressAsc'>
+                                        達成率が低い順
+                                    </MenuItem>
+                                    <MenuItem value='progressDesc'>
+                                        達成率が高い順
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Box>
+
+                    {/* モバイル用 */}
+                    <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                        <Box sx={{ mb: 4 }} >
+                            <ToggleButtonGroup
+                                fullWidth
+                                exclusive
+                                aria-label='task filter'
+                                value={active}
+                                onChange={(e, newActive) =>
+                                    handleActive(e, newActive)
+                                }>
+                                <ToggleButton
+                                    value='all'
+                                    aria-label='all tasks'>
+                                    全て
+                                </ToggleButton>
+                                <ToggleButton
+                                    value='active'
+                                    aria-label='active tasks'>
+                                    アクティブ
+                                </ToggleButton>
+                                <ToggleButton
+                                    value='archived'
+                                    aria-label='archived tasks'>
+                                    アーカイブ済み
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
+                        <FormControl fullWidth>
                             <InputLabel id='sort-select-label'>
                                 並べ替え
                             </InputLabel>
                             <Select
+                                
                                 labelId='sort-select-label'
                                 label='並べ替え'
                                 value={sort}
