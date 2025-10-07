@@ -18,19 +18,7 @@ import Grid from "@mui/material/Grid2";
 import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
 import { CheckRate } from "../components/calculate/CheckRate";
 import FadeLoading from "../components/parts/FadeLoading";
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    // intervalには数字か配列（曜日を格納する）
-}
+import { TodoModel } from "../Models/models";
 
 const AllTodoList = () => {
     const todoContext = useContext(TodoContext);
@@ -88,13 +76,13 @@ const AllTodoList = () => {
 
     const compareDates = (dateA: string, dateB: string) =>
         new Date(dateA).getTime() - new Date(dateB).getTime();
-    const compareProgress = (a: TodoProps, b: TodoProps) =>
+    const compareProgress = (a: TodoModel, b: TodoModel) =>
         CheckRate(a) - CheckRate(b);
 
     // ソート用の関数をオブジェクトで管理
     const sortFunctions: Record<
         string,
-        (a: TodoProps, b: TodoProps) => number
+        (a: TodoModel, b: TodoModel) => number
     > = {
         startDateAsc: (a, b) => compareDates(a.startdate, b.startdate),
         startDateDesc: (a, b) => compareDates(b.startdate, a.startdate),

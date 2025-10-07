@@ -28,6 +28,7 @@ import CreateCheckedDates from "../calculate/CreateCheckedDates";
 import { taglist } from "../tags";
 import { AuthContext } from "../../context/AuthContext";
 import FullScreenLoading from "../parts/fullScreenLoading";
+import { AddTaskPageSwitchProps } from "../../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -68,12 +69,7 @@ const addTodo = async (
     return res.json();
 };
 
-interface PageSwitchProps {
-    boolRecomPage: boolean;
-    handleBoolRecomPage: () => void;
-}
-
-const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
+const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);

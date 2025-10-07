@@ -20,25 +20,12 @@ import { AuthContext } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { TodoContext } from "@/app/context/TodoContext";
 import FullScreenLoading from "./fullScreenLoading";
+import { TaskProps, taskListProps } from "../../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
-
-interface TaskProps {
-    title: string;
-    description: string;
-    startdate: string;
-    enddate: string;
-    interval: number;
-    tag: string;
-}
-
-interface taskListProps {
-    taskList: TaskProps[];
-    purpose: string;
-}
 
 const addTodo = async (
     title: string,

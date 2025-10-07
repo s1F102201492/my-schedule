@@ -12,20 +12,7 @@ import {
     useState,
 } from "react";
 import FullScreenLoading from "../components/parts/fullScreenLoading";
-
-interface UserType {
-    id: string;
-    username: string;
-    email: string;
-    avatar_url: string;
-}
-
-interface AuthContextType {
-    loginUser: UserType | null;
-    setLoginUser: React.Dispatch<React.SetStateAction<UserType | null>>;
-    loginSession: () => Promise<void>;
-    session: Session | null;
-}
+import { UserType, AuthContextType } from "../Models/models";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 

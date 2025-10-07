@@ -2,12 +2,9 @@
 
 import React from "react";
 import PulseLoader from "react-spinners/PulseLoader";
+import { LoadingModel } from "../../Models/models";
 
-interface loadingType {
-    loading: boolean;
-}
-
-const PulseLoading: React.FC<loadingType> = ({ loading }) => {
+const PulseLoading: React.FC<LoadingModel> = ({ loading }) => {
     return (
         <div>
             <PulseLoader

@@ -12,28 +12,7 @@ import React, {
 import { CountContinueDays } from "../components/calculate/CountContinueDays";
 import { createClient } from "@/utils/supabase/client";
 import FullScreenLoading from "../components/parts/fullScreenLoading";
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-}
-
-interface TodoContextType {
-    todos: TodoProps[];
-    setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-    toggleChecked: (id: number, date: string) => Promise<void>;
-    fetchAllTodos: () => Promise<void>;
-    toggleDelete: (id: number, date: string) => Promise<void>;
-    loading: boolean;
-}
+import { TodoModel, TodoContextType } from "../Models/models";
 
 export const TodoContext = createContext<TodoContextType | undefined>(
     undefined,
@@ -42,7 +21,7 @@ export const TodoContext = createContext<TodoContextType | undefined>(
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const [todos, setTodos] = useState<TodoProps[]>([]);
+    const [todos, setTodos] = useState<TodoModel[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchAllTodos = useCallback(async () => {
@@ -83,7 +62,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     }, []);
 
     // 今日のタスクのチェックマーク
-    const checkTodo = async (todo: TodoProps) => {
+    const checkTodo = async (todo: TodoModel) => {
         try {
             const supabase = createClient();
             const {
@@ -117,7 +96,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     // 今日のタスクの削除ボタン
-    const deleteTodo = async (todo: TodoProps) => {
+    const deleteTodo = async (todo: TodoModel) => {
         try {
             const supabase = createClient();
             const {
@@ -151,7 +130,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     // 習慣自体を削除(checkedDateが空のときに実行)
-    const deletePractice = async (todo: TodoProps) => {
+    const deletePractice = async (todo: TodoModel) => {
         try {
             const supabase = createClient();
             const {
@@ -236,7 +215,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     const deleteZeroDate = async () => {
         setTimeout(() => {
             setTodos((prevTodos) => {
-                const newTodos: TodoProps[] = [];
+                const newTodos: TodoModel[] = [];
                 prevTodos.forEach((todo) => {
                     if (Object.keys(todo.checkedDates).length > 0) {
                         newTodos.push(todo);

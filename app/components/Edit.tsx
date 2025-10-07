@@ -29,31 +29,12 @@ import { TodoContext } from "../context/TodoContext";
 import { taglist } from "./tags";
 import { AuthContext } from "../context/AuthContext";
 import FullScreenLoading from "./parts/fullScreenLoading";
+import { TodoModel, EditDialogProps } from "../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
-
-interface oneTodo {
-    id: number;
-    todo: todo;
-    editOpen: boolean;
-    setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface todo {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-}
 
 const editPractice = async (
     id: number,
@@ -91,7 +72,7 @@ const editPractice = async (
     return res.json();
 };
 
-const Edit: React.FC<oneTodo> = ({ id, todo, editOpen, setEditOpen }) => {
+const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);

@@ -1,21 +1,8 @@
 // 達成率を計算する関数
 
-"use client";
+import { TodoModel } from "@/app/Models/models";
 
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    // intervalには数字か配列（曜日を格納する）
-}
-
-export const CheckRate = (todo: TodoProps): number => {
+export const CheckRate = (todo: TodoModel): number => {
     const checkcount = todo.continuedays;
     const totalcount = Object.keys(todo.checkedDates).length;
 

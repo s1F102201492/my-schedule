@@ -21,22 +21,9 @@ import { taglist } from "../tags";
 import RecomTaskList from "../parts/RecomTaskList";
 import FullScreenLoading from "../parts/fullScreenLoading";
 import Image from "next/image";
+import { AddTaskPageSwitchProps, TaskProps } from "../../Models/models";
 
-interface TaskProps {
-    title: string;
-    description: string;
-    startdate: string;
-    enddate: string;
-    interval: number;
-    tag: string;
-}
-
-interface PageSwitchProps {
-    boolRecomPage: boolean;
-    handleBoolRecomPage: () => void;
-}
-
-const GPTRecommend: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
+const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const [text, setText] = useState<string>("");
     const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);

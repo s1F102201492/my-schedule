@@ -23,19 +23,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { TodoContext } from "../context/TodoContext";
 import GetStickyCellStyle from "./theme/GetStickyCellStyle";
+import { CalendarViewProps } from "../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
-
-interface CalendarViewProps {
-    title: string;
-    description: string;
-    date: Dayjs;
-    completed: boolean;
-    tag: string;
-}
 
 const Calendar = () => {
     const todoContext = useContext(TodoContext);

@@ -1,19 +1,15 @@
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material'
 import React from 'react'
+import { AnalyticsPageProps } from '../../Models/models';
 
-interface modelPageProps {
-    switchModelPage: () => void;
-    switchCurrentPage: () => void;
-}
-
-export const AnalyticsCardPage: React.FC<modelPageProps> = ({ switchModelPage, switchCurrentPage}) => {
+export const AnalyticsCardPage: React.FC<AnalyticsPageProps> = ({ setModelPage, setViewCurrentPage}) => {
   return (
     <div>
         {/* PC用 */}
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
                 <Card
-                    onClick={switchModelPage}
+                    onClick={() => setModelPage(true)}
                     sx={{
                         maxWidth: 280,
                         maxHeight: "100%",
@@ -47,7 +43,7 @@ export const AnalyticsCardPage: React.FC<modelPageProps> = ({ switchModelPage, s
                 </Card>
                 
                 <Card
-                    onClick={switchCurrentPage}
+                    onClick={() => setViewCurrentPage(true)}
                     sx={{
                         maxWidth: 280,
                         maxHeight: "100%",
@@ -86,7 +82,7 @@ export const AnalyticsCardPage: React.FC<modelPageProps> = ({ switchModelPage, s
         <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Card
-                    onClick={switchModelPage}
+                    onClick={() => setModelPage(true)}
                     sx={{
                         maxWidth: "100%",
                         height: 400,
@@ -121,7 +117,7 @@ export const AnalyticsCardPage: React.FC<modelPageProps> = ({ switchModelPage, s
                 </Card>
                 
                 <Card
-                    onClick={switchCurrentPage}
+                    onClick={() => setViewCurrentPage(true)}
                     sx={{
                         maxWidth: "100%",
                         height: 400,

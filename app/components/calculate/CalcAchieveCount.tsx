@@ -1,21 +1,9 @@
 // 今までに行ったタスク数をカウント
 
+import { TodoModel } from "@/app/Models/models";
 import { CountContinueDays } from "./CountContinueDays";
 
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-}
-
-export const CalcAchieveCount = (alltodos: TodoProps[]) => {
+export const CalcAchieveCount = (alltodos: TodoModel[]) => {
     let sum = 0;
     for (const todo of alltodos) {
         sum += CountContinueDays(todo.checkedDates);

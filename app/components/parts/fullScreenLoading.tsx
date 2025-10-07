@@ -1,11 +1,8 @@
 // FullScreenLoading.tsx
 import { Modal, Box, CircularProgress, Typography } from "@mui/material";
+import { FullScreenLoadingProps } from "../../Models/models";
 
-interface Props {
-    open: boolean;
-}
-
-export default function FullScreenLoading({ open }: Props) {
+export default function FullScreenLoading({ open }: FullScreenLoadingProps) {
     return (
         <Modal
             open={open}

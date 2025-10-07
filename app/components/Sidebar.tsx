@@ -13,19 +13,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { usePathname } from 'next/navigation';
 import { useRouter } from "next/navigation";
-
-interface SidebarProps {
-    drawer: boolean;
-    setDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-    loginUser?: UserType | null;
-}
-
-interface UserType {
-    id: string;
-    username: string;
-    email: string;
-    avatar_url: string;
-}
+import { UserType, SidebarProps } from "../Models/models";
 
 // モバイル時のハンバーガーメニューで表示されるサイドバー
 

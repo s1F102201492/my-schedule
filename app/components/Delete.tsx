@@ -12,26 +12,9 @@ import React, { useContext, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
 import { useRouter } from "next/navigation";
 import FullScreenLoading from "./parts/fullScreenLoading";
+import { TodoModel, DeleteDialogProps } from "../Models/models";
 
-interface oneTodo {
-    onetodo: TodoProps;
-    deleteOpen: boolean;
-    setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string | null;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-}
-
-const deletePractice = async (todo: TodoProps) => {
+const deletePractice = async (todo: TodoModel) => {
     const res = await fetch(`/api/todo/${todo.id}`, {
         method: "DELETE",
         body: JSON.stringify(todo),
@@ -43,7 +26,7 @@ const deletePractice = async (todo: TodoProps) => {
     return res.json();
 };
 
-const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
+const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);

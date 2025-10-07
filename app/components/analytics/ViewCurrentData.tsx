@@ -20,10 +20,7 @@ import { ContributionGraph } from "./ContributionGraph";
 import ViewAchieveByTag from "./ViewAchieveByTag";
 import ViewUserAchieve from "./ViewUserAchieve";
 import FullScreenLoading from "../parts/fullScreenLoading";
-
-interface SwitchPageProps {
-  switchCurrentPage: () => void;
-}
+import { SwitchAnalyticsPageProps } from "../../Models/models";
 
 const getGPTsentence = async () => {
     const res = await fetch("/api/chatgpt", {
@@ -45,7 +42,7 @@ const getGPTsentence = async () => {
     return data;
 }
 
-export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }) => {
+export const ViewCurrentData: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
 
   const [loading, setLoading] = useState(false);
   const [GPTSentence, setGPTSentence] = useState(null);
@@ -76,7 +73,7 @@ export const ViewCurrentData: React.FC<SwitchPageProps> = ({ switchCurrentPage }
     <div>
       <Tooltip title='戻る'>
         <IconButton
-            onClick={() => switchCurrentPage()}
+            onClick={() => switchPage()}
             sx={{ ml: 2, mt: 2 }}>
             <ArrowBackIcon />
         </IconButton>

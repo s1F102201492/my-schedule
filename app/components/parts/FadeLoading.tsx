@@ -1,12 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import FadeLoader from "react-spinners/FadeLoader";
+import { LoadingModel } from "../../Models/models";
 
-interface loadingType {
-    loading: boolean;
-}
-
-const FadeLoading: React.FC<loadingType> = ({ loading }) => {
+const FadeLoading: React.FC<LoadingModel> = ({ loading }) => {
     return (
         <div>
             <Box

@@ -16,12 +16,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import penAnimation from "@/public/animations/Animation - 1742629439123.json";
 import { taglist } from "../tags";
+import { SwitchAnalyticsPageProps } from "../../Models/models";
 
-interface SwitchPageProps {
-    switchModelPage: () => void;
-}
-
-const Model: React.FC<SwitchPageProps> = ({ switchModelPage }) => {
+const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
     // タグの選択
     const tags = taglist;
     const [tag, setTag] = useState<string>("絞らない");
@@ -104,7 +101,7 @@ const Model: React.FC<SwitchPageProps> = ({ switchModelPage }) => {
         <div>
             <Tooltip title='戻る'>
                 <IconButton
-                    onClick={() => switchModelPage()}
+                    onClick={() => switchPage()}
                     sx={{ ml: 2, mt: 2 }}>
                     <ArrowBackIcon />
                 </IconButton>
