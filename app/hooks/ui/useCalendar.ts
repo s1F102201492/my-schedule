@@ -1,7 +1,7 @@
 import { useState, useContext, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { TodoContext } from "@/app/context/TodoContext";
-import { CalendarViewProps } from "@/app/Models/models";
+import { CalendarTodoModel } from "@/app/Models/models";
 
 export const useCalendar = () => {
     const todoContext = useContext(TodoContext);
@@ -12,7 +12,7 @@ export const useCalendar = () => {
 
     const [current, setCurrent] = useState<Dayjs>(dayjs());
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
-    const [todayTodoList, setTodayTodoList] = useState<CalendarViewProps[]>([]);
+    const [todayTodoList, setTodayTodoList] = useState<CalendarTodoModel[]>([]);
 
     const allEvents = useMemo(() => 
         todos.flatMap(todo =>

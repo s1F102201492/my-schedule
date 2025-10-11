@@ -57,11 +57,13 @@ export interface WithLoginUser {
     loginUser?: UserType | null;
 }
 
+// Sidebarコンポーネントの型
 export interface SidebarProps extends WithLoginUser {
     drawer: boolean;
     setDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// TodoContextTypeコンポーネントの型
 export interface TodoContextType {
     todos: TodoModel[];
     setTodos: React.Dispatch<React.SetStateAction<TodoModel[]>>;
@@ -76,6 +78,7 @@ export interface TodoContextType {
     deleteTodayTodo: (todo: TodoModel) => Promise<void>;
 }
 
+// TodoItemコンポーネントの型
 export interface TodoItemProps {
     todo: TodoModel;
     onClose: () => void;
@@ -83,13 +86,16 @@ export interface TodoItemProps {
     setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// UserCardコンポーネントの型
 export interface UserCardProps extends WithLoginUser {}
 
+// AddTaskPageSwitchコンポーネントの型
 export interface AddTaskPageSwitchProps {
     boolRecomPage: boolean;
     handleBoolRecomPage: () => void;
 }
 
+// RecommendTaskListコンポーネントでAIが提案した時のタスクの型
 export interface TaskProps {
     title: string;
     description: string;
@@ -99,7 +105,8 @@ export interface TaskProps {
     tag: string;
 }
 
-export interface CalendarViewProps {
+// CalendarViewコンポーネントのタスクの型
+export interface CalendarTodoModel {
     title: string;
     description: string;
     date: Dayjs;
@@ -107,32 +114,37 @@ export interface CalendarViewProps {
     tag: string;
 }
 
+// AuthContextTypeコンポーネントの型
 export interface AuthContextType {
     loginUser: UserType | null;
     loginSession: () => Promise<void>;
     session: Session | null; // supabaseのSession型をanyに
 }
 
+// RecomTaskListコンポーネントのPropsの型
 export interface taskListProps {
     taskList: TaskProps[];
     purpose: string;
 }
 
+// FullScreenLoadingコンポーネントの型
 export interface FullScreenLoadingProps {
     open: boolean;
 }
 
-// FadeLoadingコンポーネントの型
+// Loadingコンポーネントの型
 export interface LoadingModel {
     loading: boolean;
 }
 
+// DeleteDialogコンポーネントのPropsの型
 export interface DeleteDialogProps {
     onetodo: TodoModel;
     deleteOpen: boolean;
     setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// EditDialogコンポーネントのPropsの型
 export interface EditDialogProps {
     id: number;
     todo: TodoModel;
