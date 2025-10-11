@@ -21,7 +21,10 @@ import { taglist } from "../tags";
 import RecomTaskList from "../parts/RecomTaskList";
 import FullScreenLoading from "../parts/fullScreenLoading";
 import Image from "next/image";
-import { AddTaskPageSwitchProps, TaskProps } from "../../Models/models";
+import { AddTaskPageSwitchProps } from "../../Models/models";
+import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
+
+// このコンポーネントはおすすめの習慣を提案するページのコンポーネントです。
 
 const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const [text, setText] = useState<string>("");
@@ -61,67 +64,23 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
         setLevel(e.target.value);
     };
 
-    const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<TaskProps[]>([]); // AIからの回答
-    console.log(response.length);
+    const { responseArray, isGenerating, generateResponse } = useChatGPT();
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        if (text === "") {
-            alert("プロンプトを入力してください。");
+        if (text === "" || tag === "" || level === "") {
+            alert("すべての項目を入力してください。");
             return;
         }
 
-        if (tag === "") {
-            alert("タグを選択してください。");
-            return;
-        }
-
-        if (level === "") {
-            alert("タグを選択してください。");
-            return;
-        }
-
-        setIsGenerating(true);
-        setResponse([]);
-
-        try {
-            const res = await fetch("/api/chatgpt", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    type: "recommend",
-                    prompt: text,
-                    img,
-                    tag,
-                    level,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                console.error("APIエラー:", data);
-                setIsGenerating(false);
-                alert("APIリクエストに失敗しました。");
-                return;
-            }
-
-            console.log(data.result);
-            // stringを配列に変換
-            const arrayResult = JSON.parse(data.result);
-            console.log(arrayResult);
-
-            setResponse(arrayResult);
-        } catch (error) {
-            console.error("エラー:", error);
-            alert("エラーが発生しました。");
-        } finally {
-            setIsGenerating(false);
-        }
+        await generateResponse({
+            type: "recommend",
+            prompt: text,
+            img,
+            tag,
+            level,
+        });
     };
 
     return (
@@ -246,9 +205,9 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
                     おすすめの習慣を見る
                 </Button>
                 <Box sx={{ mt: 4 }}>
-                    {!isGenerating && response.length > 0 ? (
+                    {!isGenerating && responseArray.length > 0 ? (
                         <RecomTaskList
-                            taskList={response}
+                            taskList={responseArray}
                             purpose={text}
                         />
                     ) : (
