@@ -51,7 +51,9 @@ export const useChatGPT = () => {
                             }
                             try {
                                 const parsed = JSON.parse(jsonString);
-                                setResponse((prev) => prev + parsed.choices[0].delta.content);
+                                if (parsed.choices[0].finish_reason !== "stop") {
+                                    setResponse((prev) => prev + parsed.choices[0].delta.content);
+                                }
                             } catch (error) {
                                 console.error("Error parsing JSON chunk:", error);
                             }
