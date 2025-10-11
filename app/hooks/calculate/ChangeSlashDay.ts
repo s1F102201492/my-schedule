@@ -1,4 +1,4 @@
-//日付をハイフン型に変える関数 'YYYY/MM/DD'
+//日付をスラッシュ型に変える関数 'YYYY/MM/DD'
 
 export const ChangeSlashDay = (date: Date) => {
     const year = date.getFullYear();

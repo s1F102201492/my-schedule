@@ -1,25 +1,10 @@
 import { Checkbox, ListItem, ListItemText } from "@mui/material";
 import React, { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
-import { CountContinueDays } from "../components/calculate/CountContinueDays";
+import { CountContinueDays } from "../hooks/calculate/CountContinueDays";
+import { TodoModel } from "../Models/models";
 
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    // intervalには数字か配列（曜日を格納する）
-}
-
-interface TodoItemProps {
-    todo: TodoProps;
-}
-
-const TodoChecked: React.FC<TodoItemProps> = ({ todo }) => {
+const TodoChecked = ({ todo }: {todo: TodoModel}) => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {

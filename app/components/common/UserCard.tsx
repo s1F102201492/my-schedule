@@ -14,19 +14,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/utils/supabase/authGoogle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { UserType, UserCardProps } from "../../Models/models";
 
-interface UserType {
-    id: string;
-    username: string;
-    email: string;
-    avatar_url: string;
-}
-
-interface PropsType {
-    loginUser?: UserType | null;
-}
-
-const UserCard: React.FC<PropsType> = ({ loginUser }) => {
+const UserCard: React.FC<UserCardProps> = ({ loginUser }) => {
     // Googleログアウト
     const router = useRouter();
     const handleGoogleLogout = async () => {

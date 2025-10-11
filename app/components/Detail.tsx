@@ -19,31 +19,11 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { CheckRate } from "./calculate/CheckRate";
+import { CheckRate } from "../hooks/calculate/CheckRate";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-    // intervalには数字か配列（曜日を格納する）
-}
-
-interface TodoItemProps {
-    todo: TodoProps;
-    onClose: () => void;
-    detailOpen: boolean;
-    setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { TodoModel, TodoItemProps } from "../Models/models";
 
 const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
     // 編集フォームの管理

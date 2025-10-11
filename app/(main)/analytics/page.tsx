@@ -44,12 +44,12 @@ const Page = () => {
         <div>
 
             { modelPage && !viewCurrentPage
-                ? <Model switchModelPage={switchModelPage} />
+                ? <Model switchPage={switchModelPage} />
                     : !modelPage && viewCurrentPage
-                        ? <ViewCurrentData switchCurrentPage={switchCurrentPage} />
+                        ? <ViewCurrentData switchPage={switchCurrentPage} />
                     : <AnalyticsCardPage
-                switchModelPage={switchModelPage}
-                switchCurrentPage={switchCurrentPage}
+                setModelPage={setModelPage}
+                setViewCurrentPage={setViewCurrentPage}
                 />
             }
         </div>

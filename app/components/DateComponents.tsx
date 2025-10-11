@@ -1,23 +1,16 @@
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import React from "react";
+import { DateComponentsProps } from "../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
-
-interface DateComponentsProps {
-    label: string;
-    date: Dayjs;
-    setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
-    minDate: Dayjs;
-    maxDate: Dayjs;
-}
 
 export const DateComponents: React.FC<DateComponentsProps> = ({
     label,

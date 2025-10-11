@@ -2,22 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import TodoItem from "./TodoItem";
 import TodoChecked from "./TodoChecked";
 import { List, Typography } from "@mui/material";
-import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
+import { ChangeSlashDay } from "../hooks/calculate/ChangeSlashDay";
 import { TodoContext } from "../context/TodoContext";
 import RewardDialog from "../components/RewardDialog";
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-}
+import { TodoModel } from "../Models/models";
 
 const TodoList = () => {
     const today = new Date();
@@ -41,7 +29,7 @@ const TodoList = () => {
 
     const todayslash: string = ChangeSlashDay(today); //今日の日付("yyyy/mm/dd"型)
 
-    const todaytodos: TodoProps[] = todos.filter((todo) => {
+    const todaytodos: TodoModel[] = todos.filter((todo) => {
         // すべてのタスク開始日と終了日の範囲に今日が入っていたら抽出
         const isWithinDateRange: boolean =
             todayslash >= ChangeSlashDay(new Date(todo.startdate)) &&
@@ -111,7 +99,7 @@ const TodoList = () => {
                 <List
                     sx={{ width: "100%", maxWidth: 550 }}
                     disablePadding>
-                    {notchecktodos.map((todo: TodoProps) => (
+                    {notchecktodos.map((todo: TodoModel) => (
                         <TodoItem
                             key={todo.id}
                             todo={todo}
@@ -140,7 +128,7 @@ const TodoList = () => {
                 <List
                     sx={{ width: "100%", maxWidth: 510 }}
                     disablePadding>
-                    {checkedtodos.map((todo: TodoProps) => (
+                    {checkedtodos.map((todo: TodoModel) => (
                         <TodoChecked
                             key={todo.id}
                             todo={todo}

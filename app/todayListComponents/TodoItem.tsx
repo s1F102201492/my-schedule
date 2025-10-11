@@ -14,25 +14,10 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TodoContext } from "../context/TodoContext";
-import { CountContinueDays } from "../components/calculate/CountContinueDays";
+import { CountContinueDays } from "../hooks/calculate/CountContinueDays";
+import { TodoModel } from "../Models/models";
 
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    // intervalには数字か配列（曜日を格納する）
-}
-
-interface TodoItemProps {
-    todo: TodoProps;
-}
-
-const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+const TodoItem = ({ todo }: {todo: TodoModel}) => {
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {

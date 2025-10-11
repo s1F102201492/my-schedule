@@ -20,62 +20,23 @@ import {
 import AutoAwesomeSharpIcon from '@mui/icons-material/AutoAwesomeSharp';
 import { DateComponents } from "../DateComponents";
 import { TodoContext } from "../../context/TodoContext";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
-import CreateCheckedDates from "../calculate/CreateCheckedDates";
+import CreateCheckedDates from "../../hooks/calculate/CreateCheckedDates";
 import { taglist } from "../tags";
-import { AuthContext } from "../../context/AuthContext";
-import FullScreenLoading from "../parts/fullScreenLoading";
+import FullScreenLoading from "../common/fullScreenLoading";
+import { AddTaskPageSwitchProps } from "../../Models/models";
+import { useTaskForm } from "@/app/hooks/form/useTaskForm";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-const addTodo = async (
-    title: string,
-    description: string,
-    continuedays: number,
-    checkedDates: Record<string, boolean>,
-    startdate: string,
-    enddate: string,
-    interval: number | string[],
-    purpose: string,
-    tag: string,
-    userId: string,
-) => {
-    const res = await fetch("/api/todo", {
-        method: "POST",
-        body: JSON.stringify({
-            title,
-            description,
-            continuedays,
-            checkedDates,
-            startdate,
-            enddate,
-            interval,
-            purpose,
-            tag,
-            userId,
-        }),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
-interface PageSwitchProps {
-    boolRecomPage: boolean;
-    handleBoolRecomPage: () => void;
-}
-
-const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
+const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const router = useRouter();
-
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -83,101 +44,24 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
             "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
-
-    const { fetchAllTodos } = todoContext;
-
-    const authContext = useContext(AuthContext);
-
-    if (!authContext) {
-        throw new Error(
-            "TodoContext is undefined. Make sure to use TodoProvider.",
-        );
-    }
-
-    const { loginUser } = authContext;
-
-    const formReset = () => {
-        setTitle("");
-        setSd(dayjs());
-        setEd(dayjs());
-        setNumber(1);
-        setSelectedDays([]);
-        setNdays(true);
-        setpurp("");
-        setTag("");
-    };
+    const { fetchAllTodo, addTodo } = todoContext;
+    
+    const { formState, handlers, getIntervalValue, resetForm } = useTaskForm();
+    const { title, description, startDate, endDate, isIntervalDays, intervalNumber, selectedWeekdays, purpose, tag } = formState;
+    const { 
+        handleTitleChange, handleDescriptionChange, setStartDate, setEndDate,
+        handleIntervalToggle, handleIntervalNumberChange, handleWeekdaySelect,
+        handlePurposeChange, handleTagChange 
+    } = handlers;
 
     // タスクの追加中はローディングを表示
     const [loading, setLoading] = useState(false);
-
-    // タイトルに書き込まれたか判定
-    const [title, setTitle] = useState<string>("");
-    const handletitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    // 詳細テキストに書き込まれたか判定
-    const [desc, setdesc] = useState<string>("");
-    const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setdesc(e.target.value);
-    };
-
-    // 日付フォームをStateで管理（sdがstartdate,edがenddate）
-    const [sd, setSd] = useState<Dayjs>(dayjs()); //Date型
-    const [ed, setEd] = useState<Dayjs>(dayjs()); //Date型
-
+    
     // n日ごとの場合
     const numberofdays: number[] = [1, 2, 3, 4, 5, 6, 7];
-    const [number, setNumber] = useState<number>(1);
-    const handleNumber = (e: SelectChangeEvent<number>) => {
-        const selectedNumber = Number(e.target.value);
-        setNumber(selectedNumber);
-    };
-
-    // 曜日を選んだ場合
-    const [selectedDays, setSelectedDays] = useState<string[]>([]);
-    const handleChip = (day: string) => {
-        setSelectedDays((prevdays) => {
-            // 選択した日が含まれているか
-            if (prevdays.includes(day)) {
-                // 含まれていた場合リストから消す
-
-                return prevdays.filter((d) => d !== day);
-            } else {
-                // 含まれていなかった場合追加
-                return [...prevdays, day];
-            }
-        });
-    };
-
-    // n日ごとか曜日かを選ぶときのstate trueの場合はn日ごと、falseの場合は曜日
-    const [ndays, setNdays] = useState<boolean>(true);
-    const handleNdays = () => {
-        setNdays(!ndays);
-    };
-
-    // 目的のテキストを管理
-    const [purp, setpurp] = useState<string>("");
-    const handlePurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setpurp(e.target.value);
-    };
 
     // タグの選択
     const tags = taglist;
-    const [tag, setTag] = useState<string>("");
-    const handleTagSelect = (e: SelectChangeEvent) => {
-        // 選択
-        setTag(e.target.value as string);
-    };
-
-    // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
-    useEffect(() => {
-        if (ndays === true) {
-            setSelectedDays([]);
-        } else {
-            setNumber(0);
-        }
-    }, [ndays]);
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -185,43 +69,31 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
         try {
             setLoading(true);
 
-            // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す(interval)
-            const setint = (ndays: boolean) => {
-                if (ndays) {
-                    return number;
-                } else {
-                    return selectedDays;
-                }
-            };
-
             const checkdates: Record<string, boolean> = CreateCheckedDates(
-                sd,
-                ed,
-                setint(ndays),
-                selectedDays,
-            ); // 日付: falseの辞書を作成
-
-            const contdays: number = 0; // continuedays 登録したてなので最初は0
-
-            await addTodo(
-                title,
-                desc,
-                contdays,
-                checkdates,
-                sd?.format("YYYY/MM/DD"),
-                ed?.format("YYYY/MM/DD"),
-                setint(ndays),
-                purp,
-                tag,
-                loginUser!.id,
+                startDate,
+                endDate,
+                getIntervalValue(),
+                selectedWeekdays,
             );
 
-            await fetchAllTodos();
+            await addTodo({
+                title,
+                description,
+                checkedDates: checkdates,
+                continuedays: 0,
+                startdate: startDate?.format("YYYY/MM/DD"),
+                enddate: endDate?.format("YYYY/MM/DD"),
+                interval: getIntervalValue(),
+                purpose,
+                tag,
+            });
+
+            await fetchAllTodo();
             router.push("/list");
             router.refresh();
 
             setTimeout(() => {
-                formReset();
+                resetForm();
             }, 1000);
         } catch {
             alert("タスクの追加に失敗しました。もう一度お試しください。");
@@ -269,7 +141,7 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             fullWidth
                             variant='outlined'
                             value={title}
-                            onChange={handletitle}
+                            onChange={handleTitleChange}
                         />
                         <Typography variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
@@ -280,8 +152,8 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             margin='dense'
                             fullWidth
                             variant='outlined'
-                            value={desc}
-                            onChange={handledesc}
+                            value={description}
+                            onChange={handleDescriptionChange}
                         />
                         <Box sx={{ flexDirection: "row" }}>
                             <Typography
@@ -291,8 +163,8 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             </Typography>
                             <DateComponents
                                 label='開始日'
-                                date={sd}
-                                setDate={setSd}
+                                date={startDate}
+                                setDate={setStartDate}
                                 minDate={dayjs(new Date("2000/01/01"))}
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
@@ -305,9 +177,9 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             </Typography>
                             <DateComponents
                                 label='終了日'
-                                date={ed}
-                                setDate={setEd}
-                                minDate={sd}
+                                date={endDate}
+                                setDate={setEndDate}
+                                minDate={startDate}
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
@@ -316,19 +188,19 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             variant='h6'>
                             繰り返し日
                         </Typography>
-                        {ndays ? "N日ごと" : "曜日"}
+                        {isIntervalDays ? "N日ごと" : "曜日"}
                         <Switch
-                            checked={ndays}
-                            onChange={handleNdays}
+                            checked={isIntervalDays}
+                            onChange={handleIntervalToggle}
                         />
                         <Box>
-                            {ndays ? (
+                            {isIntervalDays ? (
                                 <Select
                                     required
                                     labelId='demo-multiple-name-label'
                                     id='demo-multiple-name'
-                                    value={number}
-                                    onChange={handleNumber}>
+                                    value={intervalNumber}
+                                    onChange={handleIntervalNumberChange}>
                                     {numberofdays.map((num) => (
                                         <MenuItem
                                             key={num}
@@ -352,16 +224,16 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                                             key={day}
                                             label={day}
                                             variant={
-                                                selectedDays.includes(day)
+                                                selectedWeekdays.includes(day)
                                                     ? "filled"
                                                     : "outlined"
                                             }
                                             color={
-                                                selectedDays.includes(day)
+                                                selectedWeekdays.includes(day)
                                                     ? "primary"
                                                     : "default"
                                             }
-                                            onClick={() => handleChip(day)}
+                                            onClick={() => handleWeekdaySelect(day)}
                                         />
                                     ))}
                                 </FormGroup>
@@ -374,8 +246,8 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                             margin='dense'
                             fullWidth
                             variant='outlined'
-                            value={purp}
-                            onChange={handlePurpose}
+                            value={purpose}
+                            onChange={handlePurposeChange}
                         />
                         <FormControl
                             fullWidth
@@ -386,7 +258,7 @@ const SelfAddForm: React.FC<PageSwitchProps> = ({ handleBoolRecomPage }) => {
                                 id='tag-select'
                                 value={tag}
                                 label='タグを選択'
-                                onChange={handleTagSelect}
+                                onChange={handleTagChange}
                                 MenuProps={{ PaperProps: { height: 300 } }}>
                                 {tags.map((tag) => (
                                     <MenuItem

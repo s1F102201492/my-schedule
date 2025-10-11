@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2'
 import React, { useContext } from 'react'
 import theme from '../theme/theme'
 import { TodoContext } from '@/app/context/TodoContext'
-import { AchieveRateByTag } from '../calculate/AchieveRateByTag'
+import { AchieveRateByTag } from '@/app/hooks/calculate/AchieveRateByTag'
 
 const ViewAchieveByTag = () => {
     const todoContext = useContext(TodoContext);

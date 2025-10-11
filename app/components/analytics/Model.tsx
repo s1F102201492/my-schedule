@@ -16,12 +16,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import penAnimation from "@/public/animations/Animation - 1742629439123.json";
 import { taglist } from "../tags";
+import { SwitchAnalyticsPageProps } from "../../Models/models";
+import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
 
-interface SwitchPageProps {
-    switchModelPage: () => void;
-}
-
-const Model: React.FC<SwitchPageProps> = ({ switchModelPage }) => {
+const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
     // タグの選択
     const tags = taglist;
     const [tag, setTag] = useState<string>("絞らない");
@@ -30,81 +28,18 @@ const Model: React.FC<SwitchPageProps> = ({ switchModelPage }) => {
         setTag(e.target.value as string);
     };
 
-    // AIと情報をやり取りするための変数を管理
-    const [isGenerating, setIsGenerating] = useState<boolean>(false); // AIが回答を生成している途中であることを示す値
-    const [response, setResponse] = useState<string>(""); // AIからの回答
+    const { response, isGenerating, generateResponse } = useChatGPT();
 
     const handleAIModel = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
-
-        setIsGenerating(true);
-        setResponse("");
-
-        const res = await fetch("/api/chatgpt", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ type: "model", tag }),
-        });
-
-        if (!res.body) {
-            setIsGenerating(false);
-            alert("ストリーミングの開始に失敗しました。");
-            return;
-        }
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let incompleteChunk = ""; // 不完全なチャンクを一時的に保持
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-
-            // 不完全なチャンクが前のチャンクの最後と繋がる可能性があるため、それを追加
-            incompleteChunk += chunk;
-
-            // 'data: ' で始まる行だけを処理
-            const lines = incompleteChunk
-                .split("\n")
-                .filter((line) => line.startsWith("data: "));
-
-            for (const line of lines) {
-                const jsonString = line.replace("data: ", "").trim();
-                if (jsonString === "[DONE]") {
-                    // ストリーミングが完了した場合
-
-                    setIsGenerating(false); // 応答生成完了
-                    break;
-                }
-                try {
-                    // JSONとして有効か確認
-                    const parsedChunk = JSON.parse(jsonString);
-                    const content = parsedChunk.choices[0]?.delta?.content;
-                    if (content) {
-                        // チャンクごとにレスポンスを追加
-                        setResponse((prev) => prev + content);
-                    }
-                } catch (error) {
-                    // JSONが未完了の場合は、次のチャンクで処理を続ける
-                    console.error(
-                        "Error parsing JSON (ignoring incomplete chunk):",
-                        error,
-                    );
-                    continue;
-                }
-            }
-            // 最後の行が不完全だった場合、次のチャンクと繋げるため保存
-            incompleteChunk = incompleteChunk.split("\n").slice(-1)[0];
-        }
+        await generateResponse({ type: "model", tag });
     };
 
     return (
         <div>
             <Tooltip title='戻る'>
                 <IconButton
-                    onClick={() => switchModelPage()}
+                    onClick={() => switchPage()}
                     sx={{ ml: 2, mt: 2 }}>
                     <ArrowBackIcon />
                 </IconButton>

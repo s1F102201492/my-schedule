@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import Grid from "@mui/material/Grid2";
 import { Card, Typography } from '@mui/material';
 import { TodoContext } from '@/app/context/TodoContext';
-import { CalcAchieveCount } from '../calculate/CalcAchieveCount';
-import { CalcAchieveDay } from '../calculate/CalcAchieveDay';
+import { CalcAchieveCount } from '@/app/hooks/calculate/CalcAchieveCount';
+import { CalcAchieveDay } from '@/app/hooks/calculate/CalcAchieveDay';
 import theme from '../theme/theme';
-import { CalcMultiCount } from '../calculate/CalcMultiCount';
+import { CalcMultiCount } from '@/app/hooks/calculate/CalcMultiCount';
 
 
 const ViewUserAchieve = () => {

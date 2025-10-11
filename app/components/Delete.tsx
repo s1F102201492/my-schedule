@@ -11,39 +11,10 @@ import {
 import React, { useContext, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
 import { useRouter } from "next/navigation";
-import FullScreenLoading from "./parts/fullScreenLoading";
+import FullScreenLoading from "./common/fullScreenLoading";
+import { TodoModel, DeleteDialogProps } from "../Models/models";
 
-interface oneTodo {
-    onetodo: TodoProps;
-    deleteOpen: boolean;
-    setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string | null;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-}
-
-const deletePractice = async (todo: TodoProps) => {
-    const res = await fetch(`/api/todo/${todo.id}`, {
-        method: "DELETE",
-        body: JSON.stringify(todo),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
-const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
+const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const router = useRouter();
 
     const todoContext = useContext(TodoContext);
@@ -54,7 +25,7 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
         );
     }
 
-    const { todos, setTodos, fetchAllTodos } = todoContext;
+    const { todos, deleteTodo, fetchAllTodo, setTodos } = todoContext;
 
     const [loading, setLoading] = useState(false);
 
@@ -71,15 +42,15 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
             setLoading(true);
 
             setTodos((prevTodos) => {
-                return prevTodos.filter((todo) => todo.id !== onetodo.id);
+                return prevTodos.filter((todo: TodoModel) => todo.id !== onetodo.id);
             });
 
             const targetTodo = todos.find((todo) => todo.id === onetodo.id);
             if (!targetTodo) return;
 
-            await deletePractice(targetTodo);
+            await deleteTodo(targetTodo);
 
-            await fetchAllTodos();
+            await fetchAllTodo();
             setDeleteOpen(false);
             router.push("/list");
             router.refresh();
@@ -127,3 +98,4 @@ const Delete: React.FC<oneTodo> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
 };
 
 export default Delete;
+

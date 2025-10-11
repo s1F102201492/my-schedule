@@ -12,69 +12,23 @@ import {
 } from "@mui/material";
 import { CheckCircle, RadioButtonUnchecked } from "@mui/icons-material";
 import React, { useContext, useState } from "react";
-import CreateCheckedDates from "../calculate/CreateCheckedDates";
+import CreateCheckedDates from "../../hooks/calculate/CreateCheckedDates";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { AuthContext } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { TodoContext } from "@/app/context/TodoContext";
-import FullScreenLoading from "./fullScreenLoading";
+import FullScreenLoading from "../common/fullScreenLoading";
+import { TaskProps, taskListProps } from "../../Models/models";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-interface TaskProps {
-    title: string;
-    description: string;
-    startdate: string;
-    enddate: string;
-    interval: number;
-    tag: string;
-}
+// このコンポーネントはおすすめの習慣を表示する部分のコンポーネントです。（親はGPTRecommend.tsx）
 
-interface taskListProps {
-    taskList: TaskProps[];
-    purpose: string;
-}
-
-const addTodo = async (
-    title: string,
-    description: string,
-    continuedays: number,
-    checkedDates: Record<string, boolean>,
-    startdate: string,
-    enddate: string,
-    interval: number | string[],
-    purpose: string,
-    tag: string,
-    userId: string,
-) => {
-    const res = await fetch("/api/todo", {
-        method: "POST",
-        body: JSON.stringify({
-            title,
-            description,
-            continuedays,
-            checkedDates,
-            startdate,
-            enddate,
-            interval,
-            purpose,
-            tag,
-            userId,
-        }),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
-// GPTがおすすめしているタスクを表示するコンポーネント
 const RecomTaskList: React.FC<taskListProps> = ({ taskList, purpose }) => {
     const router = useRouter();
 
@@ -86,7 +40,7 @@ const RecomTaskList: React.FC<taskListProps> = ({ taskList, purpose }) => {
         );
     }
 
-    const { fetchAllTodos } = todoContext;
+    const { fetchAllTodo, addTodo } = todoContext;
 
     const authContext = useContext(AuthContext);
 
@@ -95,8 +49,6 @@ const RecomTaskList: React.FC<taskListProps> = ({ taskList, purpose }) => {
             "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
-
-    const { loginUser } = authContext;
 
     // タスクを追加している際のローディングを管理
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
@@ -143,20 +95,21 @@ const RecomTaskList: React.FC<taskListProps> = ({ taskList, purpose }) => {
                 ); // 日付: falseの辞書を作成
 
                 await addTodo(
-                    addTask.title,
-                    addTask.description,
-                    0,
-                    checkdates,
-                    addTask.startdate,
-                    addTask.enddate,
-                    addTask.interval,
-                    purpose,
-                    addTask.tag,
-                    loginUser!.id,
+                    {
+                        title: addTask.title,
+                        description: addTask.description,
+                        checkedDates: checkdates,
+                        continuedays: 0,
+                        startdate: addTask.startdate,
+                        enddate: addTask.enddate,
+                        interval: addTask.interval,
+                        purpose: purpose,
+                        tag: addTask.tag,
+                    }
                 );
             });
 
-            await fetchAllTodos();
+            await fetchAllTodo();
             router.push("/list");
             router.refresh();
         } catch {

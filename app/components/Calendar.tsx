@@ -18,107 +18,32 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import React, { useContext, useState } from "react";
+import React from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { TodoContext } from "../context/TodoContext";
 import GetStickyCellStyle from "./theme/GetStickyCellStyle";
+import { useCalendar } from "../hooks/ui/useCalendar";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-interface CalendarViewProps {
-    title: string;
-    description: string;
-    date: Dayjs;
-    completed: boolean;
-    tag: string;
-}
-
 const Calendar = () => {
-    const todoContext = useContext(TodoContext);
+    const {
+        current,
+        selectedDate,
+        todayTodoList,
+        daysInMonth,
+        weekDays,
+        actions,
+        firstDayOfMonth,
+    } = useCalendar();
 
-    if (!todoContext) {
-        throw new Error(
-            "TodoContext is undefined. Make sure to use TodoProvider.",
-        );
-    }
-
-    const { todos } = todoContext;
-
-    const [todaytodolist, setTodaytodolist] = useState<CalendarViewProps[]>([]);
-
-    const todolist: CalendarViewProps[] = todos.flatMap((todo) =>
-        Object.keys(todo.checkedDates).map((dateKey) => ({
-            title: todo.title,
-            description: todo.description,
-            date: dayjs(dateKey),
-            completed: todo.checkedDates[dateKey],
-            tag: todo.tag,
-        })),
-    );
-
-    const [current, setCurrent] = useState<Dayjs>(dayjs()); // その月のカレンダーを表示
-    const [select, setSelect] = useState<boolean>(false); // その日付をクリックするとその日の予定が出てくる
-    const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null); // クリックされた日付を管理
-
-    const nextMonthPage = () => {
-        setCurrent(current.add(1, "M"));
-    };
-
-    const prevMonthPage = () => {
-        setCurrent(current.subtract(1, "M"));
-    };
-
-    const resetCurrentPage = () => {
-        setCurrent(dayjs());
-    };
-
-    const monthStart = dayjs(current).startOf("month"); // 月初めの日付
-    const monthEnd = dayjs(current).endOf("month"); // 月末の日付
-    const cntMonth = dayjs(monthEnd).diff(monthStart, "day"); // その月の日数
-    const nextMonthStart = dayjs(current).add(1, "M").startOf("month");
-    const nextMonthempty = () => {
-        // 次の月の空白を数える
-        if (nextMonthStart.day() === 0) {
-            return 7;
-        } else {
-            return nextMonthStart.day();
-        }
-    };
-
-    const daysInMonth: Dayjs[] = []; // その月の日付すべて
-    for (let i = 0; i < cntMonth + 1; i++) {
-        // 初日から i 日加算した日付を配列に追加
-        daysInMonth.push(monthStart.add(i, "d"));
-    }
-
-    // 曜日の配列
-    const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
-
-    // 日付にイベントがあるかチェック
-    const hasEvents = (d: Dayjs) => {
-        return todolist.some((todo) => todo.date.isSame(d, "day"));
-    };
-
-    const isCurrentMonth = () => {
-        if (current.format("M") === dayjs().format("M")) {
-            return true;
-        } else {
-            return false;
-        }
-    };
+    const { nextMonth, prevMonth, resetToToday, handleClickDate, hasEvents } = actions;
 
     const holiday = (day: string) => day === "土" || day === "日";
     const satsun = (day: string) => day === "土";
-
-    const clickCalendar = (d: Dayjs) => {
-        setSelect(true);
-        setSelectedDate(d);
-        setTodaytodolist(todolist.filter((todo) => todo.date.isSame(d, "day")));
-    };
 
     return (
         <div>
@@ -139,13 +64,13 @@ const Calendar = () => {
                     </Typography>
                     <Box sx={{ display: "flex", gap: 1, mr: 4 }}>
                         <IconButton
-                            onClick={prevMonthPage}
+                            onClick={prevMonth}
                             size='small'>
                             <ChevronLeftIcon />
                         </IconButton>
-                        <Button onClick={resetCurrentPage}>現在</Button>
+                        <Button onClick={resetToToday}>現在</Button>
                         <IconButton
-                            onClick={nextMonthPage}
+                            onClick={nextMonth}
                             size='small'>
                             <ChevronRightIcon />
                         </IconButton>
@@ -183,12 +108,12 @@ const Calendar = () => {
                         ))}
 
                         {/* 空のセル（月の最初の日の前） */}
-                        {Array(monthStart.day())
+                        {Array(firstDayOfMonth)
                             .fill(null)
                             .map((_, index) => (
                                 <Grid
                                     size={{ xs: 12 / 7 }}
-                                    key={`empty-${index}`}
+                                    key={`empty-start-${index}`}
                                     sx={{
                                         height: 56,
                                         borderBottom: 1,
@@ -203,13 +128,8 @@ const Calendar = () => {
 
                         {/* 日付のセル */}
                         {daysInMonth.map((date) => {
-                            const dayHasEvents: boolean = hasEvents(date); // その日タスクがあればtrue
-                            const isSelected =
-                                selectedDate &&
-                                dayjs(date).isSame(selectedDate, "day");
-                            const isTodayDate = () => {
-                                return dayjs(date).isSame(dayjs(), "day");
-                            };
+                            const isSelected = selectedDate && dayjs(date).isSame(selectedDate, "day");
+                            const isToday = dayjs(date).isSame(dayjs(), "day");
 
                             return (
                                 <Grid
@@ -222,9 +142,6 @@ const Calendar = () => {
                                         "&:nth-of-type(7n)": {
                                             borderRight: 0,
                                         },
-                                        "&:nth-last-of-type(-n+7)": {
-                                            borderBottom: 0,
-                                        },
                                     }}>
                                     <Button
                                         fullWidth
@@ -236,21 +153,17 @@ const Calendar = () => {
                                             alignItems: "flex-start",
                                             padding: 1,
                                             position: "relative",
-                                            color: !isCurrentMonth
-                                                ? "text.disabled"
-                                                : "text.primary",
+                                            color: "text.primary",
                                             backgroundColor: isSelected
                                                 ? "#dcdcdc"
-                                                : isTodayDate()
+                                                : isToday
                                                   ? "#f0f0f0"
                                                   : "transparent",
                                             "&:hover": {
                                                 backgroundColor: "#dcdcdc",
                                             },
                                         }}
-                                        onClick={() => {
-                                            clickCalendar(date);
-                                        }}>
+                                        onClick={() => handleClickDate(date)}>
                                         <Typography
                                             variant='body2'
                                             sx={{
@@ -259,7 +172,7 @@ const Calendar = () => {
                                             }}>
                                             {date.date()}
                                         </Typography>
-                                        {dayHasEvents && (
+                                        {hasEvents(date) && (
                                             <Box
                                                 sx={{
                                                     width: 6,
@@ -269,8 +182,7 @@ const Calendar = () => {
                                                     position: "absolute",
                                                     bottom: 8,
                                                     left: "50%",
-                                                    transform:
-                                                        "translateX(-50%)",
+                                                    transform: "translateX(-50%)",
                                                 }}
                                             />
                                         )}
@@ -278,29 +190,10 @@ const Calendar = () => {
                                 </Grid>
                             );
                         })}
-
-                        {/* 空のセル（月の最初の日の前） */}
-                        {Array(7 - nextMonthempty())
-                            .fill(null)
-                            .map((_, index) => (
-                                <Grid
-                                    size={{ xs: 12 / 7 }}
-                                    key={`empty-${index}`}
-                                    sx={{
-                                        height: 56,
-                                        borderBottom: 1,
-                                        borderRight: 1,
-                                        borderColor: "divider",
-                                        "&:nth-of-type(7n)": {
-                                            borderRight: 0,
-                                        },
-                                    }}
-                                />
-                            ))}
                     </Grid>
                 </Paper>
             </Box>
-            {select ? (
+            {selectedDate ? (
                 <Box sx={{ m: 2 }}>
                     <TableContainer>
                         <Table
@@ -309,60 +202,21 @@ const Calendar = () => {
                             aria-label='a dense table'>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell
-                                        sx={GetStickyCellStyle(
-                                            90,
-                                            90,
-                                            0,
-                                            "left",
-                                        )}>
-                                        タスク名
-                                    </TableCell>
-                                    <TableCell
-                                        sx={GetStickyCellStyle(
-                                            90,
-                                            90,
-                                            0,
-                                            "left",
-                                        )}>
-                                        日付
-                                    </TableCell>
-                                    <TableCell
-                                        sx={GetStickyCellStyle(
-                                            90,
-                                            90,
-                                            0,
-                                            "left",
-                                        )}>
-                                        チェック
-                                    </TableCell>
-                                    <TableCell
-                                        sx={GetStickyCellStyle(
-                                            90,
-                                            90,
-                                            0,
-                                            "left",
-                                        )}>
-                                        タグ
-                                    </TableCell>
+                                    <TableCell>タスク名</TableCell>
+                                    <TableCell>日付</TableCell>
+                                    <TableCell>チェック</TableCell>
+                                    <TableCell>タグ</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {todaytodolist.map((todo) => (
+                                {todayTodoList.map((todo) => (
                                     <TableRow
                                         key={todo.title}
                                         sx={{
                                             "&:last-child td, &:last-child th":
                                                 { border: 0 },
                                         }}>
-                                        <TableCell
-                                            sx={GetStickyCellStyle(
-                                                90,
-                                                90,
-                                                0,
-                                                "left",
-                                            )}
-                                            style={{ maxWidth: 160 }}>
+                                        <TableCell style={{ maxWidth: 160 }}>
                                             <Typography sx={{
                                                 display: '-webkit-box',
                                                 overflow: 'hidden',
@@ -371,31 +225,13 @@ const Calendar = () => {
                                                 {todo.title}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell
-                                            sx={GetStickyCellStyle(
-                                                90,
-                                                90,
-                                                0,
-                                                "left",
-                                            )}>
+                                        <TableCell>
                                             {todo.date.format("YYYY/MM/DD")}
                                         </TableCell>
-                                        <TableCell
-                                            sx={GetStickyCellStyle(
-                                                90,
-                                                90,
-                                                0,
-                                                "left",
-                                            )}>
+                                        <TableCell>
                                             {todo.completed ? "済" : "未"}
                                         </TableCell>
-                                        <TableCell
-                                            sx={GetStickyCellStyle(
-                                                90,
-                                                90,
-                                                0,
-                                                "left",
-                                            )}>
+                                        <TableCell>
                                             {todo.tag}
                                         </TableCell>
                                     </TableRow>

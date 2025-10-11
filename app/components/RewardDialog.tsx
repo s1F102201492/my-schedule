@@ -8,13 +8,9 @@ import {
     DialogTitle,
 } from "@mui/material";
 import React from "react";
+import { DialogProps } from "../Models/models";
 
-interface rewardProps {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const RewardDialog: React.FC<rewardProps> = ({ open, setOpen }) => {
+const RewardDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     return (
         <div>
             <Dialog

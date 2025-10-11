@@ -9,27 +9,10 @@ import {
 import React, { useState } from "react";
 import Detail from "../components/Detail";
 import Grid from "@mui/material/Grid2";
-import { CheckRate } from "../components/calculate/CheckRate";
+import { CheckRate } from "../hooks/calculate/CheckRate";
+import { TodoModel } from "../Models/models";
 
-interface TodoProps {
-    id: number;
-    title: string;
-    description: string;
-    continuedays: number;
-    checkedDates: Record<string, boolean>;
-    startdate: string;
-    enddate: string;
-    interval: number | string[];
-    purpose: string;
-    tag: string;
-    // intervalには数字か配列（曜日を格納する）
-}
-
-interface TodoItemProps {
-    todo: TodoProps;
-}
-
-const AllTodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+const AllTodoItem = ({ todo }: {todo: TodoModel}) => {
     // 詳細ダイアログの開閉
     const [detailOpen, setDetailOpen] = useState<boolean>(false);
     const handleDetailOpen = () => setDetailOpen(true);
