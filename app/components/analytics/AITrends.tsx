@@ -1,7 +1,7 @@
 import { Psychology, Refresh } from '@mui/icons-material'
 import { Box, Button, Card, CardContent, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import FadeLoading from '../parts/FadeLoading'
+import FadeLoading from '../common/FadeLoading'
 import Grid from "@mui/material/Grid2";
 import theme from '../theme/theme';
 import { viewIcon } from '../tags';

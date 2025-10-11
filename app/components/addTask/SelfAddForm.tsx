@@ -20,14 +20,13 @@ import {
 import AutoAwesomeSharpIcon from '@mui/icons-material/AutoAwesomeSharp';
 import { DateComponents } from "../DateComponents";
 import { TodoContext } from "../../context/TodoContext";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
-import CreateCheckedDates from "../calculate/CreateCheckedDates";
+import CreateCheckedDates from "../../hooks/calculate/CreateCheckedDates";
 import { taglist } from "../tags";
-import { AuthContext } from "../../context/AuthContext";
-import FullScreenLoading from "../parts/fullScreenLoading";
+import FullScreenLoading from "../common/fullScreenLoading";
 import { AddTaskPageSwitchProps } from "../../Models/models";
 import { useTaskForm } from "@/app/hooks/form/useTaskForm";
 

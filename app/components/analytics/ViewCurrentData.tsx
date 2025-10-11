@@ -19,7 +19,7 @@ import theme from "../theme/theme";
 import { ContributionGraph } from "./ContributionGraph";
 import ViewAchieveByTag from "./ViewAchieveByTag";
 import ViewUserAchieve from "./ViewUserAchieve";
-import FullScreenLoading from "../parts/fullScreenLoading";
+import FullScreenLoading from "../common/fullScreenLoading";
 import { SwitchAnalyticsPageProps } from "../../Models/models";
 
 const getGPTsentence = async () => {

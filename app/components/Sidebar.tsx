@@ -2,7 +2,7 @@
 
 import React from "react";
 import Drawer from "@mui/material/Drawer";
-import UserCard from "../components/parts/UserCard";
+import UserCard from "./common/UserCard";
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";

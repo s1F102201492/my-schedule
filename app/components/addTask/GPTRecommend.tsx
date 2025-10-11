@@ -15,11 +15,11 @@ import {
 import React, { useState } from "react";
 import ImageIcon from "@mui/icons-material/Image";
 import AssignmentAddIcon from '@mui/icons-material/Assignment';
-import PulseLoading from "../parts/PulseLoading";
+import PulseLoading from "../common/PulseLoading";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { taglist } from "../tags";
-import RecomTaskList from "../parts/RecomTaskList";
-import FullScreenLoading from "../parts/fullScreenLoading";
+import RecomTaskList from "../addTask/RecomTaskList";
+import FullScreenLoading from "../common/fullScreenLoading";
 import Image from "next/image";
 import { AddTaskPageSwitchProps } from "../../Models/models";
 import { useChatGPT } from "@/app/hooks/ai/useChatGPT";

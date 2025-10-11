@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import { CheckCircle, RadioButtonUnchecked } from "@mui/icons-material";
 import React, { useContext, useState } from "react";
-import CreateCheckedDates from "../calculate/CreateCheckedDates";
+import CreateCheckedDates from "../../hooks/calculate/CreateCheckedDates";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { AuthContext } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { TodoContext } from "@/app/context/TodoContext";
-import FullScreenLoading from "./fullScreenLoading";
+import FullScreenLoading from "../common/fullScreenLoading";
 import { TaskProps, taskListProps } from "../../Models/models";
 
 dayjs.extend(utc);

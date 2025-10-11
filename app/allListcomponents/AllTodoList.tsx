@@ -15,9 +15,9 @@ import {
     ToggleButtonGroup,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
-import { CheckRate } from "../components/calculate/CheckRate";
-import FadeLoading from "../components/parts/FadeLoading";
+import { ChangeSlashDay } from "../hooks/calculate/ChangeSlashDay";
+import { CheckRate } from "../hooks/calculate/CheckRate";
+import FadeLoading from "../components/common/FadeLoading";
 import { TodoModel } from "../Models/models";
 
 const AllTodoList = () => {

@@ -11,7 +11,7 @@ import {
 import React, { useContext, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
 import { useRouter } from "next/navigation";
-import FullScreenLoading from "./parts/fullScreenLoading";
+import FullScreenLoading from "./common/fullScreenLoading";
 import { TodoModel, DeleteDialogProps } from "../Models/models";
 
 const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
@@ -25,7 +25,7 @@ const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpe
         );
     }
 
-    const { todos, deleteTodo } = todoContext;
+    const { todos, deleteTodo, fetchAllTodo, setTodos } = todoContext;
 
     const [loading, setLoading] = useState(false);
 
@@ -98,11 +98,4 @@ const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpe
 };
 
 export default Delete;
-function fetchAllTodo() {
-    throw new Error("Function not implemented.");
-}
-
-function setTodos(arg0: (prevTodos: any) => any) {
-    throw new Error("Function not implemented.");
-}
 

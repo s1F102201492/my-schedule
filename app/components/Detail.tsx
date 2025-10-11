@@ -19,7 +19,7 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { CheckRate } from "./calculate/CheckRate";
+import { CheckRate } from "../hooks/calculate/CheckRate";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";

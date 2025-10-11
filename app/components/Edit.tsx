@@ -27,7 +27,7 @@ import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
 import { TodoContext } from "../context/TodoContext";
 import { taglist } from "./tags";
-import FullScreenLoading from "./parts/fullScreenLoading";
+import FullScreenLoading from "./common/fullScreenLoading";
 import { EditDialogProps } from "../Models/models";
 import { useTaskForm } from "../hooks/form/useTaskForm";
 

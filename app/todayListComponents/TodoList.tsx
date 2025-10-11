@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import TodoItem from "./TodoItem";
 import TodoChecked from "./TodoChecked";
 import { List, Typography } from "@mui/material";
-import { ChangeSlashDay } from "../components/calculate/ChangeSlashDay";
+import { ChangeSlashDay } from "../hooks/calculate/ChangeSlashDay";
 import { TodoContext } from "../context/TodoContext";
 import RewardDialog from "../components/RewardDialog";
 import { TodoModel } from "../Models/models";

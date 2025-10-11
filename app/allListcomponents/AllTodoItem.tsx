@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import Detail from "../components/Detail";
 import Grid from "@mui/material/Grid2";
-import { CheckRate } from "../components/calculate/CheckRate";
+import { CheckRate } from "../hooks/calculate/CheckRate";
 import { TodoModel } from "../Models/models";
 
 const AllTodoItem = ({ todo }: {todo: TodoModel}) => {

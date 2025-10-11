@@ -1,7 +1,7 @@
 // このカスタムフックでは、タスクの変更を管理する（フロントで使う）
 import { useCallback, useContext, useEffect, useState } from "react";
 import { TodoModel as TodoModel } from "../../Models/models";
-import { CountContinueDays } from "@/app/components/calculate/CountContinueDays";
+import { CountContinueDays } from "@/app/hooks/calculate/CountContinueDays";
 import { AuthContext } from "@/app/context/AuthContext";
 
 export const useTodoCRUD = () => {

@@ -4,7 +4,7 @@ import {
     ReactNode,
     createContext,
 } from "react";
-import FullScreenLoading from "../components/parts/fullScreenLoading";
+import FullScreenLoading from "../components/common/fullScreenLoading";
 import { AuthContextType } from "../Models/models";
 import { useAuth } from "../hooks/auth/useAuth";
 

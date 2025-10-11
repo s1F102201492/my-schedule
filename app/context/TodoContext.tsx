@@ -5,7 +5,7 @@ import React, {
     ReactNode,
     useContext,
 } from "react";
-import FullScreenLoading from "../components/parts/fullScreenLoading";
+import FullScreenLoading from "../components/common/fullScreenLoading";
 import { TodoContextType } from "../Models/models";
 import { useTodoCRUD } from "../hooks/todo/useTodoCRUD";
 import { AuthContext } from "./AuthContext";
