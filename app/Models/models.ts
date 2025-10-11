@@ -65,10 +65,15 @@ export interface SidebarProps extends WithLoginUser {
 export interface TodoContextType {
     todos: TodoModel[];
     setTodos: React.Dispatch<React.SetStateAction<TodoModel[]>>;
-    toggleChecked: (id: number, date: string) => Promise<void>;
-    fetchAllTodos: () => Promise<void>;
-    toggleDelete: (id: number, date: string) => Promise<void>;
     loading: boolean;
+    fetchAllTodo: () => Promise<void>;
+    toggleChecked: (id: number, date: string) => Promise<void>;
+    toggleDelete: (id: number, date: string) => Promise<void>;
+    addTodo: (todo: Omit<TodoModel, "id">) => Promise<any>;
+    editTodo: (todo: TodoModel) => Promise<any>;
+    deleteTodo: (todo: TodoModel) => Promise<any>;
+    checkTodayTodo: (todo: TodoModel) => Promise<void>;
+    deleteTodayTodo: (todo: TodoModel) => Promise<void>;
 }
 
 export interface TodoItemProps {
@@ -104,7 +109,6 @@ export interface CalendarViewProps {
 
 export interface AuthContextType {
     loginUser: UserType | null;
-    setLoginUser: React.Dispatch<React.SetStateAction<UserType | null>>;
     loginSession: () => Promise<void>;
     session: Session | null; // supabaseのSession型をanyに
 }

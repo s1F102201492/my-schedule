@@ -14,18 +14,6 @@ import { useRouter } from "next/navigation";
 import FullScreenLoading from "./parts/fullScreenLoading";
 import { TodoModel, DeleteDialogProps } from "../Models/models";
 
-const deletePractice = async (todo: TodoModel) => {
-    const res = await fetch(`/api/todo/${todo.id}`, {
-        method: "DELETE",
-        body: JSON.stringify(todo),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
 const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const router = useRouter();
 
@@ -37,7 +25,7 @@ const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpe
         );
     }
 
-    const { todos, setTodos, fetchAllTodos } = todoContext;
+    const { todos, deleteTodo } = todoContext;
 
     const [loading, setLoading] = useState(false);
 
@@ -54,15 +42,15 @@ const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpe
             setLoading(true);
 
             setTodos((prevTodos) => {
-                return prevTodos.filter((todo) => todo.id !== onetodo.id);
+                return prevTodos.filter((todo: TodoModel) => todo.id !== onetodo.id);
             });
 
             const targetTodo = todos.find((todo) => todo.id === onetodo.id);
             if (!targetTodo) return;
 
-            await deletePractice(targetTodo);
+            await deleteTodo(targetTodo);
 
-            await fetchAllTodos();
+            await fetchAllTodo();
             setDeleteOpen(false);
             router.push("/list");
             router.refresh();
@@ -110,3 +98,11 @@ const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpe
 };
 
 export default Delete;
+function fetchAllTodo() {
+    throw new Error("Function not implemented.");
+}
+
+function setTodos(arg0: (prevTodos: any) => any) {
+    throw new Error("Function not implemented.");
+}
+

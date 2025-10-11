@@ -36,42 +36,6 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-const editPractice = async (
-    id: number,
-    title: string,
-    description: string | null,
-    continuedays: number,
-    checkedDates: Record<string, boolean>,
-    startdate: string,
-    enddate: string,
-    interval: number | string[],
-    purpose: string,
-    tag: string,
-    userId: string,
-) => {
-    const res = await fetch(`/api/todo/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-            id,
-            title,
-            description,
-            continuedays,
-            checkedDates,
-            startdate,
-            enddate,
-            interval,
-            purpose,
-            tag,
-            userId,
-        }),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
 const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) => {
     const router = useRouter();
 
@@ -83,17 +47,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
         );
     }
 
-    const { fetchAllTodos } = todoContext;
-
-    const authContext = useContext(AuthContext);
-
-    if (!authContext) {
-        throw new Error(
-            "AuthContext is undefined. Make sure to use TodoProvider.",
-        );
-    }
-
-    const { loginUser } = authContext;
+    const { fetchAllTodo, editTodo } = todoContext;
 
     const [loading, setLoading] = useState(false);
 
@@ -256,21 +210,20 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
             ); // 日付: falseの辞書を作成
             const contdays = todo.continuedays; //編集なので達成日はそのまま
 
-            await editPractice(
+            await editTodo({
                 id,
                 title,
-                desc,
-                contdays,
-                checkdates,
-                sd?.format("YYYY/MM/DD"),
-                ed?.format("YYYY/MM/DD"),
-                setint(ndays),
-                purp,
+                description: desc,
+                continuedays: contdays,
+                checkedDates: checkdates,
+                startdate: sd?.format("YYYY/MM/DD"),
+                enddate: ed?.format("YYYY/MM/DD"),
+                interval: setint(ndays),
+                purpose: purp,
                 tag,
-                loginUser!.id,
-            );
+            });
 
-            await fetchAllTodos();
+            await fetchAllTodo();
             setEditOpen(false);
             router.push("/list");
             router.refresh();

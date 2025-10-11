@@ -35,40 +35,6 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-const addTodo = async (
-    title: string,
-    description: string,
-    continuedays: number,
-    checkedDates: Record<string, boolean>,
-    startdate: string,
-    enddate: string,
-    interval: number | string[],
-    purpose: string,
-    tag: string,
-    userId: string,
-) => {
-    const res = await fetch("/api/todo", {
-        method: "POST",
-        body: JSON.stringify({
-            title,
-            description,
-            continuedays,
-            checkedDates,
-            startdate,
-            enddate,
-            interval,
-            purpose,
-            tag,
-            userId,
-        }),
-        headers: {
-            "Content-type": "application/json",
-        },
-    });
-
-    return res.json();
-};
-
 const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const router = useRouter();
 
@@ -80,17 +46,7 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
         );
     }
 
-    const { fetchAllTodos } = todoContext;
-
-    const authContext = useContext(AuthContext);
-
-    if (!authContext) {
-        throw new Error(
-            "TodoContext is undefined. Make sure to use TodoProvider.",
-        );
-    }
-
-    const { loginUser } = authContext;
+    const { fetchAllTodo, addTodo } = todoContext;
 
     const formReset = () => {
         setTitle("");
@@ -197,22 +153,19 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                 selectedDays,
             ); // 日付: falseの辞書を作成
 
-            const contdays: number = 0; // continuedays 登録したてなので最初は0
-
-            await addTodo(
+            await addTodo({
                 title,
-                desc,
-                contdays,
-                checkdates,
-                sd?.format("YYYY/MM/DD"),
-                ed?.format("YYYY/MM/DD"),
-                setint(ndays),
-                purp,
+                description: desc,
+                checkedDates: checkdates,
+                continuedays: 0,
+                startdate: sd?.format("YYYY/MM/DD"),
+                enddate: ed?.format("YYYY/MM/DD"),
+                interval: setint(ndays),
+                purpose: purp,
                 tag,
-                loginUser!.id,
-            );
+            });
 
-            await fetchAllTodos();
+            await fetchAllTodo();
             router.push("/list");
             router.refresh();
 
