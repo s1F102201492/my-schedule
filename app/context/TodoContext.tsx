@@ -17,7 +17,9 @@ export const TodoContext = createContext<TodoContextType | undefined>(
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    
+
+    const { todos, setTodos, toggleChecked, fetchAllTodo, toggleDelete, loading, deleteTodo, checkTodayTodo, deleteTodayTodo, addTodo, editTodo } = useTodoCRUD();
+
     const authContext = useContext(AuthContext);
 
     if (!authContext) {
@@ -31,9 +33,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     if (!session) {
         return <FullScreenLoading open={true} />;
     }
-
-    const { todos, setTodos, toggleChecked, fetchAllTodo, toggleDelete, loading, deleteTodo, checkTodayTodo, deleteTodayTodo, addTodo, editTodo } = useTodoCRUD();
-
+    
     return (
         <TodoContext.Provider
             value={{

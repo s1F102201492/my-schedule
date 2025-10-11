@@ -27,9 +27,9 @@ import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
 import { TodoContext } from "../context/TodoContext";
 import { taglist } from "./tags";
-import { AuthContext } from "../context/AuthContext";
 import FullScreenLoading from "./parts/fullScreenLoading";
-import { TodoModel, EditDialogProps } from "../Models/models";
+import { EditDialogProps } from "../Models/models";
+import { useTaskForm } from "../hooks/form/useTaskForm";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -38,7 +38,6 @@ dayjs.tz.setDefault("Asia/Tokyo");
 
 const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) => {
     const router = useRouter();
-
     const todoContext = useContext(TodoContext);
 
     if (!todoContext) {
@@ -46,8 +45,15 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
             "TodoContext is undefined. Make sure to use TodoProvider.",
         );
     }
-
     const { fetchAllTodo, editTodo } = todoContext;
+    
+    const { formState, handlers, getIntervalValue, resetForm } = useTaskForm(todo);
+    const { title, description, startDate, endDate, isIntervalDays, intervalNumber, selectedWeekdays, purpose, tag } = formState;
+    const { 
+        handleTitleChange, handleDescriptionChange, setStartDate, setEndDate,
+        handleIntervalToggle, handleIntervalNumberChange, handleWeekdaySelect,
+        handlePurposeChange, handleTagChange 
+    } = handlers;
 
     const [loading, setLoading] = useState(false);
 
@@ -55,123 +61,20 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
     const handleEditClose = () => {
         //閉じたらすべてリセット
         setEditOpen(false);
-        formReset();
-    };
-
-    const formReset = () => {
-        setTitle(todo.title);
-        setdesc(todo.description);
-        setSd(dayjs(todo.startdate));
-        setEd(dayjs(todo.enddate));
-        setNumber(initialinterval() as number);
-        setSelectedDays(initialinterval() as string[]);
-        setNdays(intervaltype());
-        setpurp(todo.purpose);
-        setTag(todo.tag);
-    };
-
-    // タイトルに書き込まれたか判定
-    const [title, setTitle] = useState<string>(todo.title);
-    const handletitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    // 詳細テキストに書き込まれたか判定
-    const [desc, setdesc] = useState<string>(todo.description);
-    const handledesc = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setdesc(e.target.value);
-    };
-
-    // 日付フォームをStateで管理（sdがstartdate,edがenddate）
-    const [sd, setSd] = useState<Dayjs>(dayjs(todo.startdate)); //Date型
-    const [ed, setEd] = useState<Dayjs>(dayjs(todo.enddate)); //Date型
-
-    // intervalの型を判定
-    const intervaltype = () => {
-        if (typeof todo.interval === "number") {
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // n日ごとの場合はnumに、曜日はarrに格納。
-    const initialinterval = () => {
-        if (intervaltype()) {
-            return todo.interval as number; // 数値としてキャスト
-        }
-        return todo.interval as string[]; // 文字列配列としてキャスト
+        resetForm();
     };
 
     // n日ごとの場合
     const numberofdays: number[] = [1, 2, 3, 4, 5, 6, 7];
-    const [number, setNumber] = useState<number>(initialinterval() as number);
-    const handleNumber = (e: SelectChangeEvent<number>) => {
-        const selectedNumber = Number(e.target.value);
-        setNumber(selectedNumber);
-    };
-
-    // 曜日を選んだ場合
-    const [selectedDays, setSelectedDays] = useState<string[]>(
-        initialinterval() as string[],
-    );
-    const handleChip = (day: string) => {
-        setSelectedDays((prevdays) => {
-            // 選択した日が含まれているか
-            if (prevdays.includes(day)) {
-                // 含まれていた場合リストから消す
-
-                return prevdays.filter((d) => d !== day);
-            } else {
-                // 含まれていなかった場合追加
-                return [...prevdays, day];
-            }
-        });
-    };
-
-    // n日ごとか曜日かを選ぶときのstate trueの場合はn日ごと、falseの場合は曜日
-    const [ndays, setNdays] = useState<boolean>(intervaltype());
-    const handleNdays = () => {
-        setNdays(!ndays);
-    };
-
-    // switchした場合リセット（例えば、曜日に切り替えた場合日にちがリセット）
-    useEffect(() => {
-        if (ndays === true) {
-            setSelectedDays(initialinterval() as string[]);
-        } else {
-            setNumber(initialinterval() as number);
-        }
-    }, [ndays]);
-
-    // 目的のテキストを管理
-    const [purp, setpurp] = useState<string>(todo.purpose);
-    const handlepurpose = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setpurp(e.target.value);
-    };
-
+    
     // タグの選択
     const tags = taglist;
-    const [tag, setTag] = useState<string>(todo.tag);
-    const handleTagSelect = (e: SelectChangeEvent) => {
-        // 選択
-        setTag(e.target.value as string);
-    };
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
         try {
             setLoading(true);
-
-            // ndaysがtrueの場合はn日を返す、falseの場合は曜日を返す
-            const setint = (ndays: boolean) => {
-                if (ndays) {
-                    return number;
-                } else {
-                    return selectedDays;
-                }
-            };
 
             const createCheckedDates = (
                 sd: Dayjs,
@@ -193,7 +96,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                     let date = sd;
                     while (dayjs(date).isBefore(dayjs(ed).add(1, "d"))) {
                         const day = dayjs(date).format("ddd");
-                        if (selectedDays.includes(day)) {
+                        if (selectedWeekdays.includes(day)) {
                             const slashdate = dayjs(date).format("YYYY/MM/DD");
                             objdate[slashdate] = false;
                         }
@@ -204,22 +107,22 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
             };
 
             const checkdates: Record<string, boolean> = createCheckedDates(
-                sd,
-                ed,
-                setint(ndays),
+                startDate,
+                endDate,
+                getIntervalValue(),
             ); // 日付: falseの辞書を作成
             const contdays = todo.continuedays; //編集なので達成日はそのまま
 
             await editTodo({
                 id,
                 title,
-                description: desc,
+                description,
                 continuedays: contdays,
                 checkedDates: checkdates,
-                startdate: sd?.format("YYYY/MM/DD"),
-                enddate: ed?.format("YYYY/MM/DD"),
-                interval: setint(ndays),
-                purpose: purp,
+                startdate: startDate?.format("YYYY/MM/DD"),
+                enddate: endDate?.format("YYYY/MM/DD"),
+                interval: getIntervalValue(),
+                purpose,
                 tag,
             });
 
@@ -227,7 +130,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
             setEditOpen(false);
             router.push("/list");
             router.refresh();
-            formReset();
+            resetForm();
         } catch {
             alert("編集ができませんでした。もう一度お試しください。");
         } finally {
@@ -257,7 +160,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             fullWidth
                             variant='outlined'
                             value={title}
-                            onChange={handletitle}
+                            onChange={handleTitleChange}
                         />
                         <DialogContentText variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
@@ -268,8 +171,8 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             margin='dense'
                             fullWidth
                             variant='outlined'
-                            value={desc}
-                            onChange={handledesc}
+                            value={description}
+                            onChange={handleDescriptionChange}
                         />
                         <Box sx={{ flexDirection: "row" }}>
                             <DialogContentText
@@ -279,8 +182,8 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             </DialogContentText>
                             <DateComponents
                                 label='開始日'
-                                date={sd}
-                                setDate={setSd}
+                                date={startDate}
+                                setDate={setStartDate}
                                 minDate={dayjs(new Date("2000/01/01"))}
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
@@ -293,9 +196,9 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             </DialogContentText>
                             <DateComponents
                                 label='終了日'
-                                date={ed}
-                                setDate={setEd}
-                                minDate={sd}
+                                date={endDate}
+                                setDate={setEndDate}
+                                minDate={startDate}
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
@@ -304,19 +207,19 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             variant='h6'>
                             繰り返し日
                         </DialogContentText>
-                        {ndays ? "N日ごと" : "曜日"}
+                        {isIntervalDays ? "N日ごと" : "曜日"}
                         <Switch
-                            checked={ndays}
-                            onChange={handleNdays}
+                            checked={isIntervalDays}
+                            onChange={handleIntervalToggle}
                         />
                         <Box>
-                            {ndays ? (
+                            {isIntervalDays ? (
                                 <Select
                                     required
                                     labelId='demo-multiple-name-label'
                                     id='demo-multiple-name'
-                                    value={number}
-                                    onChange={handleNumber}>
+                                    value={intervalNumber}
+                                    onChange={handleIntervalNumberChange}>
                                     {numberofdays.map((num) => (
                                         <MenuItem
                                             key={num}
@@ -340,16 +243,16 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                                             key={day}
                                             label={day}
                                             variant={
-                                                selectedDays.includes(day)
+                                                selectedWeekdays.includes(day)
                                                     ? "filled"
                                                     : "outlined"
                                             }
                                             color={
-                                                selectedDays.includes(day)
+                                                selectedWeekdays.includes(day)
                                                     ? "primary"
                                                     : "default"
                                             }
-                                            onClick={() => handleChip(day)}
+                                            onClick={() => handleWeekdaySelect(day)}
                                         />
                                     ))}
                                 </FormGroup>
@@ -364,8 +267,8 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             margin='dense'
                             fullWidth
                             variant='outlined'
-                            value={purp}
-                            onChange={handlepurpose}
+                            value={purpose}
+                            onChange={handlePurposeChange}
                         />
                         <FormControl
                             fullWidth
@@ -376,7 +279,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                                 id='tag-select'
                                 value={tag}
                                 label='タグを選択'
-                                onChange={handleTagSelect}
+                                onChange={handleTagChange}
                                 MenuProps={{ PaperProps: { height: 300 } }}>
                                 {tags.map((tag) => (
                                     <MenuItem

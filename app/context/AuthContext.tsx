@@ -15,12 +15,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
     const { loginUser, loginSession, loading, session } = useAuth();
 
+    if (!session) {
+        return <FullScreenLoading open={loading} />;
+    }
+
     return (
         <AuthContext.Provider
             value={{ loginUser, loginSession, session }}>
             {children}
-
-            {loading && <FullScreenLoading open={loading} />}
         </AuthContext.Provider>
     );
 };

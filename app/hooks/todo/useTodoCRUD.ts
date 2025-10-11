@@ -1,11 +1,13 @@
 // このカスタムフックでは、タスクの変更を管理する（フロントで使う）
 import { useCallback, useContext, useEffect, useState } from "react";
 import { TodoModel as TodoModel } from "../../Models/models";
-import { Session } from "@supabase/supabase-js";
 import { CountContinueDays } from "@/app/components/calculate/CountContinueDays";
 import { AuthContext } from "@/app/context/AuthContext";
 
 export const useTodoCRUD = () => {
+
+    const [todos, setTodos] = useState<TodoModel[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const authContext = useContext(AuthContext);
 
@@ -18,9 +20,6 @@ export const useTodoCRUD = () => {
     if (!session) {
         throw new Error("Session is undefined. Make sure to use AuthProvider.");
     }
-
-    const [todos, setTodos] = useState<TodoModel[]>([]);
-    const [loading, setLoading] = useState(true);
 
     // 習慣の取得API
     const fetchAllTodo = useCallback(async () => {
