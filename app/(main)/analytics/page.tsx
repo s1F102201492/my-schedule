@@ -16,8 +16,6 @@ const Page = () => {
         );
     }
 
-    const { loading } = todoContext;
-
     const authContext = useContext(AuthContext);
 
     if (!authContext) {
@@ -25,8 +23,6 @@ const Page = () => {
             "AuthContext is undefined. Make sure to use AuthProvider.",
         );
     }
-
-    const { loginUser } = authContext;
 
     // 理想の自分ページの開閉を管理
     const [modelPage, setModelPage] = useState<boolean>(false);

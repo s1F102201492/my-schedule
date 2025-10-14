@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { Psychology, Refresh, PsychologyAlt, Surfing, StarBorder, MedicalInformation, DirectionsRun, AutoAwesome, Mode, CurrencyYen, Group, Bedtime } from "@mui/icons-material";
+import { PsychologyAlt, Surfing, StarBorder, MedicalInformation, DirectionsRun, AutoAwesome, Mode, CurrencyYen, Group, Bedtime } from "@mui/icons-material";
 
 export const taglist = [
     "健康",

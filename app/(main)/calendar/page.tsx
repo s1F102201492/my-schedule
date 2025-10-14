@@ -2,7 +2,7 @@
 
 import React, { useContext } from "react";
 import Calendar from "../../components/Calendar";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { TodoContext } from "../../context/TodoContext";
 import FadeLoading from "../../components/common/FadeLoading";
 import { AuthContext } from "../../context/AuthContext";
