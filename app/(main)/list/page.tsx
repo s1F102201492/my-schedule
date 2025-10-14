@@ -2,7 +2,6 @@
 
 import React, { useContext } from "react";
 import AllTodoList from "../../allListcomponents/AllTodoList";
-import { Typography } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { TodoContext } from "../../context/TodoContext";
 import FadeLoading from "../../components/common/FadeLoading";

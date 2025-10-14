@@ -1,4 +1,4 @@
-const errorTranslations = {
+export const errorTranslations = {
     // エラーメッセージとその日本語訳
     "email rate limit exceeded":
         "メールの送信制限を超えました。しばらく待ってから再試行してください。",

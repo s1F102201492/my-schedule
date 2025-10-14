@@ -13,7 +13,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { usePathname } from 'next/navigation';
 import { useRouter } from "next/navigation";
-import { UserType, SidebarProps } from "../Models/models";
+import { SidebarProps } from "../Models/models";
 
 // モバイル時のハンバーガーメニューで表示されるサイドバー
 
@@ -29,11 +29,6 @@ export default function Sidebar({
         { text: "カレンダー", icon: <EventIcon />, href: "/calendar" },
         { text: "タスク一覧", icon: <FormatListNumberedIcon />, href: "/list" },
         { text: "AI Analytics", icon: <EqualizerOutlinedIcon />, href: "/analytics" },
-    ]
-
-    const PCMenuItems = [
-        { text: "お問い合わせ", icon: <ArticleIcon />, href: "https://docs.google.com/forms/d/e/1FAIpQLSfZqnEIjM4MZkNY5Nm8UszqVFhNqJrUmWBANIlu3WxAvRma6g/viewform?usp=dialog" },
-        { text: "使い方ガイド", icon: <HelpOutlineIcon />, href: "/" }
     ]
 
     const router = useRouter();

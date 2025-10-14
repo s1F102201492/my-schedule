@@ -71,9 +71,9 @@ export interface TodoContextType {
     fetchAllTodo: () => Promise<void>;
     toggleChecked: (id: number, date: string) => Promise<void>;
     toggleDelete: (id: number, date: string) => Promise<void>;
-    addTodo: (todo: Omit<TodoModel, "id">) => Promise<any>;
-    editTodo: (todo: TodoModel) => Promise<any>;
-    deleteTodo: (todo: TodoModel) => Promise<any>;
+    addTodo: (todo: Omit<TodoModel, "id">) => Promise<void>;
+    editTodo: (todo: TodoModel) => Promise<void>;
+    deleteTodo: (todo: TodoModel) => Promise<void>;
     checkTodayTodo: (todo: TodoModel) => Promise<void>;
     deleteTodayTodo: (todo: TodoModel) => Promise<void>;
 }
@@ -87,7 +87,7 @@ export interface TodoItemProps {
 }
 
 // UserCardコンポーネントの型
-export interface UserCardProps extends WithLoginUser {}
+export type UserCardProps = WithLoginUser;
 
 // AddTaskPageSwitchコンポーネントの型
 export interface AddTaskPageSwitchProps {

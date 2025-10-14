@@ -14,14 +14,13 @@ import {
     Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import React from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import GetStickyCellStyle from "./theme/GetStickyCellStyle";
 import { useCalendar } from "../hooks/ui/useCalendar";
 
 dayjs.extend(utc);

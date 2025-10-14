@@ -7,7 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MenuIcon from '@mui/icons-material/Menu';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Button, Icon, IconButton, Menu, Tooltip } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import Sidebar from "../Sidebar";
 import ArticleIcon from '@mui/icons-material/Article';
 import { AuthContext } from "../../context/AuthContext";

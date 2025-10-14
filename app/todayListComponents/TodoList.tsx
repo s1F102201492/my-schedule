@@ -74,7 +74,7 @@ const TodoList = () => {
         if (!notchecktodos.length && !reward) {
             setReward(true);
         }
-    }, [notchecktodos.length]);
+    }, [notchecktodos.length, reward]);
 
     return (
         <div>

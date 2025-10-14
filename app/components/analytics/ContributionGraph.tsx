@@ -2,7 +2,7 @@ import { CalendarMonth } from '@mui/icons-material'
 import { Box, Card, CardContent, Typography } from '@mui/material'
 import React, { useContext } from 'react'
 import theme from '../theme/theme'
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";

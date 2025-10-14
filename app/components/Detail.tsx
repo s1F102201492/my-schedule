@@ -23,7 +23,7 @@ import { CheckRate } from "../hooks/calculate/CheckRate";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
-import { TodoModel, TodoItemProps } from "../Models/models";
+import { TodoItemProps } from "../Models/models";
 
 const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
     // 編集フォームの管理
