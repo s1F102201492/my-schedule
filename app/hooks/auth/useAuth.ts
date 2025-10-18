@@ -36,6 +36,8 @@ export const useAuth = () => {
             if (!getSession) {
                 console.log("No active session found.:", sessionError);
                 setLoginUser(null);
+                setSession(null);
+                setLoading(false);
                 return;
             }
             setSession(getSession);
