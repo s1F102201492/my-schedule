@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Best Practice',
     short_name: 'Best Practice',
     description: 'Best Practice',
-    start_url: '/userauth',
+    start_url: '/',
     display: 'minimal-ui',
     background_color: '#ffffff',
     theme_color: '#000000',
