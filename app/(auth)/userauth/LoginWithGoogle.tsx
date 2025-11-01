@@ -26,7 +26,7 @@ const LoginWithGoogle = () => {
                 },
             });
             if (error) alert(error.message);
-        } catch (error) {
+        } catch {
             // エラーハンドリング
         }
     };
