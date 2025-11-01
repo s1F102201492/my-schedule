@@ -17,7 +17,7 @@ export const useAuth = () => {
             });
             const data = await res.json();
             return data.user;
-        } catch (error) {
+        } catch {
             return null;
         }
     }, []);
@@ -28,7 +28,7 @@ export const useAuth = () => {
 
         setLoading(true);
         try {
-            const { data: sessionData, error: sessionError } =
+            const { data: sessionData } =
                 await supabase.auth.getSession();
             const getSession = sessionData?.session;
 
@@ -54,7 +54,7 @@ export const useAuth = () => {
             }
 
             await getLoginUser(userData);
-        } catch (error) {
+        } catch {
             // エラーハンドリング
         } finally {
             setLoading(false);
