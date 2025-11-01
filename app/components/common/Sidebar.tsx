@@ -2,7 +2,7 @@
 
 import React from "react";
 import Drawer from "@mui/material/Drawer";
-import UserCard from "./common/UserCard";
+import UserCard from "../../components/common/UserCard";
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
@@ -13,7 +13,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { usePathname } from 'next/navigation';
 import { useRouter } from "next/navigation";
-import { SidebarProps } from "../Models/models";
+import { SidebarProps } from "../../Models/models";
 
 // モバイル時のハンバーガーメニューで表示されるサイドバー
 

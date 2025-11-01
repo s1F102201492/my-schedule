@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
 import { Button, IconButton } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-import Sidebar from "../Sidebar";
+import Sidebar from "../../components/common/Sidebar";
 
 const PCHeader = () => {
     const pathname = usePathname();

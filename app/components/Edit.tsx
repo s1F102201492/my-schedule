@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -16,6 +17,7 @@ import {
     Select,
     Switch,
     TextField,
+    Typography,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { DateComponents } from "./DateComponents";
@@ -46,7 +48,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
     }
     const { fetchAllTodo, editTodo } = todoContext;
     
-    const { formState, handlers, getIntervalValue, resetForm } = useTaskForm(todo);
+    const { formState, handlers, errors, validateForm, getIntervalValue, resetForm } = useTaskForm(todo);
     const { title, description, startDate, endDate, isIntervalDays, intervalNumber, selectedWeekdays, purpose, tag } = formState;
     const { 
         handleTitleChange, handleDescriptionChange, setStartDate, setEndDate,
@@ -71,6 +73,11 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
+
+        // バリデーションチェック
+        if (!validateForm()) {
+            return;
+        }
 
         try {
             setLoading(true);
@@ -154,12 +161,13 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             タイトル
                         </DialogContentText>
                         <TextField
-                            required
                             margin='dense'
                             fullWidth
                             variant='outlined'
                             value={title}
                             onChange={handleTitleChange}
+                            error={!!errors.title}
+                            helperText={errors.title}
                         />
                         <DialogContentText variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
@@ -172,6 +180,8 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             variant='outlined'
                             value={description}
                             onChange={handleDescriptionChange}
+                            error={!!errors.description}
+                            helperText={errors.description}
                         />
                         <Box sx={{ flexDirection: "row" }}>
                             <DialogContentText
@@ -201,6 +211,11 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
+                        {errors.dates && (
+                            <Alert severity="error" sx={{ mt: 2 }}>
+                                {errors.dates}
+                            </Alert>
+                        )}
                         <DialogContentText
                             sx={{ mt: 3 }}
                             variant='h6'>
@@ -257,6 +272,11 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                                 </FormGroup>
                             )}
                         </Box>
+                        {errors.weekdays && (
+                            <Alert severity="error" sx={{ mt: 2 }}>
+                                {errors.weekdays}
+                            </Alert>
+                        )}
                         <DialogContentText
                             variant='h6'
                             sx={{ mt: 3 }}>目的</DialogContentText>
@@ -268,10 +288,13 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                             variant='outlined'
                             value={purpose}
                             onChange={handlePurposeChange}
+                            error={!!errors.purpose}
+                            helperText={errors.purpose}
                         />
                         <FormControl
                             fullWidth
-                            sx={{ my: 4 }}>
+                            sx={{ my: 4 }}
+                            error={!!errors.tag}>
                             <InputLabel id='tag-select'>タグを選択</InputLabel>
                             <Select
                                 labelId='tag-select'
@@ -289,6 +312,11 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {errors.tag && (
+                                <Typography color="error" variant="caption" sx={{ mt: 1, ml: 2 }}>
+                                    {errors.tag}
+                                </Typography>
+                            )}
                         </FormControl>
                     </DialogContent>
                     <DialogActions>

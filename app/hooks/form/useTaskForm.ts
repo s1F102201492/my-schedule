@@ -3,6 +3,16 @@ import dayjs, { Dayjs } from "dayjs";
 import { TodoModel } from "@/app/Models/models";
 import { SelectChangeEvent } from "@mui/material";
 
+// バリデーションエラーの型定義
+export type ValidationErrors = {
+    title: string;
+    description: string;
+    dates: string;
+    weekdays: string;
+    purpose: string;
+    tag: string;
+};
+
 export const useTaskForm = (initialTodo?: TodoModel) => {
     const [title, setTitle] = useState(initialTodo?.title || "");
     const [description, setDescription] = useState(initialTodo?.description || "");
@@ -23,6 +33,16 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
     );
     const [purpose, setPurpose] = useState(initialTodo?.purpose || "");
     const [tag, setTag] = useState(initialTodo?.tag || "");
+
+    // バリデーションエラーの状態管理
+    const [errors, setErrors] = useState<ValidationErrors>({
+        title: "",
+        description: "",
+        dates: "",
+        weekdays: "",
+        purpose: "",
+        tag: "",
+    });
 
     useEffect(() => {
         if (initialTodo) {
@@ -58,6 +78,81 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
 
     const getIntervalValue = () => isIntervalDays ? intervalNumber : selectedWeekdays;
     
+    // バリデーション関数
+    const validateForm = (): boolean => {
+        const newErrors: ValidationErrors = {
+            title: "",
+            description: "",
+            dates: "",
+            weekdays: "",
+            purpose: "",
+            tag: "",
+        };
+        let isValid = true;
+
+        // 1. タイトルのバリデーション
+        if (title.trim().length === 0) {
+            newErrors.title = "タイトルを入力してください";
+            isValid = false;
+        } else if (title.length > 50) {
+            newErrors.title = "タイトルは50文字以内で入力してください";
+            isValid = false;
+        } else {
+            // 9. 特殊文字のチェック（タイトル）
+            const invalidChars = /[<>]/;
+            if (invalidChars.test(title)) {
+                newErrors.title = "使用できない文字が含まれています（<、>は使用できません）";
+                isValid = false;
+            }
+        }
+
+        // 2. 説明の文字数制限
+        if (description.length > 500) {
+            newErrors.description = "説明は500文字以内で入力してください";
+            isValid = false;
+        } else {
+            // 9. 特殊文字のチェック（説明）
+            const invalidChars = /[<>]/;
+            if (invalidChars.test(description)) {
+                newErrors.description = "使用できない文字が含まれています（<、>は使用できません）";
+                isValid = false;
+            }
+        }
+
+        // 3. 開始日・終了日の必須チェック
+        if (!startDate || !endDate) {
+            newErrors.dates = "開始日と終了日を選択してください";
+            isValid = false;
+        } else {
+            // 4. 日付の論理的妥当性チェック
+            if (startDate.isAfter(endDate)) {
+                newErrors.dates = "終了日は開始日より後の日付を選択してください";
+                isValid = false;
+            }
+        }
+
+        // 5. 曜日選択時の最低1つ選択チェック
+        if (!isIntervalDays && selectedWeekdays.length === 0) {
+            newErrors.weekdays = "少なくとも1つの曜日を選択してください";
+            isValid = false;
+        }
+
+        // 6. 目的の文字数制限
+        if (purpose.length > 300) {
+            newErrors.purpose = "目的は300文字以内で入力してください";
+            isValid = false;
+        }
+
+        // 8. タグの必須チェック
+        if (!tag || tag === "") {
+            newErrors.tag = "タグを選択してください";
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+    
     const resetForm = () => {
         setTitle("");
         setDescription("");
@@ -68,6 +163,14 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
         setSelectedWeekdays([]);
         setPurpose("");
         setTag("");
+        setErrors({
+            title: "",
+            description: "",
+            dates: "",
+            weekdays: "",
+            purpose: "",
+            tag: "",
+        });
     }
 
     return {
@@ -93,6 +196,8 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
             handlePurposeChange,
             handleTagChange,
         },
+        errors,
+        validateForm,
         getIntervalValue,
         resetForm
     };

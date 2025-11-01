@@ -9,7 +9,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import ImageIcon from "@mui/icons-material/Image";
 import AssignmentAddIcon from '@mui/icons-material/Assignment';
 import PulseLoading from "../common/PulseLoading";
@@ -20,54 +20,27 @@ import FullScreenLoading from "../common/fullScreenLoading";
 import Image from "next/image";
 import { AddTaskPageSwitchProps } from "../../Models/models";
 import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
+import { useGPTRecommendForm } from "@/app/hooks/form/useGPTRecommendForm";
 
 // このコンポーネントはおすすめの習慣を提案するページのコンポーネントです。
 
 const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
-    const [text, setText] = useState<string>("");
-    const inputText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-    };
-
-    const [img, setImg] = useState<string>("");
-    const handleSetImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImg(reader.result as string); // Base64 データをセット
-        };
-        reader.readAsDataURL(file);
-
-        e.target.value = ""; // inputのリセット
-    };
-
-    const resetImg = () => {
-        setImg("");
-    };
+    const { formState, handlers, errors, validateForm } = useGPTRecommendForm();
+    const { text, img, tag, level } = formState;
+    const { handleTextChange, handleSetImg, resetImg, handleTagChange, handleLevelChange } = handlers;
 
     // タグの選択
     const tags = taglist;
-    const [tag, setTag] = useState<string>("");
-    const handleTagSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // 選択
-        setTag(e.target.value as string);
-    };
 
     const levelList = ["低い", "まあまあ", "高い"];
-    const [level, setLevel] = useState<string>("");
-    const handleLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLevel(e.target.value);
-    };
 
     const { responseArray, isGenerating, generateResponse } = useChatGPT();
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        if (text === "" || tag === "" || level === "") {
-            alert("すべての項目を入力してください。");
+        // バリデーションチェック
+        if (!validateForm()) {
             return;
         }
 
@@ -117,9 +90,10 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
                         fullWidth
                         rows={4}
                         multiline
-                        required
                         value={text}
-                        onChange={inputText}
+                        onChange={handleTextChange}
+                        error={!!errors.text}
+                        helperText={errors.text}
                     />
                 </Box>
                 <Box sx={{ mt: 3 }}>
@@ -163,9 +137,10 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
                             select
                             value={tag}
                             label='タグを選択'
-                            onChange={handleTagSelect}
+                            onChange={handleTagChange}
                             fullWidth
-                            required>
+                            error={!!errors.tag}
+                            helperText={errors.tag}>
                             {tags.map((elem) => (
                                 <MenuItem
                                     value={elem}
@@ -181,9 +156,10 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
                             sx={{ mt: 2 }}
                             value={level}
                             label='難易度を選択'
-                            onChange={handleLevel}
+                            onChange={handleLevelChange}
                             fullWidth
-                            required>
+                            error={!!errors.level}
+                            helperText={errors.level}>
                             {levelList.map((elem) => (
                                 <MenuItem
                                     value={elem}
