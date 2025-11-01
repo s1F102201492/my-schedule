@@ -7,7 +7,9 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "postinstall": "prisma generate",
+        "build:production": "prisma migrate deploy && next build"
     },
     "dependencies": {
         "@emotion/cache": "^11.14.0",
