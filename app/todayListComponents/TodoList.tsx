@@ -64,6 +64,7 @@ const TodoList = () => {
     // お祝いのアニメーションを管理
     const [reward, setReward] = useState<boolean>(false);
     const isFirstRender = useRef(true); // 初回レンダリングを判定
+    const hasShownReward = useRef(false); // 今日既にrewardを表示したかどうか
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -71,10 +72,11 @@ const TodoList = () => {
             return;
         }
 
-        if (!notchecktodos.length && !reward) {
+        if (!notchecktodos.length && !hasShownReward.current) {
             setReward(true);
+            hasShownReward.current = true; // 表示済みフラグを立てる
         }
-    }, [notchecktodos.length, reward]);
+    }, [notchecktodos.length]);
 
     return (
         <div>

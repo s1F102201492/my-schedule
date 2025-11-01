@@ -27,10 +27,6 @@ export async function POST(req: Request) {
         const { data, error } = await supabase.auth.getUser();
 
         if (error || !data?.user) {
-            console.log(
-                "ユーザー取得失敗もしくはログインできていません: ",
-                error,
-            );
             return NextResponse.json(
                 { error: "認証されていません" },
                 { status: 401 },
@@ -49,7 +45,6 @@ export async function POST(req: Request) {
     const gptApiEndPoint = process.env.OPENAI_API_URL;
 
     if (!gptApiKey) {
-        console.error("API keyがありません。");
         return NextResponse.json(
             { error: "API keyがありません。" },
             { status: 500 },
@@ -57,7 +52,6 @@ export async function POST(req: Request) {
     }
 
     if (!gptApiEndPoint) {
-        console.error("API URLがありません。");
         return NextResponse.json(
             { error: "API URLがありません。" },
             { status: 500 },
@@ -116,12 +110,6 @@ export async function POST(req: Request) {
 
         //API処理が正常にできない場合
         if (!response.ok) {
-            console.error(
-                `APIリクエスト失敗: ${response.status} ${response.statusText}`,
-            );
-            const errorData = await response.json();
-            console.error("エラーメッセージ:", errorData);
-
             return NextResponse.json(
                 { error: "APIリクエストが失敗しました。" },
                 { status: response.status },
@@ -132,7 +120,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ result: data.choices[0]?.message?.content });
     } else if (type === "model") {
         // modelページに返答
-        console.log(tag);
         if (tag === "絞らない") {
             SystemPrompt = `あなたは、ユーザーのタスクデータをもとに、ユーザーが目指している「理想の自分」をイメージする役割です。
         ユーザーが行っている習慣の一覧:${JSON.stringify(alltodos)}
@@ -225,12 +212,6 @@ export async function POST(req: Request) {
     
         //API処理が正常にできない場合
         if (!response.ok) {
-            console.error(
-                `APIリクエスト失敗: ${response.status} ${response.statusText}`,
-            );
-            const errorData = await response.json();
-            console.error("エラーメッセージ:", errorData);
-
             return NextResponse.json(
                 { error: "APIリクエストが失敗しました。" },
                 { status: response.status },
@@ -271,12 +252,6 @@ export async function POST(req: Request) {
     
         //API処理が正常にできない場合
         if (!response.ok) {
-            console.error(
-                `APIリクエスト失敗: ${response.status} ${response.statusText}`,
-            );
-            const errorData = await response.json();
-            console.error("エラーメッセージ:", errorData);
-
             return NextResponse.json(
                 { error: "APIリクエストが失敗しました。" },
                 { status: response.status },
@@ -287,6 +262,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ result: data.choices[0]?.message?.content });
 
     } else {
-        console.log("エラーが発生しました。type: なし");
+        return NextResponse.json({ error: "typeが指定されていません。" }, { status: 400 });
     }
 }

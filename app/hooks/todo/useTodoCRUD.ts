@@ -26,9 +26,7 @@ export const useTodoCRUD = () => {
         try {
             setLoading(true);
 
-            console.log(session);
             if (!session?.access_token) {
-                console.error("アクセストークンが取得できませんでした");
                 return;
             }
 
@@ -48,7 +46,7 @@ export const useTodoCRUD = () => {
             const data = await res.json();
             setTodos(data.alltodos);
         } catch (error) {
-            console.error("データの取得に失敗しました:", error);
+            // エラーハンドリング
         } finally {
             setLoading(false);
         }
@@ -135,7 +133,6 @@ export const useTodoCRUD = () => {
     const deleteTodo = async (todo: TodoModel) => {
 
         if (!session?.access_token) {
-            console.error("アクセストークンが取得できませんでした");
             return;
         }
 
@@ -156,7 +153,6 @@ export const useTodoCRUD = () => {
         try {
 
             if (!session?.access_token) {
-                console.error("アクセストークンが取得できませんでした");
                 return;
             }
 
@@ -173,11 +169,8 @@ export const useTodoCRUD = () => {
                 throw new Error(
                     `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-            console.log("チェック更新成功");
         } catch (err) {
-            if (err instanceof Error) {
-                console.log("Error: ", err.stack);
-            }
+            // エラーハンドリング
         }
     };
 
@@ -186,7 +179,6 @@ export const useTodoCRUD = () => {
         try {
             
             if (!session?.access_token) {
-                console.error("アクセストークンが取得できませんでした");
                 return;
             }
 
@@ -203,11 +195,8 @@ export const useTodoCRUD = () => {
                 throw new Error(
                     `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-            console.log("チェック更新成功");
         } catch (err) {
-            if (err instanceof Error) {
-                console.log("Error: ", err.stack);
-            }
+            // エラーハンドリング
         }
     };
 
@@ -277,10 +266,10 @@ export const useTodoCRUD = () => {
     const toggleDelete = async (id: number, date: string) => {
         await Promise.all([deleteDate(id, date), deleteZeroDate()])
             .then(() => {
-                console.log("削除成功！");
+                // 削除成功
             })
             .catch(() => {
-                console.log("削除失敗");
+                // 削除失敗
             });
     };
 

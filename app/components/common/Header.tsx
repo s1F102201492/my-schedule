@@ -16,7 +16,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
 import { Button, IconButton } from "@mui/material";
-import Sidebar from "../Sidebar";
+import Sidebar from "../../components/common/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
 
 const Header = () => {

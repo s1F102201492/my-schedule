@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from '@mui/icons-material/Menu';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { IconButton, Tooltip } from "@mui/material";
-import Sidebar from "../Sidebar";
+import Sidebar from "../../components/common/Sidebar";
 import ArticleIcon from '@mui/icons-material/Article';
 import { AuthContext } from "../../context/AuthContext";
 
@@ -45,8 +45,7 @@ const MobileHeader = () => {
                                 whiteSpace: "nowrap",
                                 overflow: "visible",
                                 textOverflow: "clip",
-                                alignItems: "center",
-                                color: "white" }}
+                                alignItems: "center"}}
                             noWrap>
                             Best practice
                         </Typography>

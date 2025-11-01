@@ -2,6 +2,7 @@
 
 import React, { useContext, useState } from "react";
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -45,7 +46,7 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
     }
     const { fetchAllTodo, addTodo } = todoContext;
     
-    const { formState, handlers, getIntervalValue, resetForm } = useTaskForm();
+    const { formState, handlers, errors, validateForm, getIntervalValue, resetForm } = useTaskForm();
     const { title, description, startDate, endDate, isIntervalDays, intervalNumber, selectedWeekdays, purpose, tag } = formState;
     const { 
         handleTitleChange, handleDescriptionChange, setStartDate, setEndDate,
@@ -64,6 +65,11 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
+
+        // バリデーションチェック
+        if (!validateForm()) {
+            return;
+        }
 
         try {
             setLoading(true);
@@ -135,12 +141,13 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                     <Box sx={{ mt: 3 }}>
                         <Typography variant='h6'>タイトル</Typography>
                         <TextField
-                            required
                             margin='dense'
                             fullWidth
                             variant='outlined'
                             value={title}
                             onChange={handleTitleChange}
+                            error={!!errors.title}
+                            helperText={errors.title}
                         />
                         <Typography variant='h6' sx={{ mt: 3 }}>
                             具体的にやることや現状の記録
@@ -153,6 +160,8 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                             variant='outlined'
                             value={description}
                             onChange={handleDescriptionChange}
+                            error={!!errors.description}
+                            helperText={errors.description}
                         />
                         <Box sx={{ flexDirection: "row" }}>
                             <Typography
@@ -182,6 +191,11 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                                 maxDate={dayjs(new Date("2299/12/31"))}
                             />
                         </Box>
+                        {errors.dates && (
+                            <Alert severity="error" sx={{ mt: 2 }}>
+                                {errors.dates}
+                            </Alert>
+                        )}
                         <Typography
                             sx={{ mt: 3 }}
                             variant='h6'>
@@ -238,6 +252,11 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                                 </FormGroup>
                             )}
                         </Box>
+                        {errors.weekdays && (
+                            <Alert severity="error" sx={{ mt: 2 }}>
+                                {errors.weekdays}
+                            </Alert>
+                        )}
                         <Typography variant='h6' sx={{ mt: 3 }}>目的</Typography>
                         <TextField
                             multiline
@@ -247,10 +266,13 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                             variant='outlined'
                             value={purpose}
                             onChange={handlePurposeChange}
+                            error={!!errors.purpose}
+                            helperText={errors.purpose}
                         />
                         <FormControl
                             fullWidth
-                            sx={{ my: 4 }}>
+                            sx={{ my: 4 }}
+                            error={!!errors.tag}>
                             <InputLabel id='tag-select'>タグを選択</InputLabel>
                             <Select
                                 labelId='tag-select'
@@ -268,6 +290,11 @@ const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) 
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {errors.tag && (
+                                <Typography color="error" variant="caption" sx={{ mt: 1, ml: 2 }}>
+                                    {errors.tag}
+                                </Typography>
+                            )}
                         </FormControl>
                     </Box>
                     <Box>

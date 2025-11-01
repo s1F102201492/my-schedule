@@ -57,7 +57,6 @@ export const CalcAchieveDay = (todos: TodoModel[]) => {
     dateArray_Desc.forEach((date) => {
         map_Date_Desc.set(date, map_Date.get(date));
     });
-    console.log(map_Date_Desc);
 
     // 今日から遡って日付が途切れた場合カウント終了
     for (const val of map_Date_Desc.values()) {
@@ -68,6 +67,5 @@ export const CalcAchieveDay = (todos: TodoModel[]) => {
         }
     }
 
-    console.log("cntStreak: ", cntStreak);
     return cntStreak;
 };

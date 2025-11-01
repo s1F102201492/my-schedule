@@ -22,12 +22,12 @@ const LoginWithGoogle = () => {
                         access_type: "offline", //リフレッシュトークン
                         prompt: "consent",
                     },
-                    redirectTo: `${window.location.origin}`,
+                    redirectTo: `${window.location.origin}/auth/callback`,
                 },
             });
             if (error) alert(error.message);
         } catch (error) {
-            console.log("ログインに失敗しました: ", error);
+            // エラーハンドリング
         }
     };
 

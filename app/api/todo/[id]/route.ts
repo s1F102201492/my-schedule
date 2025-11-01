@@ -63,9 +63,6 @@ export const PUT = async (req: Request) => {
             { status: 200 },
         );
     } catch (err) {
-        if (err instanceof Error) {
-            console.log("Error: ", err.stack);
-        }
         return NextResponse.json(
             { message: "Error", error: err },
             { status: 500 },

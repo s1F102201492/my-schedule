@@ -14,7 +14,6 @@ export const GET = async () => {
             await supabase.auth.getUser();
 
         if (authError) {
-            console.log(authError);
             return NextResponse.json(
                 { message: "Error", authError },
                 { status: 500 },
@@ -26,7 +25,6 @@ export const GET = async () => {
 
         return NextResponse.json({ message: "success", user }, { status: 200 });
     } catch (err) {
-        console.log(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };
