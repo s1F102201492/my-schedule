@@ -27,7 +27,7 @@ const LoginWithGoogle = () => {
             });
             if (error) alert(error.message);
         } catch (error) {
-            console.log("ログインに失敗しました: ", error);
+            // エラーハンドリング
         }
     };
 

@@ -17,8 +17,7 @@ const getGPTReview = async () => {
   });
 
   if (!res.ok) {
-    console.error("APIエラー");
-    alert("APIリクエストに失敗しました。");
+    alert("AIからの分析を取得できませんでした。もう一度読み込んでください。");
     return;
 }
 
@@ -43,8 +42,7 @@ const AITrends = () => {
       setGPTReview(setData);
 
     } catch (error) {
-      console.error(error)
-      alert("ChatGPTからの分析を取得できませんでした。もう一度読み込んでください。");
+      alert("AIからの分析を取得できませんでした。もう一度読み込んでください。");
 
     } finally {
       setGPTLoading(false);

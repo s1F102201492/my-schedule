@@ -40,10 +40,10 @@ export default function RootLayout({
                             window.addEventListener('load', function() {
                                 navigator.serviceWorker.register('/sw.js').then(
                                     function(registration) {
-                                        console.log('Service Worker registered:', registration.scope);
+                                        // Service Worker registered
                                     },
                                     function(err) {
-                                        console.log('Service Worker registration failed:', err);
+                                        // Service Worker registration failed
                                     }
                                 );
                             });

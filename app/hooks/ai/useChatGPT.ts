@@ -22,7 +22,6 @@ export const useChatGPT = () => {
         setResponseArray([]);
 
         try {
-            console.log(body);
             const res = await fetch("/api/chatgpt", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -55,7 +54,7 @@ export const useChatGPT = () => {
                                     setResponse((prev) => prev + parsed.choices[0].delta.content);
                                 }
                             } catch (error) {
-                                console.error("Error parsing JSON chunk:", error);
+                                // JSON解析エラー
                             }
                         }
                     }
@@ -71,7 +70,6 @@ export const useChatGPT = () => {
                 }
             }
         } catch (error) {
-            console.error("エラー:", error);
             alert(error instanceof Error ? error.message : "エラーが発生しました。");
         } finally {
             setIsGenerating(false);

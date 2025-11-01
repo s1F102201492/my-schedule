@@ -27,7 +27,6 @@ const getGPTsentence = async () => {
     });
 
     if (!res.ok) {
-      console.error("APIエラー");
       alert("APIリクエストに失敗しました。");
       return;
     }

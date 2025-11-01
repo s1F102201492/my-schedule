@@ -18,6 +18,5 @@ export const AchieveRateByTag = (alltodos: TodoModel[], selectedTag: string) => 
       })
     })
 
-    console.log("a:",completedCount, "b:", allCount)
   return Math.round(completedCount / allCount * 100)
 }

@@ -27,7 +27,6 @@ const ViewAchieveByTag = () => {
         tagAndRate[tag] = AchieveRateByTag(todos, tag);
     }
 
-    console.log(tagAndRate)
   return (
     <div>
         <Card elevation={2}>

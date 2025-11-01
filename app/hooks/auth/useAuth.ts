@@ -18,7 +18,6 @@ export const useAuth = () => {
             const data = await res.json();
             return data.user;
         } catch (error) {
-            console.error("ユーザーテーブルからの取得に失敗しました:", error);
             return null;
         }
     }, []);
@@ -34,7 +33,6 @@ export const useAuth = () => {
             const getSession = sessionData?.session;
 
             if (!getSession) {
-                console.log("No active session found.:", sessionError);
                 setLoginUser(null);
                 setSession(null);
                 setLoading(false);
@@ -46,20 +44,18 @@ export const useAuth = () => {
                 await supabase.auth.getUser();
 
             if (userError) {
-                console.error("getUser error:", userError);
                 setLoginUser(null);
                 return;
             }
 
             if (!userData?.user) {
-                console.log("No user found.");
                 setLoginUser(null);
                 return;
             }
 
             await getLoginUser(userData);
         } catch (error) {
-            console.error("loginSession error:", error);
+            // エラーハンドリング
         } finally {
             setLoading(false);
         }
@@ -68,15 +64,12 @@ export const useAuth = () => {
     // ログインした場合ユーザー情報を取得
     const getLoginUser = async (data: { user: User }) => {
         const userId = data!.user.id; // auth.users の ID
-        console.log(userId);
 
         if (!userId) {
-            console.log("userIdの取得に失敗しました");
             setLoginUser(null);
         }
 
         const userInfo = await fetchOneUser(userId);
-        console.log(userInfo);
 
         if (userInfo) {
             setLoginUser(userInfo);
