@@ -98,7 +98,7 @@ const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage })
                 </Box>
                 <Box sx={{ mt: 3 }}>
                     <Typography variant='subtitle1'>
-                        モデルとなる画像を貼りましょう！
+                        モデルとなる画像を貼りましょう！（任意）
                     </Typography>
                     <input
                         type='file'
