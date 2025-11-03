@@ -94,7 +94,7 @@ export default function Sidebar({
                     </ListItem>
                     <ListItem key="guide">
                         <ListItemButton
-                            href="/"
+                            href="/guide.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
                             sx={{
