@@ -68,6 +68,9 @@ const MobileHeader = () => {
                                     size="large"
                                     edge="start"
                                     sx={{ ml: 1 }}
+                                    href="/guide.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     aria-label="help">
                                     <HelpOutlineIcon />
                                 </IconButton>

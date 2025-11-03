@@ -37,7 +37,7 @@ const LoginWithGoogle = () => {
                 maxWidth={false}
                 sx={{
                     display: "flex",
-                    minHeight: "100vh",
+                    minHeight: "250px",
                     alignItems: "center",
                     justifyContent: "center",
                     backgroundColor: "background.default",

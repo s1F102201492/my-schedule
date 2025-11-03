@@ -61,12 +61,10 @@ const AllTodoList = () => {
         if (active === "active") {
             //アクティブの場合
             return (
-                todayslash >= ChangeSlashDay(new Date(todo.startdate)) &&
                 todayslash <= ChangeSlashDay(new Date(todo.enddate))
             );
         } else if (active === "archived") {
             return (
-                todayslash < ChangeSlashDay(new Date(todo.startdate)) ||
                 todayslash > ChangeSlashDay(new Date(todo.enddate))
             );
         } else {

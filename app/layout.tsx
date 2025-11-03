@@ -28,7 +28,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='ja'>
+        <html lang='ja' style={{ colorScheme: 'light' }}>
+            <head>
+                <meta name="color-scheme" content="light" />
+            </head>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <AppRouterCacheProvider>

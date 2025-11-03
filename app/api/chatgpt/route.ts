@@ -103,7 +103,7 @@ export async function POST(req: Request) {
                 ],
                 max_tokens: 500,
                 stream: false,
-                temperature: 1.2,
+                temperature: 1.0
             }),
         });
 
@@ -179,50 +179,52 @@ export async function POST(req: Request) {
             headers: { "Content-Type": "text/event-stream" },
         });
 
-    } else if (type == "analytics") {
+    } 
+    // else if (type == "analytics") {
         
-        SystemPrompt = `あなたはユーザーのタスク内容や達成状況などをタグごとに分析し、今までの分析とこれからどう取り組んでいくのがおすすめかを提示してください。
-        そのタグのタスクがない場合は、そのタグについては書かないでください。
-        タスクの内容: ${JSON.stringify(alltodos)}(タスクはjson形式)
-        今までの分析の分析とこれからの取り組みについてはそれぞれ100字程度で書いてください。
-        出力の型としては以下のようにしてください。型{"tag": タグ名, "past": 今までの分析, "next": これからどう取り組んでいくかの内容}[]
-        返す値はタスク1つ1つはJSON形式でそれを配列の中に入れて返してください。最初にjsonと書くのもやめてください。改行は入れないでください。
-        指定されたものは絶対に守ってください。`
+        // SystemPrompt = `あなたはユーザーのタスク内容や達成状況などをタグごとに分析し、今までの分析とこれからどう取り組んでいくのがおすすめかを提示してください。
+        // そのタグのタスクがない場合は、そのタグについては書かないでください。
+        // タスクの内容: ${JSON.stringify(alltodos)}(タスクはjson形式)
+        // 今までの分析の分析とこれからの取り組みについてはそれぞれ100字程度で書いてください。
+        // 出力の型としては以下のようにしてください。型{"tag": タグ名, "past": 今までの分析, "next": これからどう取り組んでいくかの内容}[]
+        // 返す値はタスク1つ1つはJSON形式でそれを配列の中に入れて返してください。最初にjsonと書くのもやめてください。改行は入れないでください。
+        // 指定されたものは絶対に守ってください。`
         
-        const response = await fetch(`${gptApiEndPoint}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${gptApiKey}`,
-            },
-            body: JSON.stringify({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "user",
-                        content: SystemPrompt
-                    },
-                ],
-                max_tokens: 1000,
-                stream: false,
-                temperature: 0.8,
-            }),
-        });
+        // const response = await fetch(`${gptApiEndPoint}`, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         Authorization: `Bearer ${gptApiKey}`,
+        //     },
+        //     body: JSON.stringify({
+        //         model: "gpt-4o-mini",
+        //         messages: [
+        //             {
+        //                 role: "user",
+        //                 content: SystemPrompt
+        //             },
+        //         ],
+        //         max_tokens: 1000,
+        //         stream: false,
+        //         temperature: 0.8,
+        //     }),
+        // });
 
-        const data = await response.json();
+        // const data = await response.json();
     
-        //API処理が正常にできない場合
-        if (!response.ok) {
-            return NextResponse.json(
-                { error: "APIリクエストが失敗しました。" },
-                { status: response.status },
-            );
-        }
+        // //API処理が正常にできない場合
+        // if (!response.ok) {
+        //     return NextResponse.json(
+        //         { error: "APIリクエストが失敗しました。" },
+        //         { status: response.status },
+        //     );
+        // }
         
-        // JSONデータをそのまま返す
-        return NextResponse.json({ result: data.choices[0]?.message?.content });
+        // // JSONデータをそのまま返す
+        // return NextResponse.json({ result: data.choices[0]?.message?.content });
 
-    } else if (type == "praise") {
+    // }
+     else if (type == "praise") {
 
         SystemPrompt = `あなたはユーザーのタスク内容や達成状況などをタグごとに分析し、分析結果を書きつつユーザーを褒めるような文を書いてください
         褒めるときはタスクの達成状況を基に褒めるようにしてください。
