@@ -53,7 +53,7 @@ export const useChatGPT = () => {
                                 if (parsed.choices[0].finish_reason !== "stop") {
                                     setResponse((prev) => prev + parsed.choices[0].delta.content);
                                 }
-                            } catch (error) {
+                            } catch {
                                 // JSON解析エラー
                             }
                         }

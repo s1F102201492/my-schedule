@@ -41,7 +41,7 @@ const AITrends = () => {
 
       setGPTReview(setData);
 
-    } catch (error) {
+    } catch {
       alert("AIからの分析を取得できませんでした。もう一度読み込んでください。");
 
     } finally {

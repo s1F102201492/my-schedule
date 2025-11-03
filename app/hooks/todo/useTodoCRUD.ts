@@ -45,7 +45,7 @@ export const useTodoCRUD = () => {
 
             const data = await res.json();
             setTodos(data.alltodos);
-        } catch (error) {
+        } catch {
             // エラーハンドリング
         } finally {
             setLoading(false);
@@ -169,7 +169,7 @@ export const useTodoCRUD = () => {
                 throw new Error(
                     `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-        } catch (err) {
+        } catch {
             // エラーハンドリング
         }
     };
@@ -195,7 +195,7 @@ export const useTodoCRUD = () => {
                 throw new Error(
                     `APIエラー: ${(await res.json()).message || "不明なエラー"}`,
                 );
-        } catch (err) {
+        } catch {
             // エラーハンドリング
         }
     };
