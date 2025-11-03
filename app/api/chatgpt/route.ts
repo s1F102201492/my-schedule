@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/utils/prisma";
 import { NextResponse } from "next/server";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
@@ -17,8 +17,6 @@ export async function POST(req: Request) {
 
     const { type, prompt, img, tag, level } = await req.json();
 
-    const prisma = new PrismaClient(); // インスタンス化
-
     let alltodos = [];
 
     try {
@@ -31,14 +29,17 @@ export async function POST(req: Request) {
                 { error: "認証されていません" },
                 { status: 401 },
             );
-        } else {
-            alltodos = await prisma.todos.findMany({
-                where: { userId: data.user.id },
-            });
         }
+
+        alltodos = await prisma.todos.findMany({
+            where: { userId: data.user.id },
+        });
         
-    } catch (err) {
-        return NextResponse.json({ message: "Error", err }, { status: 500 });
+    } catch {
+        return NextResponse.json(
+            { message: "エラーが発生しました" },
+            { status: 500 }
+        );
     }
 
     const gptApiKey = process.env.OPENAI_API_KEY;

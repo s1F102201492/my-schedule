@@ -1,21 +1,45 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/utils/prisma";
+import { createClient } from "@/utils/supabase/server";
 
 // タスク詳細用API
 export const GET = async (req: Request) => {
     try {
+        // 認証チェック
+        const supabase = await createClient();
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            return NextResponse.json(
+                { error: "認証されていません" },
+                { status: 401 },
+            );
+        }
+
         const id: number = parseInt(req.url.split("/todo/")[1]);
-        const tododetail = await prisma.todos.findFirst({ where: { id } });
+        
+        // ユーザー所有権チェック
+        const tododetail = await prisma.todos.findFirst({ 
+            where: { 
+                id,
+                userId: data.user.id // 自分のタスクのみ取得
+            } 
+        });
+
+        if (!tododetail) {
+            return NextResponse.json(
+                { error: "タスクが見つかりません" },
+                { status: 404 },
+            );
+        }
 
         return NextResponse.json(
             { message: "success", tododetail },
             { status: 200 },
         );
-    } catch (err) {
+    } catch {
         return NextResponse.json(
-            { message: "Error", error: err },
+            { message: "エラーが発生しました" },
             { status: 500 },
         );
     }
@@ -24,7 +48,33 @@ export const GET = async (req: Request) => {
 // タスク編集API
 export const PUT = async (req: Request) => {
     try {
+        // 認証チェック
+        const supabase = await createClient();
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            return NextResponse.json(
+                { error: "認証されていません" },
+                { status: 401 },
+            );
+        }
+
         const id: number = parseInt(req.url.split("/todo/")[1]);
+
+        // ユーザー所有権チェック
+        const existingTodo = await prisma.todos.findFirst({
+            where: {
+                id,
+                userId: data.user.id
+            }
+        });
+
+        if (!existingTodo) {
+            return NextResponse.json(
+                { error: "タスクが見つかりません" },
+                { status: 404 },
+            );
+        }
 
         const jsondata = await req.json();
         const {
@@ -37,7 +87,6 @@ export const PUT = async (req: Request) => {
             interval,
             purpose,
             tag,
-            userId,
         } = jsondata;
         const formattedStartDate = new Date(startdate.replace(/\//g, "-"));
         const formattedEndDate = new Date(enddate.replace(/\//g, "-"));
@@ -53,7 +102,7 @@ export const PUT = async (req: Request) => {
                 interval,
                 purpose,
                 tag,
-                userId,
+                userId: data.user.id, // 認証されたユーザーIDを使用
             },
             where: { id },
         });
@@ -63,8 +112,9 @@ export const PUT = async (req: Request) => {
             { status: 200 },
         );
     } catch (err) {
+        console.error('API Error (PUT /api/todo/[id]):', err);
         return NextResponse.json(
-            { message: "Error", error: err },
+            { message: "エラーが発生しました" },
             { status: 500 },
         );
     }
@@ -73,7 +123,33 @@ export const PUT = async (req: Request) => {
 // タスク削除用API
 export const DELETE = async (req: Request) => {
     try {
+        // 認証チェック
+        const supabase = await createClient();
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            return NextResponse.json(
+                { error: "認証されていません" },
+                { status: 401 },
+            );
+        }
+
         const id: number = parseInt(req.url.split("/todo/")[1]);
+
+        // ユーザー所有権チェック
+        const existingTodo = await prisma.todos.findFirst({
+            where: {
+                id,
+                userId: data.user.id
+            }
+        });
+
+        if (!existingTodo) {
+            return NextResponse.json(
+                { error: "タスクが見つかりません" },
+                { status: 404 },
+            );
+        }
 
         const tododelete = await prisma.todos.delete({
             where: { id },
@@ -84,8 +160,9 @@ export const DELETE = async (req: Request) => {
             { status: 200 },
         );
     } catch (err) {
+        console.error('API Error (DELETE /api/todo/[id]):', err);
         return NextResponse.json(
-            { message: "Error", error: err },
+            { message: "エラーが発生しました" },
             { status: 500 },
         );
     }
