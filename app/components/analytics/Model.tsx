@@ -11,13 +11,14 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import penAnimation from "@/public/animations/Animation - 1742629439123.json";
 import { taglist } from "../tags";
 import { SwitchAnalyticsPageProps } from "../../Models/models";
 import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
+import { TodoContext } from "@/app/context/TodoContext";
 
 const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
     // タグの選択
@@ -29,6 +30,16 @@ const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
     };
 
     const { response, isGenerating, generateResponse } = useChatGPT();
+
+    const todoContext = useContext(TodoContext);
+
+    if (!todoContext) {
+        throw new Error(
+            "TodoContext is undefined. Make sure to use TodoProvider.",
+        );
+    }
+
+    const { todos } = todoContext;
 
     const handleAIModel = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -90,7 +101,8 @@ const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
                     <Button
                         onClick={handleAIModel}
                         variant='contained'
-                        sx={{ height: 50 }}>
+                        sx={{ height: 50 }}
+                        disabled={todos.length === 0 || isGenerating}>
                         イメージ
                     </Button>
                 </Box>
@@ -98,14 +110,17 @@ const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
                     elevation={4}
                     sx={{ mt: 6, mb: 4, p: 2, minHeight: 200 }}>
                     <Typography variant='body2'>AIからの回答</Typography>
-                    <Box>{response}</Box>
-                    {isGenerating && (
-                        <Box sx={{ width: "30px", height: "30px" }}>
-                            <Lottie
-                                animationData={penAnimation}
-                                loop={true}
-                            />
-                        </Box>
+                    {todos.length === 0 ? (
+                        <Box sx={{ mt: 1 }}>タスクがありません。タスクを追加しましょう！</Box>
+                    ) : (
+                        <>
+                            <Box>{response}</Box>
+                            {isGenerating && (
+                                <Box sx={{ width: "30px", height: "30px" }}>
+                                    <Lottie animationData={penAnimation} loop={true} />
+                                </Box>
+                            )}
+                        </>
                     )}
                 </Paper>
             </Box>

@@ -9,13 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import theme from "../theme/theme";
 import { ContributionGraph } from "./ContributionGraph";
 import ViewAchieveByTag from "./ViewAchieveByTag";
 import ViewUserAchieve from "./ViewUserAchieve";
 import FullScreenLoading from "../common/fullScreenLoading";
 import { SwitchAnalyticsPageProps } from "../../Models/models";
+import { TodoContext } from "@/app/context/TodoContext";
 
 const getGPTsentence = async () => {
     const res = await fetch("/api/chatgpt", {
@@ -39,9 +40,24 @@ const getGPTsentence = async () => {
 export const ViewCurrentData: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
 
   const [loading, setLoading] = useState(false);
-  const [GPTSentence, setGPTSentence] = useState(null);
+  const [GPTSentence, setGPTSentence] = useState<string | null>(null);
+
+  const todoContext = useContext(TodoContext);
+
+  if (!todoContext) {
+      throw new Error(
+          "TodoContext is undefined. Make sure to use TodoProvider.",
+      );
+  }
+
+  const { todos } = todoContext;
 
   const GPTfunc = async () => {
+    if (todos.length === 0) {
+      setGPTSentence("タスクがありません。タスクを追加しましょう！");
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -58,9 +74,7 @@ export const ViewCurrentData: React.FC<SwitchAnalyticsPageProps> = ({ switchPage
   }
 
   useEffect(() => {
-
     GPTfunc();
-
   }, [])
 
   return (
