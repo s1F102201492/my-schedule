@@ -5,6 +5,8 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { createClient } from "@/utils/supabase/server";
+import { z } from 'zod';
+import { zodResponseFormat } from "openai/helpers/zod";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,6 +65,17 @@ export async function POST(req: Request) {
 
     if (type === "recommend") {
         // AIrecommnedページに返答
+        const outputType = z.object({
+            title: z.string(),
+            description: z.string(),
+            startdate: z.string(),
+            enddate: z.string(),
+            interval: z.number(),
+            tag: z.string(),
+          });
+        
+        const todosArrayType = z.array(outputType);
+
         // プロンプト設定
         SystemPrompt = `アプリの利用者が自分の目標、(あれば)目標の画像、タスクのタグ（カテゴリ）、タスクの難易度を入力するので、あなたはその内容を分析し利用者がなりたい姿やなりたいもの、目標を達成できるような習慣を５つ考えてください。
         難易度に関しては、そのタスクを毎日やるのか、それとも3日ごとにやるのかといった、あるタスクに対して行う頻度という意味での難易度になります。
@@ -103,7 +116,8 @@ export async function POST(req: Request) {
                 ],
                 max_tokens: 500,
                 stream: false,
-                temperature: 1.0
+                temperature: 1.0,
+                response_format: zodResponseFormat(todosArrayType, "recommendedTodos"),
             }),
         });
 
@@ -118,7 +132,7 @@ export async function POST(req: Request) {
         }
 
         // JSONデータをそのまま返す
-        return NextResponse.json({ result: data.choices[0]?.message?.content });
+        return NextResponse.json({ result: data.choices[0]?.message?.parsed });
     } else if (type === "model") {
         // modelページに返答
         if (tag === "絞らない") {

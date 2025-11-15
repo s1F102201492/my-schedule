@@ -49,7 +49,8 @@
         "react-router-dom": "^7.1.1",
         "react-spinners": "^0.15.0",
         "server-only": "^0.0.1",
-        "styled-components": "^6.1.15"
+        "styled-components": "^6.1.15",
+        "zod": "^3.25.76"
     },
     "devDependencies": {
         "@types/node": "^20",
