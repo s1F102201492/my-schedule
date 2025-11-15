@@ -62,8 +62,9 @@ export const useChatGPT = () => {
             } else {
                 // 通常のJSONレスポンスの場合
                 const data = await res.json();
+                
                 if (body.type === "recommend") {
-                    const arrayResult = JSON.parse(data.result);
+                    const arrayResult = data.result
                     setResponseArray(arrayResult);
                 } else {
                     setResponse(data.result);
