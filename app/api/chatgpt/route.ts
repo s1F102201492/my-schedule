@@ -5,7 +5,6 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { createClient } from "@/utils/supabase/server";
-import { z } from 'zod';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
