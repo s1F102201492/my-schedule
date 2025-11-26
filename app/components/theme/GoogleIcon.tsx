@@ -1,4 +1,9 @@
-// Googleアイコンコンポーネント
+/**
+ * Googleのロゴ（Gマーク）を表示するSVGコンポーネント
+ * ログインボタンなどで使用されます。
+ * * @component
+ * @param {React.SVGProps<SVGSVGElement>} props - SVG要素に渡す標準的なprops
+ */
 export default function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg

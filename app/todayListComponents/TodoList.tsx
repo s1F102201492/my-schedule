@@ -7,6 +7,12 @@ import { TodoContext } from "../context/TodoContext";
 import RewardDialog from "../components/RewardDialog";
 import { TodoModel } from "../Models/models";
 
+/**
+ * 「今日のやることリスト」を表示するコンポーネント
+ * 登録された全タスクの中から、日付や頻度（interval）に基づいて今日実施すべきタスクを抽出します。
+ * 未完了タスクと完了済みタスクを分けて表示し、全て完了するとお祝いダイアログを表示します。
+ * @component
+ */
 const TodoList = () => {
     const today = new Date();
     const year = today.getFullYear();

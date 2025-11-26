@@ -37,6 +37,16 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
+/**
+ * タスク編集用ダイアログコンポーネント
+ * 既存のタスクデータを受け取り、フォームを初期化した状態で表示します。
+ * * 主な機能:
+ * - useTaskFormによる初期値セットとバリデーション
+ * - チェック履歴（checkedDates）の再計算（期間変更に対応するため）
+ * - タスク更新APIの呼び出し
+ * * @component
+ * @param {EditDialogProps} props - 編集対象のタスクデータ、ダイアログ開閉状態、制御関数
+ */
 const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) => {
     const router = useRouter();
     const todoContext = useContext(TodoContext);
@@ -48,6 +58,7 @@ const Edit: React.FC<EditDialogProps> = ({ id, todo, editOpen, setEditOpen }) =>
     }
     const { fetchAllTodo, editTodo } = todoContext;
     
+    // useTaskFormに初期値(todo)を渡してフォームを初期化
     const { formState, handlers, errors, validateForm, getIntervalValue, resetForm } = useTaskForm(todo);
     const { title, description, startDate, endDate, isIntervalDays, intervalNumber, selectedWeekdays, purpose, tag } = formState;
     const { 

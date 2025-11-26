@@ -13,6 +13,11 @@ export type ValidationErrors = {
     tag: string;
 };
 
+/**
+ * タスク追加・編集フォームの状態管理とバリデーションを行うカスタムフック
+ * * @param {TodoModel} [initialTodo] - 編集時の初期値（新規作成時はundefined）
+ * @returns {object} フォームの状態、ハンドラー、エラー情報、バリデーション関数など
+ */
 export const useTaskForm = (initialTodo?: TodoModel) => {
     const [title, setTitle] = useState(initialTodo?.title || "");
     const [description, setDescription] = useState(initialTodo?.description || "");
@@ -76,9 +81,16 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
         );
     };
 
+    /**
+     * 曜日の選択を切り替える
+     * 既に選択されていれば解除、されていなければ追加する
+     */
     const getIntervalValue = () => isIntervalDays ? intervalNumber : selectedWeekdays;
     
-    // バリデーション関数
+    /**
+     * フォームの入力値を検証する
+     * @returns {boolean} バリデーションに通過したかどうか
+     */
     const validateForm = (): boolean => {
         const newErrors: ValidationErrors = {
             title: "",
@@ -153,6 +165,9 @@ export const useTaskForm = (initialTodo?: TodoModel) => {
         return isValid;
     };
     
+    /**
+     * フォームの状態を初期化する
+     */
     const resetForm = () => {
         setTitle("");
         setDescription("");

@@ -15,7 +15,12 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-
+/**
+ * GitHubのような活動量（コントリビューション）グラフを表示するコンポーネント
+ * 過去1年間のタスク達成状況をヒートマップとして可視化します。
+ * * @component
+ * @param {TodoModel[]} todos - 分析対象の全タスクデータ
+ */
 export const ContributionGraph = () => {
     const todoContext = useContext(TodoContext);
 

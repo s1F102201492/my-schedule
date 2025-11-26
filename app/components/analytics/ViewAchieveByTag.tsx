@@ -6,6 +6,12 @@ import theme from '../theme/theme'
 import { TodoContext } from '@/app/context/TodoContext'
 import { AchieveRateByTag } from '@/app/hooks/calculate/AchieveRateByTag'
 
+/**
+ * タグごとの達成率をレーダーチャートで表示するコンポーネント
+ * 定義されたタグリストに基づいて、それぞれの達成度を比較・可視化します。
+ * * @component
+ * @param {TodoModel[]} todos - 分析対象のタスクデータ
+ */
 const ViewAchieveByTag = () => {
     const todoContext = useContext(TodoContext);
 

@@ -28,6 +28,11 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
+/**
+ * カレンダーを表示し、タスクの実施状況を確認できるコンポーネント
+ * `useCalendar`フックを使用して日付の計算やタスクデータの取得を行います。
+ * @component
+ */
 const Calendar = () => {
     const {
         current,

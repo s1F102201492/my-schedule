@@ -25,6 +25,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import { TodoItemProps } from "../Models/models";
 
+/**
+ * タスクの詳細情報を表示するダイアログ
+ * * 主な機能:
+ * - タイトル、説明、期間、頻度、目的、タグの表示
+ * - 達成率のプログレスバー表示
+ * - 日別の達成状況（checkedDates）をグリッド表示
+ * - 編集および削除ダイアログへの遷移ボタン
+ * * @component
+ * @param {TodoItemProps} props - 表示対象タスク、ダイアログ開閉状態、制御関数
+ */
 const Detail: React.FC<TodoItemProps> = ({ todo, onClose, detailOpen }) => {
     // 編集フォームの管理
     const [editOpen, setEditOpen] = useState<boolean>(false);

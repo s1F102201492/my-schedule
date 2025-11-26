@@ -7,6 +7,14 @@ export type GPTRecommendValidationErrors = {
     level: string;
 };
 
+/**
+ * AI提案フォーム（GPTRecommend）の状態管理とバリデーションを行うカスタムフック
+ * * 主な機能:
+ * - 入力テキスト、画像（Base64）、タグ、難易度のState管理
+ * - 画像ファイルの読み込みとBase64変換
+ * - バリデーションロジック（必須チェック、文字数制限、特殊文字チェック）
+ * * @returns {object} フォームの状態、ハンドラー、エラー情報、バリデーション関数など
+ */
 export const useGPTRecommendForm = () => {
     const [text, setText] = useState<string>("");
     const [img, setImg] = useState<string>("");

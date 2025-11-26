@@ -20,6 +20,15 @@ import { CheckRate } from "../hooks/calculate/CheckRate";
 import FadeLoading from "../components/common/FadeLoading";
 import { TodoModel } from "../Models/models";
 
+/**
+ * 全てのタスクを管理・表示するリストコンポーネント
+ * * 主な機能:
+ * - キーワードによるタスク検索
+ * - ステータスによるフィルタリング（全て / アクティブ / アーカイブ済み）
+ * - 様々な条件でのソート（開始日順、終了日順、達成率順）
+ * - PC/モバイルで異なるレイアウトの提供
+ * * @component
+ */
 const AllTodoList = () => {
     const todoContext = useContext(TodoContext);
 
@@ -31,11 +40,13 @@ const AllTodoList = () => {
 
     const { todos, loading } = todoContext;
 
+    // 検索ワードの状態管理
     const [search, setSearch] = useState<string>(""); // 検索機能
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
     };
 
+    // 表示フィルターの状態管理（すべて、アクティブ、アーカイブ済み）
     const [active, setActive] = useState<string>("all");
     const handleActive = (
         e: React.MouseEvent<HTMLElement>,
@@ -44,26 +55,28 @@ const AllTodoList = () => {
         setActive(newActive);
     };
 
+    // ソート順の状態管理
     const [sort, setSort] = useState<string>("startDateAsc");
     const selectSort = (e: SelectChangeEvent) => {
         setSort(e.target.value);
     };
 
-    //文字検索
+    // 文字検索
     const searchtodos = todos.filter((todo) =>
         todo.title.match(new RegExp(".*" + search + ".*")),
     );
 
-    //フィルター
+    // フィルター
     const filtertodos = searchtodos.filter((todo) => {
         const todayslash = ChangeSlashDay(new Date());
 
         if (active === "active") {
-            //アクティブの場合
+            // 今日が終了日以前ならアクティブ
             return (
                 todayslash <= ChangeSlashDay(new Date(todo.enddate))
             );
         } else if (active === "archived") {
+            // 今日が終了日を過ぎていればアーカイブ済み
             return (
                 todayslash > ChangeSlashDay(new Date(todo.enddate))
             );
@@ -72,6 +85,7 @@ const AllTodoList = () => {
         }
     });
 
+    // ソート用の比較関数
     const compareDates = (dateA: string, dateB: string) =>
         new Date(dateA).getTime() - new Date(dateB).getTime();
     const compareProgress = (a: TodoModel, b: TodoModel) =>
@@ -90,6 +104,7 @@ const AllTodoList = () => {
         progressDesc: (a, b) => compareProgress(b, a),
     };
 
+    // ソートが適用された変数
     const finaltodos = filtertodos.sort(sortFunctions[sort] || (() => 0));
 
     return (

@@ -15,8 +15,15 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from "next/navigation";
 import { SidebarProps } from "../../Models/models";
 
-// モバイル時のハンバーガーメニューで表示されるサイドバー
-
+/**
+ * 画面右側からスライドインするサイドバー（ドロワー）コンポーネント
+ * * 主な機能:
+ * - ユーザー情報のカード表示
+ * - モバイル画面時: 主要ページへのナビゲーションリンクを表示
+ * - PC画面時: お問い合わせやガイドなどの補助メニューを表示
+ * * @component
+ * @param {SidebarProps} props - ドロワーの開閉状態、制御関数、ログインユーザー情報
+ */
 export default function Sidebar({
     drawer,
     setDrawer,
@@ -45,7 +52,10 @@ export default function Sidebar({
         open={drawer}
         onClose={() => setDrawer(false)}
         anchor="right">
+            {/* ユーザー情報表示部分 */}
             <UserCard loginUser={loginUser} />
+
+            {/* モバイル用メニュー（画面幅が狭いときのみ表示） */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <List>
                     {mobileMenuItems.map((item) => {
@@ -73,6 +83,7 @@ export default function Sidebar({
                 </List>
             </Box>
 
+            {/* PC用メニュー（画面幅が広いときのみ表示） */}
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <List>
                     <ListItem key="contact">

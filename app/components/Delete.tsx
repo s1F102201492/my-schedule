@@ -14,6 +14,15 @@ import { useRouter } from "next/navigation";
 import FullScreenLoading from "./common/fullScreenLoading";
 import { TodoModel, DeleteDialogProps } from "../Models/models";
 
+/**
+ * タスク削除確認用ダイアログコンポーネント
+ * * 主な機能:
+ * - 削除の確認メッセージ表示
+ * - 削除APIの実行
+ * - ローカルState（TodoList）からの即時削除反映
+ * * @component
+ * @param {DeleteDialogProps} props - 削除対象タスク、ダイアログ開閉状態、制御関数
+ */
 const Delete: React.FC<DeleteDialogProps> = ({ onetodo, deleteOpen, setDeleteOpen }) => {
     const router = useRouter();
 

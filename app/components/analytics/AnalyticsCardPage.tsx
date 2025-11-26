@@ -2,6 +2,18 @@ import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material'
 import React from 'react'
 import { AnalyticsPageProps } from '../../Models/models';
 
+/**
+ * 分析ページのメインレイアウトコンポーネント
+ * ユーザーのタスク達成状況を様々な角度から可視化するダッシュボードを表示します。
+ * * 主な機能:
+ * - データのロード状態管理
+ * - 以下の分析コンポーネントの配置:
+ * - `ViewCurrentData`: 現在のストリークや達成数
+ * - `ViewAchieveByTag`: タグごとの達成率
+ * - `ContributionGraph`: 日別の活動量（草）グラフ
+ * - `ViewUserAchieve`: 総合的な達成状況サマリー
+ * * @component
+ */
 export const AnalyticsCardPage: React.FC<AnalyticsPageProps> = ({ setModelPage, setViewCurrentPage}) => {
   return (
     <div>

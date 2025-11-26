@@ -1,6 +1,21 @@
 import { TodoModel } from "@/app/Models/models";
 
-// １日の最大タスク数をカウントする関数
+/**
+ * 1日あたりの最大達成タスク数を計算する関数
+ * 過去の記録の中で、最も多くタスクを完了させた日の完了数を返します。
+ * * @param {TodoModel[]} alltodos - 全てのタスクの配列
+ * @returns {number} 1日で達成したタスクの最大数
+ * * @example
+ * const todos = [
+ * { checkedDates: { "2023/01/01": true, "2023/01/02": true } },
+ * { checkedDates: { "2023/01/01": true, "2023/01/02": false } },
+ * { checkedDates: { "2023/01/01": true, "2023/01/02": false } }
+ * ];
+ * // 1/1: 3つ完了
+ * // 1/2: 1つ完了
+ * // 最大は 3
+ * const maxCount = CalcMultiCount(todos); // 3
+ */
 export const CalcMultiCount = (alltodos: TodoModel[]) => {
     const resultObj: Record<string, number> = {};
 

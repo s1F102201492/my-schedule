@@ -35,6 +35,17 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
+/**
+ * ユーザーが手動で新しいタスク・習慣を追加するためのフォーム
+ * * 主な機能:
+ * - useTaskFormフックを使用したフォーム状態管理とバリデーション
+ * - タスク情報（タイトル、説明、期間、頻度、タグ等）の入力
+ * - タスクの期間に基づいたチェック用データ（checkedDates）の生成
+ * - APIへの送信とタスク一覧へのリダイレクト
+ * - 「おすすめ提案（GPTRecommend）」への切り替えボタン
+ * * @component
+ * @param {function} handleBoolRecomPage - 推薦ページと手動追加ページの表示切り替え関数
+ */
 const SelfAddForm: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const router = useRouter();
     const todoContext = useContext(TodoContext);
