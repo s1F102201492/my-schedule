@@ -22,8 +22,18 @@ import { AddTaskPageSwitchProps } from "../../Models/models";
 import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
 import { useGPTRecommendForm } from "@/app/hooks/form/useGPTRecommendForm";
 
-// このコンポーネントはおすすめの習慣を提案するページのコンポーネントです。
-
+/**
+ * AIによるタスク提案機能を提供するコンポーネント
+ * ユーザーの入力（テキスト、画像、タグ、難易度）を基にChatGPT APIを使用して習慣を提案します。
+ * * 主な機能:
+ * - テキストによる要望の入力
+ * - 参考画像のアップロードとプレビュー
+ * - タグと難易度の選択
+ * - ChatGPT APIへのリクエスト送信と結果（RecomTaskList）の表示
+ * - 手動追加フォームへの切り替え
+ * * @component
+ * @param {function} handleBoolRecomPage - 手動追加ページとの切り替え関数
+ */
 const GPTRecommend: React.FC<AddTaskPageSwitchProps> = ({ handleBoolRecomPage }) => {
     const { formState, handlers, errors, validateForm } = useGPTRecommendForm();
     const { text, img, tag, level } = formState;

@@ -10,10 +10,20 @@ import { TodoContextType } from "../Models/models";
 import { useTodoCRUD } from "../hooks/todo/useTodoCRUD";
 import { AuthContext } from "./AuthContext";
 
+/**
+ * Todoデータをアプリケーション全体で共有するためのContextオブジェクト
+ */
 export const TodoContext = createContext<TodoContextType | undefined>(
     undefined,
 );
 
+/**
+ * Todoコンテキストプロバイダー
+ * `useTodoCRUD`フックが提供するTodoリストの状態と操作関数をコンテキストとして提供します。
+ * AuthContextに依存しており、認証セッションがない場合はローディングを表示します。
+ * * @component
+ * @param {ReactNode} children - 子コンポーネント
+ */
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {

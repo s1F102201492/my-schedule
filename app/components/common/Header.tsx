@@ -19,6 +19,15 @@ import { Button, IconButton } from "@mui/material";
 import Sidebar from "../../components/common/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
 
+/**
+ * アプリケーションの共通ヘッダーコンポーネント
+ * * 主な機能:
+ * - アプリタイトルの表示
+ * - ページ間のナビゲーション（ホーム、追加、カレンダー、一覧、分析）
+ * - ログイン状態に応じたユーザーアイコンまたはログインボタンの表示
+ * - サイドバー（ドロワー）の開閉制御
+ * * @component
+ */
 const Header = () => {
     const pathname = usePathname();
 

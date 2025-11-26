@@ -20,6 +20,14 @@ import { SwitchAnalyticsPageProps } from "../../Models/models";
 import { useChatGPT } from "@/app/hooks/ai/useChatGPT";
 import { TodoContext } from "@/app/context/TodoContext";
 
+/**
+ * テキストベースで理想の自分をイメージする機能のコンポーネント
+ * * 主な機能:
+ * - タグによるタスクの絞り込み
+ * - ChatGPT APIを用いた理想の自分のイメージ生成
+ * - AIからの回答表示
+ * * @component
+ */
 const Model: React.FC<SwitchAnalyticsPageProps> = ({ switchPage }) => {
     // タグの選択
     const tags = taglist;

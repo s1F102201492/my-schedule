@@ -1,6 +1,15 @@
 import { ContributionData, TodoModel } from "@/app/Models/models";
 import dayjs from "dayjs";
 
+/**
+ * タスクデータからコントリビューショングラフ用のデータ形式に変換するコンポーネント（関数）
+ * 各日付ごとのタスク達成数を集計します。
+ * * @param {TodoModel[]} todos - 全タスクデータ
+ * @returns {Array<{ date: string, count: number }>} 日付とカウントを持つオブジェクトの配列
+ * * @example
+ * // 入力: [{ checkedDates: { "2023/01/01": true } }, { checkedDates: { "2023/01/01": true } }]
+ * // 出力: [{ date: "2023-01-01", count: 2 }]
+ */
 export const ChangeContributionData = (alltodos: TodoModel[]) => {
 
     const setCompleted = new Set<string>()

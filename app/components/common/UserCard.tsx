@@ -16,6 +16,15 @@ import { signOut } from "@/utils/supabase/authGoogle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { UserCardProps } from "../../Models/models";
 
+/**
+ * サイドバーなどに表示するユーザー情報のカードコンポーネント
+ * * 主な機能:
+ * - ユーザーのアバターと名前の表示
+ * - ログイン時は「ログアウト」ボタンを表示
+ * - 未ログイン時は「ログイン」ボタンを表示
+ * * @component
+ * @param {UserCardProps} props - ログイン中のユーザー情報（nullの場合は未ログイン表示）
+ */
 const UserCard: React.FC<UserCardProps> = ({ loginUser }) => {
     // Googleログアウト
     const router = useRouter();

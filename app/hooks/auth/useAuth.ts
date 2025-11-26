@@ -4,12 +4,24 @@ import { UserType } from "../../Models/models";
 import { Session, User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 
+/**
+ * ユーザーの認証状態を監視・管理するカスタムフック
+ * Supabaseのセッション管理と、アプリ固有のDBからのユーザー情報取得を行います。
+ * * @returns {object} 認証情報
+ * @returns {UserType | null} loginUser - ログイン中のユーザー詳細情報（DBから取得したもの）
+ * @returns {Session | null} session - Supabaseのセッション情報
+ * @returns {boolean} loading - 認証情報の取得中かどうか
+ * @returns {function} loginSession - セッション確認を手動で実行する関数
+ */
 export const useAuth = () => {
     const [loginUser, setLoginUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
     const [session, setSession] = useState<Session | null>(null);
 
-    // usersテーブルからユーザーを取って来るAPI
+    /**
+     * アプリ内DB（usersテーブル）から特定のユーザー情報を取得する
+     * @param {string} userId - 取得するユーザーのID
+     */
     const fetchOneUser = useCallback(async (userId: string) => {
         try {
             const res = await fetch(`/api/user/${userId}`, {
@@ -22,7 +34,10 @@ export const useAuth = () => {
         }
     }, []);
 
-    // ログイン状態を管理
+    /**
+     * 現在のログインセッションを確認し、状態を更新する
+     * SupabaseのAuth機能を使用してセッションを取得後、対応するユーザー情報をDBから取り出します。
+     */
     const loginSession = async () => {
         const supabase = createClient();
 
@@ -61,7 +76,10 @@ export const useAuth = () => {
         }
     };
 
-    // ログインした場合ユーザー情報を取得
+    /**
+     * 認証済みのSupabaseユーザー情報を使って、アプリ内DBから詳細を取得してセットする
+     * @param {object} data - Supabaseのユーザーデータ
+     */
     const getLoginUser = async (data: { user: User }) => {
         const userId = data!.user.id; // auth.users の ID
 

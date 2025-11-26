@@ -7,7 +7,15 @@ import { CalcAchieveDay } from '@/app/hooks/calculate/CalcAchieveDay';
 import theme from '../theme/theme';
 import { CalcMultiCount } from '@/app/hooks/calculate/CalcMultiCount';
 
-
+/**
+ * ユーザーの総合的な達成統計をリスト形式で表示するコンポーネント
+ * * 表示項目:
+ * - 総登録タスク数
+ * - 今日完了したタスク数
+ * - 1日の最大完了タスク数（自己ベスト）
+ * * @component
+ * @param {TodoModel[]} todos - 分析対象のタスクデータ
+ */
 const ViewUserAchieve = () => {
 
     const todoContext = useContext(TodoContext);

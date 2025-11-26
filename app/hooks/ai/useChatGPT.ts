@@ -11,9 +11,20 @@ interface RequestBody {
     level?: string;
 }
 
+/**
+ * ChatGPT APIと通信し、応答を生成・管理するカスタムフック
+ * * @returns {object} フックの戻り値
+ * @returns {string} response - AIからのテキスト応答（ストリーミングで順次更新される）
+ * @returns {TaskProps[]} responseArray - 推奨タスクのリスト（JSON形式で受け取った場合）
+ * @returns {boolean} isGenerating - 生成処理中かどうかのフラグ
+ * @returns {function} generateResponse - APIリクエストを送信する関数
+ */
 export const useChatGPT = () => {
+    // 生成中かどうかのフラグ
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
+    // 文字列でのレスポンス（会話や褒め言葉など）
     const [response, setResponse] = useState<string>("");
+    // 配列でのレスポンス（タスク推奨リストなど）
     const [responseArray, setResponseArray] = useState<TaskProps[]>([]);
 
     const generateResponse = async (body: RequestBody) => {

@@ -18,6 +18,12 @@ import FullScreenLoading from "../common/fullScreenLoading";
 import { SwitchAnalyticsPageProps } from "../../Models/models";
 import { TodoContext } from "@/app/context/TodoContext";
 
+/**
+ * 現在の主要な統計データ（ストリーク、総達成数）を表示するコンポーネント
+ * 3Dモデル（Modelコンポーネント）も併せて表示し、視覚的なフィードバックを提供します。
+ * * @component
+ * @param {TodoModel[]} todos - 分析対象のタスクデータ
+ */
 const getGPTsentence = async () => {
     const res = await fetch("/api/chatgpt", {
       method: "POST",

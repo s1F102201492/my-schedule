@@ -12,6 +12,16 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
+/**
+ * 日付選択用の共通コンポーネント
+ * MUIのDatePickerをラップし、日本語ロケール設定などを適用しています。
+ * * @component
+ * @param {string} label - フォームのラベル（例: "開始日"）
+ * @param {Dayjs | null} date - 現在選択されている日付
+ * @param {function} setDate - 日付変更時のコールバック関数
+ * @param {Dayjs} minDate - 選択可能な最小日付
+ * @param {Dayjs} maxDate - 選択可能な最大日付
+ */
 export const DateComponents: React.FC<DateComponentsProps> = ({
     label,
     date,

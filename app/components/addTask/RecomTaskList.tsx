@@ -27,8 +27,14 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
-// このコンポーネントはおすすめの習慣を表示する部分のコンポーネントです。（親はGPTRecommend.tsx）
-
+/**
+ * AIによって提案されたタスクのリストを表示するコンポーネント
+ * ユーザーは提案されたリストの中から気に入ったタスクを選択し、
+ * `SelfAddForm`を通じて詳細を編集・登録することができます。
+ * * @component
+ * @param {TaskProps[]} taskList - AIが生成したタスクの配列
+ * @param {string} purpose - ユーザーが入力した目的（フォームの初期値として使用）
+ */
 const RecomTaskList: React.FC<taskListProps> = ({ taskList, purpose }) => {
     const router = useRouter();
 

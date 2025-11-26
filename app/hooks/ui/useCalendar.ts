@@ -3,6 +3,11 @@ import dayjs, { Dayjs } from "dayjs";
 import { TodoContext } from "@/app/context/TodoContext";
 import { CalendarTodoModel } from "@/app/Models/models";
 
+/**
+ * カレンダーUIのためのロジックを提供するカスタムフック
+ * 現在の表示月、選択された日付、その日のタスクリストなどの状態を管理します。
+ * * @returns {object} カレンダーの状態と操作関数
+ */
 export const useCalendar = () => {
     const todoContext = useContext(TodoContext);
     if (!todoContext) {
@@ -14,6 +19,7 @@ export const useCalendar = () => {
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
     const [todayTodoList, setTodayTodoList] = useState<CalendarTodoModel[]>([]);
 
+    // 全てのTodoのチェック履歴を展開し、カレンダー用イベント形式の配列に変換してメモ化
     const allEvents = useMemo(() => 
         todos.flatMap(todo =>
             Object.keys(todo.checkedDates).map(dateKey => ({

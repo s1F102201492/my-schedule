@@ -10,6 +10,12 @@ import {
 import React from "react";
 import { DialogProps } from "../Models/models";
 
+/**
+ * タスク全完了時に表示されるお祝いダイアログコンポーネント
+ * Lottieアニメーション（メダル）を使用して視覚的なリワードを提供します。
+ * * @component
+ * @param {DialogProps} props - ダイアログの開閉状態(open)と状態変更関数(setOpen)
+ */
 const RewardDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     return (
         <div>

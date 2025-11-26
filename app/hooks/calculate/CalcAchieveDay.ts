@@ -11,6 +11,24 @@ dayjs.extend(timezone);
 dayjs.locale("ja");
 dayjs.tz.setDefault("Asia/Tokyo");
 
+/**
+ * 現在（今日）から遡って、タスクを連続で達成している日数（ストリーク）を計算する関数
+ * どれか1つでもタスクを達成していれば、その日は「達成」とみなします。
+ * 現在より未来の日付は無視されます。
+ * * @param {TodoModel[]} todos - 全てのタスクの配列
+ * @returns {number} 現在からの連続達成日数
+ * * @example
+ * // 今日が 2023/01/03 だとする
+ * const todos = [
+ * { checkedDates: { "2023/01/03": true, "2023/01/02": true, "2023/01/01": false } },
+ * { checkedDates: { "2023/01/03": false, "2023/01/02": false, "2023/01/01": true } }
+ * ];
+ * // 1/3: タスク1が達成 -> OK
+ * // 1/2: タスク1が達成 -> OK
+ * // 1/1: タスク2が達成 -> OK
+ * // ストリークは 3日
+ * const streak = CalcAchieveDay(todos); // 3
+ */
 export const CalcAchieveDay = (todos: TodoModel[]) => {
     // タスク完了をした日付を格納
     const map_Date = new Map();

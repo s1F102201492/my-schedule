@@ -2,6 +2,13 @@
 import { Modal, Box, CircularProgress, Typography } from "@mui/material";
 import { FullScreenLoadingProps } from "../../Models/models";
 
+/**
+ * 全画面を覆うモーダル形式のローディングコンポーネント
+ * 画面操作をブロックし、重要な処理（送信中など）の進行中であることを示します。
+ * ESCキーでのクローズを無効化しています。
+ * * @component
+ * @param {FullScreenLoadingProps} props - モーダルの表示状態(open)
+ */
 export default function FullScreenLoading({ open }: FullScreenLoadingProps) {
     return (
         <Modal

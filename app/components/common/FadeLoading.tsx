@@ -3,6 +3,12 @@ import React from "react";
 import FadeLoader from "react-spinners/FadeLoader";
 import { LoadingModel } from "../../Models/models";
 
+/**
+ * フェードアニメーションを使用するローディングコンポーネント
+ * 主にコンテンツの読み込み待ちなど、画面の一部または全体を占有して表示する場合に使用します。
+ * * @component
+ * @param {LoadingModel} props - ローディング表示フラグ(loading)
+ */
 const FadeLoading: React.FC<LoadingModel> = ({ loading }) => {
     return (
         <div>

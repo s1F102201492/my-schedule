@@ -17,6 +17,16 @@ import { TodoContext } from "../context/TodoContext";
 import { CountContinueDays } from "../hooks/calculate/CountContinueDays";
 import { TodoModel } from "../Models/models";
 
+/**
+ * 今日のやることリストに表示する「未完了タスク」の単一コンポーネント
+ * * 主な機能:
+ * - チェックボックスによる完了状態の切り替え
+ * - タスク名の表示（省略あり）
+ * - 継続日数の表示
+ * - 削除ボタンと確認ダイアログの表示
+ * * @component
+ * @param {TodoModel} todo - 表示するタスクデータ
+ */
 const TodoItem = ({ todo }: {todo: TodoModel}) => {
     const todoContext = useContext(TodoContext);
 

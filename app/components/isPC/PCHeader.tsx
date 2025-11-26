@@ -19,6 +19,16 @@ import { Button, IconButton } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import Sidebar from "../../components/common/Sidebar";
 
+/**
+ * PC画面向けのヘッダーコンポーネント
+ * BottomNavigation（タブUI）をヘッダー内に配置し、主要機能へのアクセスを提供します。
+ * * 主な機能:
+ * - 各ページ（Home, タスク追加, カレンダー, 一覧, Analytics）へのナビゲーション
+ * - 現在のページに応じたタブの選択状態表示
+ * - ユーザーアイコンによるサイドバー開閉
+ * - 未ログイン時のログインボタン表示
+ * * @component
+ */
 const PCHeader = () => {
     const pathname = usePathname();
 

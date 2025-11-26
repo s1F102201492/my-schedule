@@ -4,6 +4,11 @@ import { TodoModel as TodoModel } from "../../Models/models";
 import { CountContinueDays } from "@/app/hooks/calculate/CountContinueDays";
 import { AuthContext } from "@/app/context/AuthContext";
 
+/**
+ * タスク（Todo）のCRUD操作を提供するカスタムフック
+ * APIとの通信を行い、タスクの取得、追加、更新、削除、チェック状態の変更を管理します。
+ * * @returns {object} Todoリストの状態と操作関数群
+ */
 export const useTodoCRUD = () => {
 
     const [todos, setTodos] = useState<TodoModel[]>([]);
@@ -21,7 +26,9 @@ export const useTodoCRUD = () => {
         throw new Error("Session is undefined. Make sure to use AuthProvider.");
     }
 
-    // 習慣の取得API
+    /**
+     * 全ての習慣（Todo）を取得するAPI呼び出し
+     */
     const fetchAllTodo = useCallback(async () => {
         try {
             setLoading(true);
@@ -56,7 +63,10 @@ export const useTodoCRUD = () => {
         fetchAllTodo();
     }, []);
 
-    // 習慣の追加API
+    /**
+     * 新しい習慣を追加する
+     * @param {Omit<TodoModel, "id" | "continuedays">} todo - 追加するTodoデータ
+     */
     const addTodo = async (todo: Omit<TodoModel, "id" | "continuedays">) => {
         const {
             title,
@@ -91,7 +101,9 @@ export const useTodoCRUD = () => {
         return res.json();
     };
 
-    // タスクの編集API
+    /**
+     * タスクの内容を編集する
+     */
     const editTodo = async (todo: TodoModel) => {
         const {
             id,
@@ -129,7 +141,9 @@ export const useTodoCRUD = () => {
         return res.json();
     };
 
-    // タスクの削除API
+    /**
+     * タスクを完全に削除する
+     */
     const deleteTodo = async (todo: TodoModel) => {
 
         if (!session?.access_token) {
@@ -148,7 +162,9 @@ export const useTodoCRUD = () => {
         return res.json();
     };
 
-    // 今日のタスクのチェックマーク
+    /**
+     * 今日のタスクのチェック状態をAPIへ同期する
+     */
     const checkTodayTodo = async (todo: TodoModel) => {
         try {
 
@@ -174,7 +190,9 @@ export const useTodoCRUD = () => {
         }
     };
 
-    // 今日のタスクの削除ボタン
+    /**
+     * 今日のタスク一覧から削除ボタンを押した時の処理
+     */
     const deleteTodayTodo = async (todo: TodoModel) => {
         try {
             
@@ -200,7 +218,12 @@ export const useTodoCRUD = () => {
         }
     };
 
-    //チェックボタンを機能させる関数
+    /**
+     * チェックボタンをトグル（ON/OFF切り替え）する
+     * ローカルの状態を即座に更新し、非同期でAPIへ同期します。
+     * @param {number} selectedId - 対象のTodo ID
+     * @param {string} date - チェックする日付文字列
+     */
     const toggleChecked = async (selectedId: number, date: string) => {
         
         setTodos((prevTodos) => {
@@ -226,7 +249,9 @@ export const useTodoCRUD = () => {
         });
     };
 
-    // 習慣の中の指定日のタスクを削除する関数
+    /**
+     * 習慣の中から指定日のチェック履歴データのみを削除する
+     */
     const deleteDate = async (selectedId: number, date: string) => {
         setTodos((prevTodos) => {
             return prevTodos.map((todo) => {
@@ -245,7 +270,9 @@ export const useTodoCRUD = () => {
         });
     };
 
-    // checkedDatesの中の要素が一つもない場合に削除する関数
+    /**
+     * チェック履歴（checkedDates）が空になったタスクを削除する
+     */
     const deleteZeroDate = async () => {
         setTimeout(() => {
             setTodos((prevTodos) => {
@@ -262,7 +289,9 @@ export const useTodoCRUD = () => {
         }, 1000);
     };
 
-    // 上の二つの関数をまとめたもの
+    /**
+     * 日付指定の削除と、空タスクの削除をまとめて実行する
+     */
     const toggleDelete = async (id: number, date: string) => {
         await Promise.all([deleteDate(id, date), deleteZeroDate()])
             .then(() => {

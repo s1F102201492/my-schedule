@@ -12,6 +12,15 @@ import Grid from "@mui/material/Grid2";
 import { CheckRate } from "../hooks/calculate/CheckRate";
 import { TodoModel } from "../Models/models";
 
+/**
+ * タスク一覧画面における個別のタスクカードコンポーネント
+ * * 主な機能:
+ * - 達成率を円グラフ（CircularProgress）で視覚的に表示
+ * - タスクの基本情報（タイトル、期間、継続日数）の表示
+ * - クリック時に詳細ダイアログ（Detailコンポーネント）を開く
+ * * @component
+ * @param {TodoModel} todo - 表示するタスクデータ
+ */
 const AllTodoItem = ({ todo }: {todo: TodoModel}) => {
     // 詳細ダイアログの開閉
     const [detailOpen, setDetailOpen] = useState<boolean>(false);
@@ -20,7 +29,7 @@ const AllTodoItem = ({ todo }: {todo: TodoModel}) => {
         setDetailOpen(false);
     };
 
-    const checkrate = CheckRate(todo);
+    const checkrate = CheckRate(todo); // 達成率を計算
     const slashstart = todo.startdate.replace(/-/g, "/");
     const slashend = todo.enddate.replace(/-/g, "/");
 

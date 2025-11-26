@@ -12,6 +12,15 @@ import Sidebar from "../../components/common/Sidebar";
 import ArticleIcon from '@mui/icons-material/Article';
 import { AuthContext } from "../../context/AuthContext";
 
+/**
+ * モバイル画面向けのヘッダーコンポーネント
+ * ハンバーガーメニューやアイコンベースのナビゲーションを提供します。
+ * * 主な機能:
+ * - アプリタイトルの表示
+ * - お問い合わせ、ガイドへのリンクアイコン
+ * - サイドバー（ドロワー）を開くハンバーガーメニュー
+ * * @component
+ */
 const MobileHeader = () => {
 
     const [hambergerMenu, setHambergerMenu] = useState<boolean>(false);
